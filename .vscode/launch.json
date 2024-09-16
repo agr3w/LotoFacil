@@ -6,13 +6,20 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainScreen",
+            "request": "launch",
+            "mainClass": "MainScreen",
+            "projectName": "Loto_ac99ac18"
+        },
+        {
+            "type": "java",
             "name": "Launch Main",
             "request": "launch",
-            "mainClass": "MainJFX", 
+            "mainClass": "MainJFX",
             "vmArgs": "--module-path \"C:/Program Files/Java/javafx-sdk-22.0.2/lib\" --add-modules javafx.controls,javafx.fxml",
             "cwd": "${workspaceFolder}",
             "console": "internalConsole"
-          },
+        },
         {
             "type": "java",
             "name": "Main",
@@ -40,6 +47,6 @@
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
-        },
+        }
     ]
 }
