@@ -18,7 +18,7 @@ public class MainScreen {
 
         // Barra superior (NAV) com fundo mais escuro
         HBox topBar = new HBox(10);
-        topBar.setStyle("-fx-background-color: #2F2F2F; -fx-padding: 10; -fx-alignment: center;");
+        topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
         
         // Botão de configurações à esquerda
         MenuButton configButton = new MenuButton();
@@ -52,7 +52,7 @@ public class MainScreen {
         btnComprarBilhete.setOnAction(e -> {
             TicketPurchaseScreen purchaseScreen = new TicketPurchaseScreen(stage);
             stage.setScene(new Scene(purchaseScreen.getLayout(), 600, 400));
-        });
+        });        
 
         // Botões secundários
         Button btnResultados = new Button("Resultados");
