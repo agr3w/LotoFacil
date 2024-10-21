@@ -159,15 +159,14 @@ public class TicketPurchaseScreen {
 
     private void confirmTicketPurchase() {
         if (selectedNumbers.size() >= MIN_NUM && selectedNumbers.size() <= MAX_NUM) {
-            ticketPurchases.put(loggedInUser, new ArrayList<>(selectedNumbers));
-            FileManager.savePurchase(loggedInUser, selectedNumbers);
-
-            showAlert("Compra Confirmada", "Seu bilhete foi registrado e salvo com sucesso!", AlertType.INFORMATION);
-            clearSelection();
+            // Aqui você redireciona para a tela de resumo da aposta
+            Stage stage = (Stage) layout.getScene().getWindow();
+            stage.setScene(new Scene(new TicketSummaryScreen(stage, new ArrayList<>(selectedNumbers), loggedInUser).getLayout(), 600, 400));
         } else {
             showAlert("Erro", "Número de seleções inválido.", AlertType.WARNING);
         }
     }
+    
 
     private void showAlert(String title, String message, AlertType type) {
         Alert alert = new Alert(type);

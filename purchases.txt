@@ -1,24 +1,24 @@
-Usuario: X
-Numeros selecionados: [25, 19, 17, 10, 24, 3, 22, 2, 14, 6, 8, 16, 15, 18, 7]
-Valor: R$ 3,00
-
-Usuario: X
-Numeros selecionados: [1, 19, 14, 4, 8, 7, 23, 11, 10, 9, 22, 13, 18, 16, 20]
-Valor: R$ 3,00
-
-Usuario: user
-Numeros selecionados: [7, 20, 13, 9, 2, 25, 17, 4, 15, 11, 21, 5, 18, 24, 19]
-Valor: R$ 3,00
-
-Usuario: 123.456.789-00
-Numeros selecionados: [4, 18, 6, 8, 11, 25, 20, 2, 17, 14, 13, 5, 12, 24, 1]
-Valor: R$ 3,00
-
-Usuario: 123.456.789-00
-Numeros selecionados: [19, 2, 12, 15, 20, 3, 8, 9, 16, 10, 24, 11, 14, 6, 17]
+Usuario: 123
+Numeros selecionados: [2, 1, 11, 19, 15, 13, 22, 25, 3, 8, 10, 9, 12, 17, 7]
 Valor: R$ 3,00
 
 Usuario: 123
-Numeros selecionados: [25, 9, 7, 4, 10, 6, 1, 12, 13, 15, 11, 16, 23, 21, 24]
+Numeros selecionados: [2, 1, 11, 19, 15, 13, 22, 25, 3, 8, 10, 9, 12, 17, 7]
 Valor: R$ 3,00
+
+Usuario: 123
+Numeros selecionados: [2, 1, 11, 19, 15, 13, 22, 25, 3, 8, 10, 9, 12, 17, 7]
+Valor: R$ 3,00
+
+Usuario: 123
+Numeros selecionados: [4, 13, 16, 19, 18, 2, 7, 25, 5, 12, 17, 15, 23, 10, 9, 20, 14]
+Valor: R$ 408,00
+
+Usuario: 123
+Numeros selecionados: [15, 8, 21, 17, 10, 20, 6, 13, 22, 14, 7, 4, 5, 2, 18, 23, 19, 24]
+Valor: R$ 2448,00
+
+Usuario: 123
+Numeros selecionados: [5, 16, 21, 7, 19, 14, 24, 20, 17, 13, 2, 25, 9, 15, 8, 18, 23, 22, 12, 11]
+Valor: R$ 46512,00
 
