@@ -1,4 +1,5 @@
 package screen;
+
 import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -6,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import utils.UIComponents;
+import utils.UserSession;
 
 public class LoginScreen {
     private VBox layout;
@@ -21,16 +24,12 @@ public class LoginScreen {
         Label lblLogo = new Label("LOTOFÁCIL");
         lblLogo.setStyle("-fx-font-size: 32px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
-        txtCPF = new TextField();
-        txtCPF.setPromptText("CPF");
+        txtCPF = UIComponents.createTextField("CPF");
+        txtSenha = UIComponents.createPasswordField("Sua senha");
 
-        txtSenha = new PasswordField();
-        txtSenha.setPromptText("Sua senha");
-
-        Button btnEntrar = new Button("Entrar");
-        btnEntrar.setStyle("-fx-background-color: #007BFF; -fx-text-fill: white;");
-        btnEntrar.setOnAction(e -> {
+        Button btnEntrar = UIComponents.createButton("Entrar", "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> {
             if (Database.checkCredentials(txtCPF.getText(), txtSenha.getText())) {
+                UserSession.setLoggedInUserCpf(txtCPF.getText()); // Configura o CPF do usuário logado
                 MainScreen mainScreen = new MainScreen(stage);
                 stage.setScene(new Scene(mainScreen.getLayout(), 800, 600));
             } else {
@@ -38,9 +37,9 @@ public class LoginScreen {
             }
         });
 
-        Button btnRegistrar = new Button("Registrar");
-        btnRegistrar.setStyle("-fx-background-color: #007BFF; -fx-text-fill: white;");
-        btnRegistrar.setOnAction(e -> stage.setScene(new Scene(new RegisterScreen(stage).getLayout(), 400, 500)));
+        Button btnRegistrar = UIComponents.createButton("Registrar", "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> 
+            stage.setScene(new Scene(new RegisterScreen(stage).getLayout(), 400, 500))
+        );
 
         Hyperlink forgotPassword = new Hyperlink("Esqueci minha senha");
 

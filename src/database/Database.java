@@ -1,4 +1,5 @@
 package database;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -16,8 +17,13 @@ public class Database {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
+                // Remover os prefixos e dividir a linha corretamente
                 String[] data = line.split(";");
-                if (data[0].equals(cpf) && data[1].equals(senha)) {
+                String userCpf = data[0].split(": ")[1]; // Extrair o CPF
+                String userSenha = data[1].split(": ")[1]; // Extrair a senha
+                
+                // Verificar credenciais
+                if (userCpf.equals(cpf) && userSenha.equals(senha)) {
                     scanner.close();
                     return true; // Credenciais corretas
                 }
@@ -36,8 +42,8 @@ public class Database {
             FileWriter writer = new FileWriter(FILE_NAME, true); // Modo de append
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            // Salvar as informações no formato "cpf;senha;nome;email"
-            bufferedWriter.write(cpf + ";" + senha + ";" + nome + ";" + email);
+            // Salvar as informações no formato "CPF: cpf;senha: senha;nome: nome;email: email"
+            bufferedWriter.write("CPF: " + cpf + ";" + "senha: " + senha + ";" + "nome: " + nome + ";" + "email: " + email);
             bufferedWriter.newLine(); // Adicionar nova linha para o próximo usuário
             bufferedWriter.close();
 

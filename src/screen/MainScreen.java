@@ -9,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import utils.UserSession;
 
 public class MainScreen {
     private BorderPane layout;
@@ -50,8 +51,7 @@ public class MainScreen {
         
         // Ação do botão Comprar Bilhete
         btnComprarBilhete.setOnAction(e -> {
-            TicketPurchaseScreen purchaseScreen = new TicketPurchaseScreen(stage);
-            stage.setScene(new Scene(purchaseScreen.getLayout(), 600, 400));
+            stage.setScene(new Scene(new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf()).getLayout(), 600, 400));
         });        
 
         // Botões secundários
