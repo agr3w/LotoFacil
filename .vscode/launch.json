@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "MainJFX",
+            "request": "launch",
+            "mainClass": "main.MainJFX",
+            "projectName": "LotoFacil-main_ea110c01"
+        },
+        {
+            "type": "java",
             "name": "MainScreen",
             "request": "launch",
             "mainClass": "MainScreen",
