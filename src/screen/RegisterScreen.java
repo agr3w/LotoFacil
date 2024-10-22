@@ -21,7 +21,7 @@ public class RegisterScreen {
         TextField txtNome = new TextField();
         txtNome.setPromptText("Nome completo");
 
-        TextField txtDataNasc = new TextField();
+        TextField txtDataNasc = new TextField(); //Adicionar DatePicker
         txtDataNasc.setPromptText("Data de Nasc.");
 
         TextField txtEmail = new TextField();

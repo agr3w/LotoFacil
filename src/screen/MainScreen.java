@@ -17,28 +17,28 @@ public class MainScreen {
     public MainScreen(Stage stage) {
         layout = new BorderPane();
 
-        // Barra superior (NAV) com fundo mais escuro
-        HBox topBar = new HBox(10);
-        topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
+        // // Barra superior (NAV) com fundo mais escuro
+        // HBox topBar = new HBox(10);
+        // topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
         
-        // Botão de configurações à esquerda
-        MenuButton configButton = new MenuButton();
-        configButton.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
-        configButton.setText("⚙"); // Ícone de configuração, pode substituir por imagem
-        MenuItem perfilItem = new MenuItem("Perfil");
-        configButton.getItems().addAll(perfilItem);
+        // // Botão de configurações à esquerda
+        // MenuButton configButton = new MenuButton();
+        // configButton.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+        // configButton.setText("⚙"); // Ícone de configuração, pode substituir por imagem
+        // MenuItem perfilItem = new MenuItem("Perfil");
+        // configButton.getItems().addAll(perfilItem);
 
-        // Ícone de perfil à direita
-        Button profileIcon = new Button("🌟");
-        profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+        // // Ícone de perfil à direita
+        // Button profileIcon = new Button("🌟");
+        // profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
 
-        // Ajustar posicionamento dos ícones na barra
-        Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
-        Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do botão Sair
-        spacerLeft.setMinWidth(250);  // Definir largura mínima do espaçador esquerdo
-        spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
+        // // Ajustar posicionamento dos ícones na barra
+        // Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
+        // Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do botão Sair
+        // spacerLeft.setMinWidth(250);  // Definir largura mínima do espaçador esquerdo
+        // spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
 
-        topBar.getChildren().addAll(configButton, spacerLeft, profileIcon, spacerRight);
+        // topBar.getChildren().addAll(configButton, spacerLeft, profileIcon, spacerRight);
         
         // Conteúdo principal
         VBox mainContent = new VBox(15); // Espaçamento entre os elementos
@@ -49,15 +49,25 @@ public class MainScreen {
         btnComprarBilhete.setStyle("-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
         btnComprarBilhete.setMinWidth(200);
         
-        // Ação do botão Comprar Bilhete
-        btnComprarBilhete.setOnAction(e -> {
+         // Ação do botão Comprar Bilhete
+         btnComprarBilhete.setOnAction(e -> {
             stage.setScene(new Scene(new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf()).getLayout(), 600, 400));
-        });        
+        });
+
+        Button btnCadastrarConcurso = new Button("CADASTRAR CONCURSO");
+        btnCadastrarConcurso.setStyle("-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
+        btnCadastrarConcurso.setMinWidth(200);
+
+        // Ação do botão Cadastrar Concurso
+        btnCadastrarConcurso.setOnAction(e -> {
+            stage.setScene(new Scene(new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf()).getLayout(), 600, 400));
+        });
 
         // Botões secundários
         Button btnResultados = new Button("Resultados");
         Button btnHistorico = new Button("Histórico");
         Button btnRegras = new Button("Regras");
+        Button btnStatusConcurso = new Button("Status dos concursos");
 
          // Botão de Sair à direita, separado
          Button btnSair = new Button("Sair");
@@ -68,22 +78,25 @@ public class MainScreen {
         btnResultados.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
         btnHistorico.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
         btnRegras.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
-        
+        btnStatusConcurso.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
+
         btnResultados.setMinWidth(150);
         btnHistorico.setMinWidth(150);
         btnRegras.setMinWidth(150);
+        btnStatusConcurso.setMinWidth(150);
 
         // Adicionar Tooltips aos botões
         btnComprarBilhete.setTooltip(new Tooltip("Compre bilhetes para o próximo sorteio."));
         btnResultados.setTooltip(new Tooltip("Veja os resultados anteriores."));
         btnHistorico.setTooltip(new Tooltip("Acompanhe seu histórico de apostas."));
         btnRegras.setTooltip(new Tooltip("Leia as regras do jogo."));
+        btnStatusConcurso.setTooltip(new Tooltip("Veja o status dos concursos."));
         
         // Adiciona os botões ao layout principal
-        mainContent.getChildren().addAll(btnComprarBilhete, btnResultados, btnHistorico, btnRegras, btnSair);
+        mainContent.getChildren().addAll(btnComprarBilhete, btnCadastrarConcurso, btnResultados, btnStatusConcurso, btnHistorico, btnRegras, btnSair);
         
         // Colocar a barra superior no topo e o conteúdo principal no centro
-        layout.setTop(topBar);
+        // layout.setTop(topBar);
         layout.setCenter(mainContent);
     }
 
