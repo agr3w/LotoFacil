@@ -3,10 +3,11 @@ package screen;
 import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
+
 import utils.UIComponents;
 import utils.UserSession;
 
@@ -21,40 +22,39 @@ public class LoginScreen {
         layout.setAlignment(Pos.CENTER);
 
         // Logo da LotoFácil
-        Label lblLogo = new Label("LOTOFÁCIL");
-        lblLogo.setStyle("-fx-font-size: 32px; -fx-text-fill: #800080; -fx-font-weight: bold;");
+        Label lblLogo = UIComponents.createLabel("LOTOFACIL",
+                "-fx-font-size: 32px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
-        txtCPF = UIComponents.createTextField("CPF");
-        txtSenha = UIComponents.createPasswordField("Sua senha");
+        // campos de login
+        Label lblLogiCpf = UIComponents.createLabel("CPF", null);
+        txtCPF = UIComponents.createTextField("CPF", null);
+        Label lblLoginSenha = UIComponents.createLabel("Senha", null);
+        txtSenha = UIComponents.createPasswordField("Sua senha", null);
 
-        Button btnEntrar = UIComponents.createButton("Entrar", "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> {
-            if (Database.checkCredentials(txtCPF.getText(), txtSenha.getText())) {
-                UserSession.setLoggedInUserCpf(txtCPF.getText()); // Configura o CPF do usuário logado
-                MainScreen mainScreen = new MainScreen(stage);
-                stage.setScene(new Scene(mainScreen.getLayout(), 800, 600));
-            } else {
-                showAlert("Erro de Login", "CPF ou Senha inválidos.");
-            }
-        });
+        // botão de entrar
+        Button btnEntrar = UIComponents.createButton("Entrar", "-fx-background-color: #007BFF; -fx-text-fill: white;",
+                e -> {
+                    if (Database.checkCredentials(txtCPF.getText(), txtSenha.getText())) {
+                        UserSession.setLoggedInUserCpf(txtCPF.getText()); // Configura o CPF do usuário logado
+                        ScreenNavigator.navigateToMainScreen(stage);
+                    } else {
+                        UIComponents.showAlert("Erro de Login", "CPF ou Senha inválidos.", null);
+                    }
+                });
 
-        Button btnRegistrar = UIComponents.createButton("Registrar", "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> 
-            stage.setScene(new Scene(new RegisterScreen(stage).getLayout(), 400, 500))
-        );
+        // botão de registro
+        Button btnRegistrar = UIComponents.createButton("Registrar",
+                "-fx-background-color: #007BFF; -fx-text-fill: white;",
+                e -> ScreenNavigator.navigateToRegisterScreen(stage));
 
         Hyperlink forgotPassword = new Hyperlink("Esqueci minha senha");
 
-        layout.getChildren().addAll(lblLogo, txtCPF, txtSenha, btnEntrar, btnRegistrar, forgotPassword);
+        layout.getChildren().addAll(lblLogo, lblLogiCpf, txtCPF, lblLoginSenha, txtSenha, btnEntrar, btnRegistrar,
+                forgotPassword);
     }
 
     public VBox getLayout() {
         return layout;
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }

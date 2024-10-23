@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Scanner;
 
 public class Database {
-    private static final String FILE_NAME = "usuarios.txt";
+    private static final String FILE_NAME = "usuarios.txt"; // ta criando usuarios com nomes iguais, ARRUMAR
 
     // Método para verificar credenciais
     public static boolean checkCredentials(String cpf, String senha) {
@@ -17,7 +17,6 @@ public class Database {
             Scanner scanner = new Scanner(file);
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                // Remover os prefixos e dividir a linha corretamente
                 String[] data = line.split(";");
                 String userCpf = data[0].split(": ")[1]; // Extrair o CPF
                 String userSenha = data[1].split(": ")[1]; // Extrair a senha
@@ -42,7 +41,6 @@ public class Database {
             FileWriter writer = new FileWriter(FILE_NAME, true); // Modo de append
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            // Salvar as informações no formato "CPF: cpf;senha: senha;nome: nome;email: email"
             bufferedWriter.write("CPF: " + cpf + ";" + "senha: " + senha + ";" + "nome: " + nome + ";" + "email: " + email);
             bufferedWriter.newLine(); // Adicionar nova linha para o próximo usuário
             bufferedWriter.close();

@@ -1,5 +1,5 @@
 package screen;
-import javafx.scene.Scene;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -9,7 +9,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import utils.UserSession;
+import screen.sizes.ScreenNavigator;
+import utils.UIComponents;
 
 public class MainScreen {
     private BorderPane layout;
@@ -19,60 +20,54 @@ public class MainScreen {
 
         // // Barra superior (NAV) com fundo mais escuro
         // HBox topBar = new HBox(10);
-        // topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
-        
+        // topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10;
+        // -fx-alignment: center;");
+
         // // Botão de configurações à esquerda
         // MenuButton configButton = new MenuButton();
-        // configButton.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
-        // configButton.setText("⚙"); // Ícone de configuração, pode substituir por imagem
+        // configButton.setStyle("-fx-background-radius: 50%; -fx-background-color:
+        // #800080;");
+        // configButton.setText("⚙"); // Ícone de configuração, pode substituir por
+        // imagem
         // MenuItem perfilItem = new MenuItem("Perfil");
         // configButton.getItems().addAll(perfilItem);
 
         // // Ícone de perfil à direita
         // Button profileIcon = new Button("🌟");
-        // profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+        // profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color:
+        // #800080;");
 
         // // Ajustar posicionamento dos ícones na barra
         // Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
-        // Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do botão Sair
-        // spacerLeft.setMinWidth(250);  // Definir largura mínima do espaçador esquerdo
+        // Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do
+        // botão Sair
+        // spacerLeft.setMinWidth(250); // Definir largura mínima do espaçador esquerdo
         // spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
 
-        // topBar.getChildren().addAll(configButton, spacerLeft, profileIcon, spacerRight);
-        
+        // topBar.getChildren().addAll(configButton, spacerLeft, profileIcon,
+        // spacerRight);
+
         // Conteúdo principal
         VBox mainContent = new VBox(15); // Espaçamento entre os elementos
-        mainContent.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;"); // Ajuste do fundo mais claro
+        mainContent.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;"); // Ajuste do
+                                                                                                        // fundo mais
+                                                                                                        // claro
 
         // Botão principal "Comprar Bilhete"
-        Button btnComprarBilhete = new Button("COMPRAR BILHETE");
-        btnComprarBilhete.setStyle("-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
-        btnComprarBilhete.setMinWidth(200);
-        
-         // Ação do botão Comprar Bilhete
-         btnComprarBilhete.setOnAction(e -> {
-            stage.setScene(new Scene(new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf()).getLayout(), 600, 400));
-        });
+        Button btnComprarBilhete = UIComponents.createButton("COMPRAR BILHETE",
+                "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
+                e -> ScreenNavigator.navigateToPurchaseScreen(stage));
 
-        Button btnCadastrarConcurso = new Button("CADASTRAR CONCURSO");
-        btnCadastrarConcurso.setStyle("-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;");
-        btnCadastrarConcurso.setMinWidth(200);
-
-        // Ação do botão Cadastrar Concurso
-        btnCadastrarConcurso.setOnAction(e -> {
-            stage.setScene(new Scene(new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf()).getLayout(), 600, 400));
-        });
+        // Botão principal "Comprar Bilhete"
+        Button btnCadastrarConcurso = UIComponents.createButton("CADASTRAR BILHETE",
+                "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
+                e -> ScreenNavigator.navigateToRegisterContestScreenSize(stage));
 
         // Botões secundários
         Button btnResultados = new Button("Resultados");
         Button btnHistorico = new Button("Histórico");
         Button btnRegras = new Button("Regras");
         Button btnStatusConcurso = new Button("Status dos concursos");
-
-         // Botão de Sair à direita, separado
-         Button btnSair = new Button("Sair");
-         btnSair.setStyle("-fx-background-color: #FF0000; -fx-text-fill: white;");
-         btnSair.setOnAction(e -> stage.close());
 
         // Estilos dos botões secundários
         btnResultados.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
@@ -91,10 +86,14 @@ public class MainScreen {
         btnHistorico.setTooltip(new Tooltip("Acompanhe seu histórico de apostas."));
         btnRegras.setTooltip(new Tooltip("Leia as regras do jogo."));
         btnStatusConcurso.setTooltip(new Tooltip("Veja o status dos concursos."));
+
+        // Botão de Sair à direita, separado
+        Button btnSair = UIComponents.createButton("Sair", "-fx-background-color: #FF0000; -fx-text-fill: white;", e-> stage.close());
         
         // Adiciona os botões ao layout principal
-        mainContent.getChildren().addAll(btnComprarBilhete, btnCadastrarConcurso, btnResultados, btnStatusConcurso, btnHistorico, btnRegras, btnSair);
-        
+        mainContent.getChildren().addAll(btnComprarBilhete, btnCadastrarConcurso, btnResultados, btnStatusConcurso,
+                btnHistorico, btnRegras, btnSair);
+
         // Colocar a barra superior no topo e o conteúdo principal no centro
         // layout.setTop(topBar);
         layout.setCenter(mainContent);

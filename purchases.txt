@@ -22,3 +22,11 @@ Usuario: 123
 Numeros selecionados: [5, 16, 21, 7, 19, 14, 24, 20, 17, 13, 2, 25, 9, 15, 8, 18, 23, 22, 12, 11]
 Valor: R$ 46512,00
 
+Usuario: 123
+Numeros selecionados: [4, 20, 5, 7, 25, 17, 22, 10, 9, 18, 21, 8, 13, 19, 12]
+Valor: R$ 3,00
+
+Usuario: 123
+Numeros selecionados: [21, 14, 2, 4, 20, 22, 17, 15, 19, 5, 13, 10, 1, 7, 11]
+Valor: R$ 3,00
+

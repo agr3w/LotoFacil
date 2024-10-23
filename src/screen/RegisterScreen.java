@@ -1,11 +1,13 @@
 package screen;
+
 import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
+import utils.UIComponents;
 
 public class RegisterScreen {
     private VBox layout;
@@ -15,72 +17,88 @@ public class RegisterScreen {
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 
-        Label lblCadastro = new Label("Cadastro de Usuário");
-        lblCadastro.setStyle("-fx-font-size: 20px; -fx-text-fill: #800080; -fx-font-weight: bold;");
+        // Título da tela
+        Label lblCadastro = UIComponents.createLabel("Cadastro de Usuário",
+                "-fx-font-size: 22px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
-        TextField txtNome = new TextField();
-        txtNome.setPromptText("Nome completo");
+        // Nome Completo
+        Label lblNome = UIComponents.createLabel("Nome Completo:", null);
+        TextField txtNome = UIComponents.createTextField("Digite seu nome completo", "-fx-max-width: 300;");
 
-        TextField txtDataNasc = new TextField(); //Adicionar DatePicker
-        txtDataNasc.setPromptText("Data de Nasc.");
+        // Data Nascimento
+        Label lblDataNasc = UIComponents.createLabel("Data de Nascimento:", null);
+        DatePicker datePickerNasc = UIComponents.createDatePicker("Selecione sua data de nascimento",
+                "-fx-min-width: 300");
 
-        TextField txtEmail = new TextField();
-        txtEmail.setPromptText("Email");
+        // Email
+        Label lblEmail = UIComponents.createLabel("Email", null);
+        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 300;");
 
-        TextField txtCPF = new TextField();
-        txtCPF.setPromptText("CPF");
+        // CPF
+        Label lblCPF = UIComponents.createLabel("CPF", null);
+        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 300;");
 
-        PasswordField txtSenha = new PasswordField();
-        txtSenha.setPromptText("Senha");
+        // Senha
+        Label lblSenha = UIComponents.createLabel("Senha", null);
+        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 300;");
 
-        PasswordField txtConfSenha = new PasswordField();
-        txtConfSenha.setPromptText("Conf Senha");
+        // Confirmar Senha
+        Label lblConfSenha = UIComponents.createLabel("Confirmar senha", null);
+        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 300;");
 
+        // Checkbox para termos de serviço
         CheckBox checkTermos = new CheckBox("Concordo com os Termos de Serviço");
 
-        Button btnRegistrar = new Button("Registrar");
-        btnRegistrar.setStyle("-fx-background-color: #800080; -fx-text-fill: white;");
-        btnRegistrar.setOnAction(e -> {
-            if (validateFields(txtNome, txtDataNasc, txtEmail, txtCPF, txtSenha, txtConfSenha, checkTermos)) {
-                if (txtSenha.getText().equals(txtConfSenha.getText())) {
-                    Database.saveUser(txtNome.getText(), txtEmail.getText(), txtCPF.getText(), txtSenha.getText());
-                    showAlert("Registro Concluído", "Usuário registrado com sucesso.");
-                    stage.setScene(new Scene(new LoginScreen(stage).getLayout(), 400, 300));
-                } else {
-                    showAlert("Erro de Registro", "Senhas não coincidem.");
-                }
-            }
-        });
+        // Botão de Termos de Serviço
+        Button btnTermos = UIComponents.createButton("Termos de Serviço",
+                "-fx-background-color: #ffff; -fx-text-fill: black;",
+                e -> ScreenNavigator.navigateToTermsScreen(stage));
 
-        Button btnTermos = new Button("Termos de Serviço");
-        btnTermos.setOnAction(e -> stage.setScene(new Scene(new TermsScreen(stage).getLayout(), 400, 500)));
+        // Botão de retorno para login
+        Button btnRetornoLogin = UIComponents.createButton("Retornar",
+                "-fx-background-color: #FF0000; -fx-text-fill: white;",
+                e -> ScreenNavigator.navigateToLoginScreen(stage));
 
-        layout.getChildren().addAll(lblCadastro, txtNome, txtDataNasc, txtEmail, txtCPF, txtSenha, txtConfSenha, checkTermos, btnRegistrar, btnTermos);
+        // Botão de Registrar
+        Button btnRegistrar = UIComponents.createButton("Registrar",
+                "-fx-background-color: #800080; -fx-text-fill: white;", e -> {
+                    if (validateFields(txtNome, datePickerNasc, txtEmail, txtCPF, txtSenha, txtConfSenha,
+                            checkTermos)) {
+                        if (txtSenha.getText().equals(txtConfSenha.getText())) {
+                            Database.saveUser(txtNome.getText(), txtEmail.getText(), txtCPF.getText(),
+                                    txtSenha.getText());
+                            UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.", null);
+
+                            ScreenNavigator.navigateToRegisterScreen(stage);
+
+                        } else {
+                            UIComponents.showAlert("Erro de Registro", "Senhas não coincidem", null);
+                        }
+                    }
+                });
+
+        // Adiciona todos os componentes ao layout
+        layout.getChildren().addAll(lblCadastro, lblNome, txtNome, lblDataNasc, datePickerNasc, lblEmail, txtEmail,
+                lblCPF, txtCPF,
+                lblSenha, txtSenha, lblConfSenha, txtConfSenha, checkTermos, btnRetornoLogin, btnTermos, btnRegistrar);
     }
 
-    public VBox getLayout() {
-        return layout;
-    }
-
-    private boolean validateFields(TextField txtNome, TextField txtDataNasc, TextField txtEmail, TextField txtCPF,
-                                   PasswordField txtSenha, PasswordField txtConfSenha, CheckBox checkTermos) {
-        if (txtNome.getText().isEmpty() || txtDataNasc.getText().isEmpty() || txtEmail.getText().isEmpty()
+    // Valida os campos de entrada
+    private boolean validateFields(TextField txtNome, DatePicker datePickerNasc, TextField txtEmail, TextField txtCPF,
+            PasswordField txtSenha, PasswordField txtConfSenha, CheckBox checkTermos) {
+        if (txtNome.getText().isEmpty() || datePickerNasc.getValue() == null || txtEmail.getText().isEmpty()
                 || txtCPF.getText().isEmpty() || txtSenha.getText().isEmpty() || txtConfSenha.getText().isEmpty()) {
-            showAlert("Erro de Registro", "Todos os campos devem ser preenchidos.");
+            UIComponents.showAlert("Erro de Registro", "Todos os campos devem ser preenchidos.", null);
             return false;
         }
         if (!checkTermos.isSelected()) {
-            showAlert("Erro de Registro", "Você deve concordar com os Termos de Serviço.");
+            UIComponents.showAlert("Erro de Registro", "Você deve concordar com os Termos de Serviço.", null);
             return false;
         }
         return true;
     }
 
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+    public VBox getLayout() {
+        return layout;
     }
 }

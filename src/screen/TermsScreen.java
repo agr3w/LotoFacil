@@ -1,10 +1,10 @@
 package screen;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
 
 public class TermsScreen {
     private VBox layout;
@@ -24,7 +24,7 @@ public class TermsScreen {
 
         Button btnContinuar = new Button("Continuar");
         btnContinuar.setStyle("-fx-background-color: #800080; -fx-text-fill: white;");
-        btnContinuar.setOnAction(e -> stage.setScene(new Scene(new RegisterScreen(stage).getLayout(), 400, 500)));
+        btnContinuar.setOnAction(e -> ScreenNavigator.navigateToRegisterScreen(stage));
 
         layout.getChildren().addAll(lblTermos, txtTermos, btnContinuar);
     }

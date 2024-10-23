@@ -2,7 +2,6 @@ package screen;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -10,14 +9,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import utils.UIComponents;
 import utils.UserSession;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-
-import database.FileManager;
 import database.TicketPricing;
 
 public class TicketPurchaseScreen {
@@ -163,16 +161,7 @@ public class TicketPurchaseScreen {
             Stage stage = (Stage) layout.getScene().getWindow();
             stage.setScene(new Scene(new TicketSummaryScreen(stage, new ArrayList<>(selectedNumbers), loggedInUser).getLayout(), 600, 400));
         } else {
-            showAlert("Erro", "Número de seleções inválido.", AlertType.WARNING);
+            UIComponents.showAlert("Erro", "Número de seleções inválido.", AlertType.WARNING);
         }
-    }
-    
-
-    private void showAlert(String title, String message, AlertType type) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }
