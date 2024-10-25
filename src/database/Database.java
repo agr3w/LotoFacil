@@ -36,12 +36,12 @@ public class Database {
     }
 
     // Método para salvar um novo usuário no arquivo
-    public static void saveUser(String nome, String email, String cpf, String senha) {
+    public static void saveUser(String nome, String email, String cpf, String Nascimento, String senha) {
         try {
-            FileWriter writer = new FileWriter(FILE_NAME, true); // Modo de append
+            FileWriter writer = new FileWriter(FILE_NAME, true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);
 
-            bufferedWriter.write("CPF: " + cpf + ";" + "senha: " + senha + ";" + "nome: " + nome + ";" + "email: " + email);
+            bufferedWriter.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";" + "nome: " + nome + ";" + "email: " + email);
             bufferedWriter.newLine(); // Adicionar nova linha para o próximo usuário
             bufferedWriter.close();
 

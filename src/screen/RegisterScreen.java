@@ -1,5 +1,6 @@
 package screen;
 
+import java.time.format.DateTimeFormatter;
 import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,6 +9,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
+import utils.ValidateDate;
 
 public class RegisterScreen {
     private VBox layout;
@@ -65,12 +67,16 @@ public class RegisterScreen {
                     if (validateFields(txtNome, datePickerNasc, txtEmail, txtCPF, txtSenha, txtConfSenha,
                             checkTermos)) {
                         if (txtSenha.getText().equals(txtConfSenha.getText())) {
-                            Database.saveUser(txtNome.getText(), txtEmail.getText(), txtCPF.getText(),
-                                    txtSenha.getText());
-                            UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.", null);
+                            if (ValidateDate.isOfLegalAge(datePickerNasc.getValue())) {
+                                Database.saveUser(txtNome.getText(), txtEmail.getText(), txtCPF.getText(),
+                                        datePickerNasc.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                                        txtSenha.getText());
+                                UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.", null);
 
-                            ScreenNavigator.navigateToRegisterScreen(stage);
-
+                                ScreenNavigator.navigateToRegisterScreen(stage);
+                            } else {
+                                UIComponents.showAlert("Erro de Registro", "Usuário deve ser maior de idade.", null);
+                            }
                         } else {
                             UIComponents.showAlert("Erro de Registro", "Senhas não coincidem", null);
                         }
