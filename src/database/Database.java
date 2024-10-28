@@ -19,7 +19,7 @@ public class Database {
                 String line = scanner.nextLine();
                 String[] data = line.split(";");
                 String userCpf = data[0].split(": ")[1]; // Extrair o CPF
-                String userSenha = data[1].split(": ")[1]; // Extrair a senha
+                String userSenha = data[2].split(": ")[1]; // Extrair a senha
                 
                 // Verificar credenciais
                 if (userCpf.equals(cpf) && userSenha.equals(senha)) {
@@ -36,7 +36,7 @@ public class Database {
     }
 
     // Método para salvar um novo usuário no arquivo
-    public static void saveUser(String nome, String email, String cpf, String Nascimento, String senha) {
+    public static void saveUser(String nome, String email, String cpf, String Nascimento,String senha) {
         try {
             FileWriter writer = new FileWriter(FILE_NAME, true);
             BufferedWriter bufferedWriter = new BufferedWriter(writer);

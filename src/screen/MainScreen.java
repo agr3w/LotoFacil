@@ -65,34 +65,36 @@ public class MainScreen {
 
         // Botões secundários
         Button btnResultados = new Button("Resultados");
-        Button btnHistorico = new Button("Histórico");
+
+        Button btnHistoricoCompras = UIComponents.createButton("Histórico de Compras",
+                "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
+                e -> ScreenNavigator.navigateToPurchaseHistoryScreen(stage));
+
         Button btnRegras = new Button("Regras");
         Button btnStatusConcurso = new Button("Status dos concursos");
 
         // Estilos dos botões secundários
         btnResultados.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
-        btnHistorico.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
         btnRegras.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
         btnStatusConcurso.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;");
 
         btnResultados.setMinWidth(150);
-        btnHistorico.setMinWidth(150);
         btnRegras.setMinWidth(150);
         btnStatusConcurso.setMinWidth(150);
 
         // Adicionar Tooltips aos botões
         btnComprarBilhete.setTooltip(new Tooltip("Compre bilhetes para o próximo sorteio."));
         btnResultados.setTooltip(new Tooltip("Veja os resultados anteriores."));
-        btnHistorico.setTooltip(new Tooltip("Acompanhe seu histórico de apostas."));
         btnRegras.setTooltip(new Tooltip("Leia as regras do jogo."));
         btnStatusConcurso.setTooltip(new Tooltip("Veja o status dos concursos."));
 
         // Botão de Sair à direita, separado
-        Button btnSair = UIComponents.createButton("Sair", "-fx-background-color: #FF0000; -fx-text-fill: white;", e-> stage.close());
-        
+        Button btnSair = UIComponents.createButton("Sair", "-fx-background-color: #FF0000; -fx-text-fill: white;",
+                e -> stage.close());
+
         // Adiciona os botões ao layout principal
         mainContent.getChildren().addAll(btnComprarBilhete, btnCadastrarConcurso, btnResultados, btnStatusConcurso,
-                btnHistorico, btnRegras, btnSair);
+                btnHistoricoCompras, btnRegras, btnSair);
 
         // Colocar a barra superior no topo e o conteúdo principal no centro
         // layout.setTop(topBar);

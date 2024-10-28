@@ -73,7 +73,7 @@ public class RegisterScreen {
                                         txtSenha.getText());
                                 UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.", null);
 
-                                ScreenNavigator.navigateToRegisterScreen(stage);
+                                ScreenNavigator.navigateToLoginScreen(stage);
                             } else {
                                 UIComponents.showAlert("Erro de Registro", "Usuário deve ser maior de idade.", null);
                             }

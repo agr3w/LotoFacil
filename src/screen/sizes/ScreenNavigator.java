@@ -1,14 +1,17 @@
 package screen.sizes;
 
 import javafx.stage.Stage;
+
+import java.util.List;
+
 import javafx.scene.Scene;
 import screen.LoginScreen;
 import screen.MainScreen;
+import screen.PurchaseHistoryScreen;
 import screen.RegisterScreen;
 import screen.TermsScreen;
 import screen.TicketPurchaseScreen;
-import screen.sizes.ScreenSize;
-import screen.sizes.ScreenSizeManager;
+import screen.TicketSummaryScreen;
 import utils.UserSession;
 
 public class ScreenNavigator {
@@ -37,16 +40,29 @@ public class ScreenNavigator {
         stage.setScene(new Scene(loginScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
-    public static void navigateToPurchaseScreen(Stage stage) { 
+    public static void navigateToPurchaseScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getPurchaseScreenSize();
         TicketPurchaseScreen ticketPurchaseScreen = new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf());
         stage.setScene(new Scene(ticketPurchaseScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
-    } 
+    }
 
-    public static void navigateToRegisterContestScreenSize(Stage stage) { //falta criar
+    public static void navigateToRegisterContestScreenSize(Stage stage) { // falta criar ADM
         ScreenSize screenSize = ScreenSizeManager.getRegisterContestScreenSize();
         TicketPurchaseScreen ticketPurchaseScreen = new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf());
         stage.setScene(new Scene(ticketPurchaseScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    public static <ArrayList> void navigateToTicketSummaryScreen(Stage stage, List<Integer> selectedNumbers) {
+        ScreenSize screenSize = ScreenSizeManager.getTicketSummaryScreenSize();
+        TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers,
+                UserSession.getLoggedInUserCpf());
+        stage.setScene(new Scene(TicketSummaryScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    public static void navigateToPurchaseHistoryScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getPurchaseHistoryScreenSize();
+        PurchaseHistoryScreen historyScreen = new PurchaseHistoryScreen(stage);
+        stage.setScene(new Scene(historyScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     // Adicione mais métodos para outras telas conforme necessário

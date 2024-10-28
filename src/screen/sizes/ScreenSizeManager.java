@@ -26,6 +26,15 @@ public class ScreenSizeManager {
         return new ScreenSize(600, 400); //compra
     }
 
+    public static ScreenSize getPurchaseHistoryScreenSize() {
+        return new ScreenSize(800, 600); //Historico
+    }
+
+    public static ScreenSize getTicketSummaryScreenSize() {
+        return new ScreenSize(600, 400); // Ajuste o tamanho conforme necessário
+    }
+    
+
     // Outros métodos podem ser adicionados para diferentes telas no futuro
 }
 
