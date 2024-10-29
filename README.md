@@ -59,7 +59,7 @@ Sinta-se à vontade para contribuir com melhorias, correções de bugs ou novas 
 2. **Clone o repositório**:
    - No terminal, execute:
      ```bash
-     git clone https://github.com/agr3w/LotoFacil.git
+     git clone https://github.com/seu-usuario/LotoFacil.git
      ```
    - Substitua `seu-usuario` pelo seu nome de usuário do GitHub.
 
