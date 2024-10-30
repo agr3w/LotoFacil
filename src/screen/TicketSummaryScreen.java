@@ -6,7 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import database.FileManager;
+import database.PurchaseFileManager;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class TicketSummaryScreen {
 
     // Método para salvar a aposta após o pagamento
     public void saveBetToFile() {
-        boolean success = FileManager.saveBetToFile(loggedInUser, selectedNumbers);
+        boolean success = PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers);
         if (success) {
             System.out.println("Aposta salva com sucesso!");
         } else {
