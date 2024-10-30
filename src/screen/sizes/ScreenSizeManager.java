@@ -33,6 +33,10 @@ public class ScreenSizeManager {
     public static ScreenSize getTicketSummaryScreenSize() {
         return new ScreenSize(800, 600); // Ajuste o tamanho conforme necessário
     }
+
+    public static ScreenSize getTicketPaymentScreenSize() {
+        return new ScreenSize(800, 600); // Ajuste o tamanho conforme necessário
+    }
     
 
     // Outros métodos podem ser adicionados para diferentes telas no futuro

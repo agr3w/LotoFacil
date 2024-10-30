@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
+import utils.UIComponents;
 import database.PurchaseFileManager;
 
 import java.util.List;
@@ -26,25 +28,16 @@ public class TicketSummaryScreen {
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
 
-        Label lblTitle = new Label("Resumo da Aposta");
-        lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-
+        Label lblTitle = UIComponents.createLabel("Resumo da Aposta", "-fx-font-size: 20px; -fx-font-weight: bold;");
+ 
         Label lblNumbers = new Label("Números Selecionados: " + selectedNumbers.toString());
 
-        Button btnConfirmar = new Button("Confirmar");
-        btnConfirmar.setOnAction(e -> confirmPayment(stage));
+        Button btnConfirmar = UIComponents.createButton("Confirmar", null, e -> ScreenNavigator.navigateToPaymentScreen(stage, selectedNumbers));
 
-        Button btnVoltar = new Button("Voltar");
-        btnVoltar.setOnAction(e -> stage.setScene(new Scene(new TicketPurchaseScreen(stage, loggedInUser).getLayout(), 600, 400)));
+        Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToPurchaseScreen(stage));
 
         layout.getChildren().addAll(lblTitle, lblNumbers, btnConfirmar, btnVoltar);
         layout.setAlignment(Pos.CENTER);
-    }
-
-    private void confirmPayment(Stage stage) {
-        // Redirecionar para a tela de pagamento
-        PaymentScreen paymentScreen = new PaymentScreen(stage, loggedInUser, selectedNumbers, this);
-        stage.setScene(new Scene(paymentScreen.getLayout(), 600, 400));
     }
 
     // Método para salvar a aposta após o pagamento

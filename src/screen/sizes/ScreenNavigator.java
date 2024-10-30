@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.scene.Scene;
 import screen.LoginScreen;
 import screen.MainScreen;
+import screen.PaymentScreen;
 import screen.PurchaseHistoryScreen;
 import screen.RegisterScreen;
 import screen.TermsScreen;
@@ -63,6 +64,12 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getPurchaseHistoryScreenSize();
         PurchaseHistoryScreen historyScreen = new PurchaseHistoryScreen(stage);
         stage.setScene(new Scene(historyScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    public static void navigateToPaymentScreen(Stage stage, List<Integer> selectedNumbers) {
+        ScreenSize screenSize = ScreenSizeManager.getTicketPaymentScreenSize();
+        PaymentScreen paymentScreen = new PaymentScreen(stage, UserSession.getLoggedInUserCpf(), selectedNumbers);
+        stage.setScene(new Scene(paymentScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     // Adicione mais métodos para outras telas conforme necessário

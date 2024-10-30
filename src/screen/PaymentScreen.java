@@ -9,16 +9,17 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+import database.PurchaseFileManager;
+import database.TicketPricing;
+
 public class PaymentScreen {
     private VBox layout;
     private String loggedInUser;
     private List<Integer> selectedNumbers;
-    private TicketSummaryScreen summaryScreen;
 
-    public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers, TicketSummaryScreen summaryScreen) {
+    public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers) {
         this.loggedInUser = loggedInUser;
         this.selectedNumbers = selectedNumbers;
-        this.summaryScreen = summaryScreen;
 
         initializeUI(stage);
     }
@@ -34,7 +35,7 @@ public class PaymentScreen {
 
         Button btnConfirmarPagamento = new Button("Confirmar Pagamento");
         btnConfirmarPagamento.setOnAction(e -> {
-            summaryScreen.saveBetToFile(); // Salvar a aposta após pagamento
+            PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers); // Salvar a aposta após pagamento
             System.out.println("Pagamento Confirmado!");
             // Aqui você pode redirecionar para uma tela de confirmação de compra ou de sucesso
         });
