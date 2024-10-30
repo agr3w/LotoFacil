@@ -1,7 +1,6 @@
 package screen;
 
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -9,6 +8,7 @@ import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 import database.PurchaseFileManager;
+import database.TicketPricing;
 
 import java.util.List;
 
@@ -32,11 +32,14 @@ public class TicketSummaryScreen {
  
         Label lblNumbers = new Label("Números Selecionados: " + selectedNumbers.toString());
 
+        Label lblValor = new Label("Valor a se pagar: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()));
+
         Button btnConfirmar = UIComponents.createButton("Confirmar", null, e -> ScreenNavigator.navigateToPaymentScreen(stage, selectedNumbers));
 
         Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToPurchaseScreen(stage));
 
-        layout.getChildren().addAll(lblTitle, lblNumbers, btnConfirmar, btnVoltar);
+
+        layout.getChildren().addAll(lblTitle, lblNumbers, lblValor, btnConfirmar, btnVoltar);
         layout.setAlignment(Pos.CENTER);
     }
 
