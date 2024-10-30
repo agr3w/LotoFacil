@@ -24,9 +24,6 @@ Este repositório contém o código para um sistema de gerenciamento de tickets 
 - **MainScreen**: 🔄 Em progresso
   - Tela funcional, mas métodos ainda precisam ser criados e objetos definidos.
 
-- **NumberSelectionScreen**: 🔄 Necessita de testes
-  - Classe possivelmente não está sendo chamada pelo código.
-
 - **PaymentSelectionScreen**: 🔄 Em progresso
   - Tela não finalizada.
 
@@ -43,7 +40,7 @@ Este repositório contém o código para um sistema de gerenciamento de tickets 
   - Necessita de revisão na estilização.
 
 - **TicketSummaryScreen**: 🔄 Em progresso
-  - Necessita finalizar seus métodos principais.
+  - Necessita finalizar seus métodos principais e estilizacao.
 
 ## Contribuições
 
