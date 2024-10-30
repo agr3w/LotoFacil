@@ -33,6 +33,7 @@ public class PurchaseFileManager {
 
     private static final String FILE_NAME = "purchases.txt";
 
+    //Salva os valores do ticket no arquivo
     public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers) {
         try (FileWriter writer = new FileWriter(FILE_NAME, true)) {
             writer.write(loggedInUser + "\n");
@@ -44,6 +45,7 @@ public class PurchaseFileManager {
         return false;
     }
 
+    //Carrega as informacoes do arquivo
     public static List<PurchaseFileManager> loadUserTickets() {
         List<PurchaseFileManager> tickets = new ArrayList<>();
         String loggedInCpf = UserSession.getLoggedInUserCpf();

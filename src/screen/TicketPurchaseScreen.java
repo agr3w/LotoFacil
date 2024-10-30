@@ -10,51 +10,41 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
+import utils.NumberSelection;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import database.TicketPricing;
 
 public class TicketPurchaseScreen {
     private VBox layout;
     private List<Button> numberButtons;
-    private List<Integer> selectedNumbers;
     private Label lblSelecionados;
     private Label lblValor;
+
+    private NumberSelection numberSelection;
 
     private static final int MAX_NUM = 20;
     private static final int MIN_NUM = 15;
 
-    // Construtor principal
     public TicketPurchaseScreen(Stage stage, String cpfUsuarioLogado) {
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
+        numberSelection = new NumberSelection();
 
-        initializeUI(stage); // Inicializa a interface do usuário
-        new HashMap<>(); // Para armazenar as compras
+        initializeUI(stage);
     }
 
     private void initializeUI(Stage stage) {
-        // Título
         Label lblTitulo = UIComponents.createLabel("COMPRA DE BILHETE", "-fx-font-size: 20px; -fx-font-weight: bold;");
-
-        // Grid para os números
         GridPane grid = createNumberGrid();
 
-        // Labels para informações
-        lblSelecionados = new Label("Selecionados: 00");
-        lblValor = new Label("Valor: (valor a se pagar)");
-
-        // Botões de Surpresinha, Limpar, Voltar e Confirmar
+        lblSelecionados = UIComponents.createLabel("Selecionados: 00", null);
+        lblValor = UIComponents.createLabel("Valor: (valor a se pagar)", null);
         HBox buttonBox = createButtonBox(stage);
 
-        // Layout da página
         VBox infoBox = new VBox(10, lblSelecionados, lblValor);
         infoBox.setAlignment(Pos.CENTER);
-
-        // Adiciona todos os elementos ao layout
         layout.getChildren().addAll(lblTitulo, grid, infoBox, buttonBox);
     }
 
@@ -65,7 +55,6 @@ public class TicketPurchaseScreen {
         grid.setAlignment(Pos.CENTER);
 
         numberButtons = new ArrayList<>();
-        selectedNumbers = new ArrayList<>();
 
         for (int i = 1; i <= 25; i++) {
             final int number = i;
@@ -101,39 +90,37 @@ public class TicketPurchaseScreen {
     }
 
     private void handleNumberSelection(Button btn, int number) {
-        if (selectedNumbers.contains(number)) {
-            selectedNumbers.remove((Integer) number);
+        if (numberSelection.getSelectedNumbers().contains(number)) {
+            numberSelection.removeNumber(number);
             btn.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
         } else {
-            if (selectedNumbers.size() < MAX_NUM) {
-                selectedNumbers.add(number);
-                btn.setStyle("-fx-background-color: #00FF00; -fx-border-color: black;");
-            }
+            numberSelection.addNumber(number);
+            btn.setStyle("-fx-background-color: #00FF00; -fx-border-color: black;");
         }
         updateSelectedInfo();
     }
 
     private void updateSelectedInfo() {
-        lblSelecionados.setText("Selecionados: " + String.format("%02d", selectedNumbers.size()));
-        double valor = TicketPricing.calculatePrice(selectedNumbers.size());
+        lblSelecionados.setText("Selecionados: " + String.format("%02d", numberSelection.getSelectedCount()));
+        double valor = TicketPricing.calculatePrice(numberSelection.getSelectedCount());
         lblValor.setText("Valor: R$ " + String.format("%.2f", valor));
     }
 
     private void generateRandomNumbers() {
-        clearSelection();
-        Random random = new Random();
-        while (selectedNumbers.size() < MIN_NUM) {
-            int randomNum = random.nextInt(25) + 1;
-            if (!selectedNumbers.contains(randomNum)) {
-                selectedNumbers.add(randomNum);
-                numberButtons.get(randomNum - 1).setStyle("-fx-background-color: #00FF00; -fx-border-color: black;");
+        numberSelection.generateRandomNumbers();
+        for (int i = 0; i < numberButtons.size(); i++) {
+            Button btn = numberButtons.get(i);
+            if (numberSelection.getSelectedNumbers().contains(i + 1)) {
+                btn.setStyle("-fx-background-color: #00FF00; -fx-border-color: black;");
+            } else {
+                btn.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
             }
         }
         updateSelectedInfo();
     }
 
     private void clearSelection() {
-        selectedNumbers.clear();
+        numberSelection.clearSelection();
         for (Button btn : numberButtons) {
             btn.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
         }
@@ -141,9 +128,9 @@ public class TicketPurchaseScreen {
     }
 
     private void confirmTicketPurchase() {
-        if (selectedNumbers.size() >= MIN_NUM && selectedNumbers.size() <= MAX_NUM) {
+        if (numberSelection.getSelectedCount() >= MIN_NUM && numberSelection.getSelectedCount() <= MAX_NUM) {
             Stage stage = (Stage) layout.getScene().getWindow();
-                    ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers);
+            ScreenNavigator.navigateToTicketSummaryScreen(stage, numberSelection.getSelectedNumbers());
         } else {
             UIComponents.showAlert("Erro", "Número de seleções inválido.", AlertType.WARNING);
         }

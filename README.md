@@ -12,14 +12,10 @@ Este repositório contém o código para um sistema de gerenciamento de tickets 
   - Parte mais crua está funcional, mas pode ser melhorada. Consideramos separar mais as classes para uma melhor organização.
   
 - **FileManager**: ✅ Funcional
-  - Chama apenas o método de criar o arquivo `purchases.txt`.
+  - Chama o método de criar o arquivo `purchases.txt` e seus gerenciamentos.
 
 - **TicketPricing**: ✅ Funcional
   - Chama apenas os valores dos tickets. Sugestão de mudança de localização.
-
-### 3. Modelos
-- **Bet**: 🔄 Necessita de testes
-  - A funcionalidade precisa ser revisada para garantir seu correto funcionamento.
 
 ### 4. Telas
 - **LoginScreen**: ✅ Funcional

@@ -27,9 +27,9 @@ public class LoginScreen {
 
         // campos de login
         Label lblLogiCpf = UIComponents.createLabel("CPF", null);
-        txtCPF = UIComponents.createTextField("CPF", null);
+        txtCPF = UIComponents.createTextField("CPF", "-fx-max-width: 250px;");
         Label lblLoginSenha = UIComponents.createLabel("Senha", null);
-        txtSenha = UIComponents.createPasswordField("Sua senha", null);
+        txtSenha = UIComponents.createPasswordField("Sua senha", "-fx-max-width: 250px;");
 
         // botão de entrar
         Button btnEntrar = UIComponents.createButton("Entrar", "-fx-background-color: #007BFF; -fx-text-fill: white;",

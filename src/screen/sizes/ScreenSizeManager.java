@@ -3,15 +3,15 @@ package screen.sizes;
 public class ScreenSizeManager {
    
     public static ScreenSize getLoginScreenSize() {
-        return new ScreenSize(400, 300); //login
+        return new ScreenSize(800, 600); //login
     }
 
     public static ScreenSize getRegisterScreenSize() {
-        return new ScreenSize(500, 550); // registro
+        return new ScreenSize(800, 600); // registro
     }
 
     public static ScreenSize getTermsScreenSize() {
-        return new ScreenSize(500, 550); //termos
+        return new ScreenSize(800, 600); //termos
     }
 
     public static ScreenSize getMainScreenSize() {
@@ -19,11 +19,11 @@ public class ScreenSizeManager {
     }
 
     public static ScreenSize getPurchaseScreenSize() {
-        return new ScreenSize(600, 400); //compra
+        return new ScreenSize(800, 600); //compra
     }
 
     public static ScreenSize getRegisterContestScreenSize() {
-        return new ScreenSize(600, 400); //compra
+        return new ScreenSize(800, 600); //A fazer
     }
 
     public static ScreenSize getPurchaseHistoryScreenSize() {
@@ -31,7 +31,7 @@ public class ScreenSizeManager {
     }
 
     public static ScreenSize getTicketSummaryScreenSize() {
-        return new ScreenSize(600, 400); // Ajuste o tamanho conforme necessário
+        return new ScreenSize(800, 600); // Ajuste o tamanho conforme necessário
     }
     
 
