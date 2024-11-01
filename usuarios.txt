@@ -1,3 +1,0 @@
-CPF: 123;DataNascimento: 12-10-2005;senha: 123;nome: 123;email: 123@123
-CPF: adm;DataNascimento: 12-10-2005;senha: adm;nome: adm;email: adm@123
-CPF: 1234;DataNascimento: 16-10-2002;senha: 1234;nome: 1234;email: 1234@1234

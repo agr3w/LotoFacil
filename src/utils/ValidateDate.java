@@ -5,9 +5,13 @@ import java.time.Period;
 
 public class ValidateDate {
 
-    public static boolean isOfLegalAge(LocalDate pickedDate) {
+    public static LocalDate todayLocalDate() {
         LocalDate today = LocalDate.now();
-        Period age = Period.between(pickedDate, today);
+        return today;
+    }
+
+    public static boolean isOfLegalAge(LocalDate pickedDate) {
+        Period age = Period.between(pickedDate, todayLocalDate());
         return age.getYears() >= 18;
     }
 }

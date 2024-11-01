@@ -8,7 +8,7 @@ public class MainJFX extends Application {
     @Override
     public void start(Stage primaryStage) {
         // Criar o arquivo de texto se não existir
-        Database.createFileIfNotExists();
+        Database.createFilesIfNotExists();
 
         // Carregar a tela de login
         LoginScreen loginScreen = new LoginScreen(primaryStage);

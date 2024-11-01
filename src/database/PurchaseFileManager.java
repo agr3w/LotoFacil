@@ -1,23 +1,24 @@
 package database;
-
 import java.io.IOException;
 import java.util.List;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.nio.file.Files;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.util.ArrayList;
 import utils.UserSession;
+import utils.ValidateDate;
 
 public class PurchaseFileManager {
     private String selectedNumbers;
     private String value;
     private String cpf;
+    private String dataCompra;
 
-    public PurchaseFileManager(String cpf, String selectedNumbers, String value) {
+    public PurchaseFileManager(String cpf, String dataCompra,  String selectedNumbers, String value) {
         this.cpf = cpf;
+        this.dataCompra = dataCompra;
         this.selectedNumbers = selectedNumbers;
         this.value = value;
     }
@@ -34,6 +35,10 @@ public class PurchaseFileManager {
         return cpf;
     }
 
+    public String getDataCompra() {
+        return dataCompra;
+    }
+
     private static final String FILE_NAME = "purchases.txt";
     private static final String filePath = "c:\\tmp\\" + FILE_NAME;
 
@@ -44,6 +49,7 @@ public class PurchaseFileManager {
             Files.createDirectories(path.getParent());
             try (BufferedWriter writer = Files.newBufferedWriter(path, java.nio.file.StandardOpenOption.APPEND)) {
                 writer.write(loggedInUser + "\n");
+                writer.write(ValidateDate.todayLocalDate().toString() + "\n");
                 writer.write(numbers.toString() + "\n");
                 writer.write(TicketPricing.calculatePrice(numbers.size()) + "\n\n");
             }
@@ -66,11 +72,12 @@ public class PurchaseFileManager {
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith(loggedInCpf)) {
                     String cpf = line;
+                    String dataCompra = reader.readLine();
                     String selectedNumbers = reader.readLine();
                     String value = reader.readLine();
 
                     if (cpf != null && selectedNumbers != null && value != null) {
-                        tickets.add(new PurchaseFileManager(cpf, selectedNumbers, value));
+                        tickets.add(new PurchaseFileManager(cpf, dataCompra,selectedNumbers, value));
                     }
                 }
             }

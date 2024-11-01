@@ -7,13 +7,13 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Database {
-    private static final String FILE_NAME = "usuarios.txt"; // ta criando usuarios com nomes iguais, ARRUMAR
-    private static final String filePath = "c:\\tmp\\" + FILE_NAME;
+    private static final String[] FILE_NAMES = {"users.txt", "purchases.txt"};
+    private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
     // Método para verificar credenciais
     public static boolean checkCredentials(String cpf, String senha) {
         try {
-            Path path = Paths.get(filePath);
+            Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
             List<String> lines = Files.readAllLines(path);
 
             for (String line : lines) {
@@ -34,7 +34,7 @@ public class Database {
 
     // Método para salvar um novo usuário no arquivo
     public static void saveUser(String nome, String email, String cpf, String Nascimento,String senha) {
-        Path path = Paths.get(filePath);
+        Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
         try {
             Files.createDirectories(path.getParent());
             BufferedWriter writer = Files.newBufferedWriter(path);
@@ -49,15 +49,20 @@ public class Database {
         }
     }
 
-    // Método para criar o arquivo, se não existir
-    public static void createFileIfNotExists() {
+    // Método para criar os arquivos se não existirem
+    public static void createFilesIfNotExists() {
         try {
-            File file = new File(FILE_NAME);
-            if (!file.exists()) {
-                file.createNewFile();
-                System.out.println("Arquivo de usuários criado.");
+            Files.createDirectories(Paths.get(DIRECTORY_PATH)); // Garante que o diretório exista
+            
+            for (String fileName : FILE_NAMES) {
+                Path filePath = Paths.get(DIRECTORY_PATH + fileName);
+                if (Files.notExists(filePath)) {
+                    Files.createFile(filePath);
+                    System.out.println("Arquivo criado: " + filePath);
+                }
             }
         } catch (IOException e) {
+            System.out.println("Erro ao criar os arquivos: " + e.getMessage());
             e.printStackTrace();
         }
     }
