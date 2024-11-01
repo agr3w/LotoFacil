@@ -60,19 +60,19 @@ public class PurchaseHistoryScreen {
 
                 // Exibindo o CPF
                 Label userLabel = UIComponents.createLabel(
-                    "CPF: " + ticket.getCpf(),
+                    "CPF: " + ticket.getCpfFromFile(),
                     "-fx-font-size: 14px; -fx-text-fill: #333;"
                 );
 
                 // Exibindo os números selecionados
                 Label numbersLabel = UIComponents.createLabel(
-                    "Números Selecionados: " + ticket.getSelectedNumbers(),
+                    "Números Selecionados: " + ticket.getSelectedNumbersFromFile(),
                     "-fx-font-size: 12px; -fx-text-fill: #555;"
                 );
 
                 // Exibindo o valor da compra
                 Label valueLabel = UIComponents.createLabel(
-                    "Valor: " + ticket.getValue(),
+                    "Valor: " + ticket.getValueFromFile(),
                     "-fx-font-size: 12px; -fx-text-fill: #555;"
                 );
                 purchaseBox.getChildren().addAll(userLabel ,numbersLabel ,valueLabel);
