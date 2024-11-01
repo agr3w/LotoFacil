@@ -12,9 +12,10 @@ import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 
+
 public class MainScreen {
     private BorderPane layout;
-
+    @SuppressWarnings("unused")
     public MainScreen(Stage stage) {
         layout = new BorderPane();
 

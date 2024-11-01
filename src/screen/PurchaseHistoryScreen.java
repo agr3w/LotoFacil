@@ -34,6 +34,7 @@ public class PurchaseHistoryScreen {
         scrollPane.setStyle("-fx-background: #f5f5f5; -fx-border-color: #d0d0d0;");
 
         // Botão de voltar
+        @SuppressWarnings("unused")
         Button btnVoltar = UIComponents.createButton(
                 "Voltar",
                 "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;",

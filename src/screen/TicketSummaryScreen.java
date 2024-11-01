@@ -12,10 +12,12 @@ import database.TicketPricing;
 
 import java.util.List;
 
+
 public class TicketSummaryScreen {
     private VBox layout;
     private List<Integer> selectedNumbers;
     private String loggedInUser;
+    
 
     public TicketSummaryScreen(Stage stage, List<Integer> selectedNumbers, String loggedInUser) {
         this.selectedNumbers = selectedNumbers;
@@ -23,7 +25,8 @@ public class TicketSummaryScreen {
 
         initializeUI(stage);
     }
-
+    
+    @SuppressWarnings("unused")
     private void initializeUI(Stage stage) {
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
@@ -37,7 +40,6 @@ public class TicketSummaryScreen {
         Button btnConfirmar = UIComponents.createButton("Confirmar", null, e -> ScreenNavigator.navigateToPaymentScreen(stage, selectedNumbers));
 
         Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToPurchaseScreen(stage));
-
 
         layout.getChildren().addAll(lblTitle, lblNumbers, lblValor, btnConfirmar, btnVoltar);
         layout.setAlignment(Pos.CENTER);

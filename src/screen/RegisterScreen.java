@@ -11,6 +11,7 @@ import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 import utils.ValidateDate;
 
+@SuppressWarnings("unused")
 public class RegisterScreen {
     private VBox layout;
 

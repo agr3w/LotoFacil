@@ -16,6 +16,7 @@ import java.util.List;
 import database.PurchaseFileManager;
 import database.TicketPricing;
 
+@SuppressWarnings("unused")
 public class PaymentScreen {
     private VBox layout;
     private String loggedInUser;

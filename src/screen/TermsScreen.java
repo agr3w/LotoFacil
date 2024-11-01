@@ -8,6 +8,7 @@ import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 
+@SuppressWarnings("unused")
 public class TermsScreen {
     private VBox layout;
 

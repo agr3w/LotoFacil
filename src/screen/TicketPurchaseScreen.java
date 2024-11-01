@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import database.TicketPricing;
 
+@SuppressWarnings("unused")
 public class TicketPurchaseScreen {
     private VBox layout;
     private List<Button> numberButtons;
@@ -68,7 +69,7 @@ public class TicketPurchaseScreen {
 
         return grid;
     }
-
+    
     private HBox createButtonBox(Stage stage) {
         Button btnSurpresinha = UIComponents.createButton("Surpresinha",
                 "-fx-background-color: #800080; -fx-text-fill: white;", e -> generateRandomNumbers());
