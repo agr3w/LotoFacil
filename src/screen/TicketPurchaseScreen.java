@@ -94,6 +94,10 @@ public class TicketPurchaseScreen {
             numberSelection.removeNumber(number);
             btn.setStyle("-fx-background-color: #FFFFFF; -fx-border-color: black;");
         } else {
+            if (numberSelection.getSelectedCount() >= MAX_NUM) {
+                UIComponents.showAlert("Limite Atingido", "O número máximo de seleções é 20.", AlertType.WARNING);
+                return;
+            }
             numberSelection.addNumber(number);
             btn.setStyle("-fx-background-color: #00FF00; -fx-border-color: black;");
         }
