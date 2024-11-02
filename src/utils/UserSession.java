@@ -6,7 +6,7 @@ public class UserSession {
     private static String loggedInUserCpf;
 
     public static boolean isAdminLoggedIn() {
-        if (Database.isAdm()) {
+        if (Database.isAdm(loggedInUserCpf)) {
             return true;
         }
         return false;

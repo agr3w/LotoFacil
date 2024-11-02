@@ -2,6 +2,7 @@ package database;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -32,24 +33,27 @@ public class Database {
         return false;
     }
 
-    // Método para verificar credenciais
-    public static boolean isAdm() {
+    // Método para verificar se o usuário é ADM
+    public static boolean isAdm(String cpf) {
         try {
             Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
             List<String> lines = Files.readAllLines(path);
 
             for (String line : lines) {
                 String[] data = line.split(";");
-                boolean isAdm = data[5].split(": ")[1].equals("1"); // Verifica se o usuário é ADM
-                if (isAdm) {
-                    return true;
+                String userCpf = data[0].split(": ")[1];
+
+                // Verifica se o CPF do usuário corresponde ao fornecido
+                if (userCpf.equals(cpf)) {
+                    boolean isAdm = data[5].split(": ")[1].equals("1"); // Verifica se o usuário é ADM
+                    return isAdm;
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        return false;
+        return false; // Retorna false se não encontrar o usuário ou se não for ADM
     }
 
     // Método para salvar um novo usuário no arquivo
@@ -57,7 +61,7 @@ public class Database {
         Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
         try {
             Files.createDirectories(path.getParent());
-            BufferedWriter writer = Files.newBufferedWriter(path);
+            BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
             String admValue = "0";
             writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";"

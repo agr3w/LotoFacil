@@ -1,6 +1,9 @@
 package screen;
 
+import database.ContestFileManager;
+import database.Database;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
@@ -15,6 +18,8 @@ import utils.UserSession;
 
 public class MainScreen {
         private BorderPane layout;
+        private Label lblContestStatus;
+        private Button btnComprarBilhete;
 
         @SuppressWarnings("unused")
         public MainScreen(Stage stage) {
@@ -72,11 +77,21 @@ public class MainScreen {
                         // Adicionar botões adicionais para administradores
                         mainContent.getChildren().addAll(btnCadastrarConcurso, btnStatusConcurso);
                 } else {
-                        // Botão "Comprar Bilhete"
-                        Button btnComprarBilhete = UIComponents.createButton("COMPRAR BILHETE",
-                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
-                                        e -> ScreenNavigator.navigateToPurchaseScreen(stage));
+                        // Label para exibir o status do concurso
+                        lblContestStatus = new Label();
 
+                        // Botão "Comprar Bilhete"
+                        btnComprarBilhete = UIComponents.createButton("COMPRAR BILHETE",
+                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
+                                        e -> {
+                                                if (ContestFileManager.isContestOpen()) { // Verifica se há concurso
+                                                                                          // aberto
+                                                        ScreenNavigator.navigateToPurchaseScreen(stage);
+                                                } else {
+                                                        UIComponents.showAlert("Nenhum Concurso Aberto",
+                                                                        "Não há concursos abertos no momento.", null);
+                                                }
+                                        });
                         // Botões comuns a todos os usuários
                         Button btnHistoricoCompras = UIComponents.createButton("Histórico de Compras",
                                         "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
@@ -90,8 +105,10 @@ public class MainScreen {
                         btnHistoricoCompras.setTooltip(new Tooltip("Veja o histórico de compras."));
                         // btnRegras.setTooltip(new Tooltip("Leia as regras do jogo."));
 
+                        updateContestStatus();
+
                         // Adicionar botões ao layout principal para usuários comuns
-                        mainContent.getChildren().addAll(btnComprarBilhete, btnHistoricoCompras);
+                        mainContent.getChildren().addAll(lblContestStatus, btnComprarBilhete, btnHistoricoCompras);
                 }
 
                 // Botão de Sair
@@ -99,9 +116,25 @@ public class MainScreen {
                                 "-fx-background-color: #FF0000; -fx-text-fill: white;",
                                 e -> stage.close());
 
+                mainContent.getChildren().add(btnSair);
                 // Colocar a barra superior no topo e o conteúdo principal no centro
                 // layout.setTop(topBar);
                 layout.setCenter(mainContent);
+        }
+
+        // Função para atualizar o status do concurso
+        private void updateContestStatus() {
+                if (ContestFileManager.isContestOpen()) {
+                        lblContestStatus.setText("Há um concurso aberto! Você pode apostar.");
+                        btnComprarBilhete.setDisable(false); // Habilita o botão
+                        btnComprarBilhete.setStyle(
+                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;");
+                } else {
+                        lblContestStatus.setText("Não há concursos abertos no momento.");
+                        btnComprarBilhete.setDisable(true); // Desabilita o botão
+                        btnComprarBilhete.setStyle(
+                                        "-fx-background-color: #A9A9A9; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;");
+                }
         }
 
         public BorderPane getLayout() {
