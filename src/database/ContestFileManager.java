@@ -82,6 +82,30 @@ public class ContestFileManager {
 
         return openContests;
     }
+    // Método para obter uma lista de concursos abertos
+    public static List<Map<String, String>> getAllContests() {
+        List<Map<String, String>> AllContests = new ArrayList<>();
+        Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length >= 5 && parts[4].contains("Aberto")) {
+                    Map<String, String> contest = new HashMap<>();
+                    contest.put("name", parts[0].split(":")[1].trim());
+                    contest.put("startDate", parts[1].split(":")[1].trim());
+                    contest.put("endDate", parts[2].split(":")[1].trim());
+                    contest.put("contestCode", parts[3].split(":")[1].trim());
+                    AllContests.add(contest);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return AllContests;
+    }
 
     // Método para obter uma lista de códigos de concursos abertos
     public static List<String> getOpenContestCodes() {

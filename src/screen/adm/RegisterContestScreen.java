@@ -10,7 +10,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Contest;
 import utils.UIComponents;
-import utils.UserSession;
 
 public class RegisterContestScreen {
     private VBox layout;
