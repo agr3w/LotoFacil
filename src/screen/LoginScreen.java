@@ -15,7 +15,7 @@ public class LoginScreen {
     private VBox layout;
     private TextField txtCPF;
     private PasswordField txtSenha;
-    
+
     @SuppressWarnings("unused")
     public LoginScreen(Stage stage) {
         layout = new VBox(10);

@@ -10,13 +10,18 @@ import screen.MainScreen;
 import screen.PaymentScreen;
 import screen.PurchaseHistoryScreen;
 import screen.RegisterScreen;
+import screen.ResultsScreen;
+import screen.RulesScreen;
 import screen.TermsScreen;
 import screen.TicketPurchaseScreen;
 import screen.TicketSummaryScreen;
+import screen.adm.ContestStatusScreen;
+import screen.adm.RegisterContestScreen;
 import utils.UserSession;
 
 public class ScreenNavigator {
 
+    //User
     public static void navigateToMainScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getMainScreenSize();
         MainScreen mainScreen = new MainScreen(stage);
@@ -47,12 +52,6 @@ public class ScreenNavigator {
         stage.setScene(new Scene(ticketPurchaseScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
-    public static void navigateToRegisterContestScreenSize(Stage stage) { // falta criar ADM
-        ScreenSize screenSize = ScreenSizeManager.getRegisterContestScreenSize();
-        TicketPurchaseScreen ticketPurchaseScreen = new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf());
-        stage.setScene(new Scene(ticketPurchaseScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
-    }
-
     public static <ArrayList> void navigateToTicketSummaryScreen(Stage stage, List<Integer> selectedNumbers) {
         ScreenSize screenSize = ScreenSizeManager.getTicketSummaryScreenSize();
         TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers,
@@ -70,6 +69,31 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getTicketPaymentScreenSize();
         PaymentScreen paymentScreen = new PaymentScreen(stage, UserSession.getLoggedInUserCpf(), selectedNumbers);
         stage.setScene(new Scene(paymentScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    // public static void navigateToRulesScreen(Stage stage) {
+    //     ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+    //     RulesScreen rulesScreen = new RulesScreen(stage);
+    //     stage.setScene(new Scene(rulesScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    // }
+
+    // public static void navigateToResultsScreen(Stage stage) {
+    //     ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+    //     ResultsScreen resultsScreen = new ResultsScreen(stage);
+    //     stage.setScene(new Scene(resultsScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    // }
+
+    //ADM
+    public static void navigateToRegisterContestScreenSize(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        RegisterContestScreen registerContestScreen = new RegisterContestScreen(stage);
+        stage.setScene(new Scene(registerContestScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+    
+    public static void navigateToContestStatusScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        ContestStatusScreen contestStatusScreen = new ContestStatusScreen(stage);
+        stage.setScene(new Scene(contestStatusScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     // Adicione mais métodos para outras telas conforme necessário

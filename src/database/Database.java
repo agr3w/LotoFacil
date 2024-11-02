@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Database {
-    private static final String[] FILE_NAMES = {"users.txt", "purchases.txt"};
+    private static final String[] FILE_NAMES = { "users.txt", "purchases.txt" };
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
     // Método para verificar credenciais
@@ -32,14 +32,37 @@ public class Database {
         return false;
     }
 
+    // Método para verificar credenciais
+    public static boolean isAdm() {
+        try {
+            Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
+            List<String> lines = Files.readAllLines(path);
+
+            for (String line : lines) {
+                String[] data = line.split(";");
+                boolean isAdm = data[5].split(": ")[1].equals("1"); // Verifica se o usuário é ADM
+                if (isAdm) {
+                    return true;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     // Método para salvar um novo usuário no arquivo
-    public static void saveUser(String nome, String email, String cpf, String Nascimento,String senha) {
+    public static void saveUser(String nome, String email, String cpf, String Nascimento, String senha) {
         Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
         try {
             Files.createDirectories(path.getParent());
             BufferedWriter writer = Files.newBufferedWriter(path);
 
-            writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";" + "nome: " + nome + ";" + "email: " + email);
+            String admValue = "0";
+            writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";"
+                    + "nome: " + nome + ";" + "email: " + email + ";" +
+                    "ADM: " + admValue);
             writer.newLine(); // Adicionar nova linha para o próximo usuário
             writer.close();
 
@@ -53,7 +76,7 @@ public class Database {
     public static void createFilesIfNotExists() {
         try {
             Files.createDirectories(Paths.get(DIRECTORY_PATH)); // Garante que o diretório exista
-            
+
             for (String fileName : FILE_NAMES) {
                 Path filePath = Paths.get(DIRECTORY_PATH + fileName);
                 if (Files.notExists(filePath)) {
