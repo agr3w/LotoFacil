@@ -7,13 +7,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
 import utils.Contest;
 import utils.UIComponents;
 
 public class ContestStatusScreen {
     private VBox layout;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unused", "unchecked" })
     public ContestStatusScreen(Stage stage) {
         layout = new VBox(15); // Espaçamento entre os elementos
         layout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;");
@@ -45,15 +46,15 @@ public class ContestStatusScreen {
         table.getColumns().addAll(nameColumn, dateColumn, statusColumn);
 
         // Adicionar dados à tabela (simulado, adicione lógica para buscar dados reais)
-        table.getItems().addAll(
-                new Contest("Concurso 1", "01/11/2024", "Aberto"),
-                new Contest("Concurso 2", "15/11/2024", "Fechado"),
-                new Contest("Concurso 3", "25/11/2024", "Em andamento")
-        );
+        // table.getItems().addAll(
+        //         new Contest("Concurso 1", "01/11/2024", "Aberto"),
+        //         new Contest("Concurso 2", "15/11/2024", "Fechado"),
+        //         new Contest("Concurso 3", "25/11/2024", "Em andamento")
+        // );
 
         // Botão de voltar
         Button btnVoltar = UIComponents.createButton("Voltar", "-fx-background-color: #FF0000; -fx-text-fill: white;",
-                e -> stage.close()); // Fechar a tela ou navegar de volta à tela anterior
+                e -> ScreenNavigator.navigateToMainScreen(stage)); // Fechar a tela ou navegar de volta à tela anterior
 
         // Adicionar elementos ao layout
         layout.getChildren().addAll(titleLabel, table, btnVoltar);
