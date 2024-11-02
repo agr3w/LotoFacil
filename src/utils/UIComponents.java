@@ -16,22 +16,23 @@ public class UIComponents {
         label.setStyle(style);
         return label;
     }
-    
+
     public static TextField createTextField(String promptText, String style) {
         TextField textField = new TextField();
         textField.setStyle(style);
         textField.setPromptText(promptText);
         return textField;
     }
-    
+
     public static PasswordField createPasswordField(String promptText, String style) {
         PasswordField passwordField = new PasswordField();
         passwordField.setStyle(style);
         passwordField.setPromptText(promptText);
         return passwordField;
     }
-    
-    public static Button createButton(String text, String style, javafx.event.EventHandler<javafx.event.ActionEvent> eventHandler) {
+
+    public static Button createButton(String text, String style,
+            javafx.event.EventHandler<javafx.event.ActionEvent> eventHandler) {
         Button button = new Button(text);
         button.setStyle(style);
         button.setOnAction(eventHandler);

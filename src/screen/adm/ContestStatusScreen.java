@@ -1,23 +1,23 @@
 package screen.adm;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
+import utils.ContestManager;
 import utils.UIComponents;
-
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import database.ContestFileManager;
 
 public class ContestStatusScreen {
     private VBox layout;
-    private TableView<Map<String, String>> table; // Alterado para Map<String, String>
+    private TableView<Map<String, String>> table;
 
     @SuppressWarnings("unused")
     public ContestStatusScreen(Stage stage) {
@@ -35,14 +35,24 @@ public class ContestStatusScreen {
         // Carregar dados reais
         loadContestData();
 
+        // Organizando botões
+        HBox buttonBox = new HBox(10);
+        Button btnFinalizar = UIComponents.createButton("Finalizar Concurso",
+                "-fx-background-color: #FFA500; -fx-text-fill: white;", e -> finalizarConcurso());
+        Button btnEditar = UIComponents.createButton("Editar Nome",
+                "-fx-background-color: #1E90FF; -fx-text-fill: white;", e -> editarConcurso());
+        Button btnExcluir = UIComponents.createButton("Excluir Concurso",
+                "-fx-background-color: #FF0000; -fx-text-fill: white;", e -> excluirConcurso());
+        buttonBox.getChildren().addAll(btnFinalizar, btnEditar, btnExcluir);
+
         // Botão de voltar
         Button btnVoltar = UIComponents.createButton("Voltar", "-fx-background-color: #FF0000; -fx-text-fill: white;",
                 e -> ScreenNavigator.navigateToMainScreen(stage));
 
-        layout.getChildren().addAll(titleLabel, table, btnVoltar);
+        layout.getChildren().addAll(titleLabel, table, buttonBox, btnVoltar);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "unused" })
     private void setupTableColumns() {
         TableColumn<Map<String, String>, String> nameColumn = new TableColumn<>("Nome do Concurso");
         nameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("name")));
@@ -58,15 +68,71 @@ public class ContestStatusScreen {
 
         TableColumn<Map<String, String>, String> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper("Aberto")); // Todos os concursos são abertos
+                                                                                        
+
         statusColumn.setPrefWidth(150);
 
-        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn);
+        TableColumn<Map<String, String>, String> codeColumn = new TableColumn<>("Código");
+        codeColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("contestCode")));
+        codeColumn.setPrefWidth(100);
+
+        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn, codeColumn);
     }
 
     private void loadContestData() {
         List<Map<String, String>> contests = ContestFileManager.getAllContests(); // Chama o método que você criou
         table.getItems().clear(); // Limpar itens antes de carregar novos dados
         table.getItems().addAll(contests);
+    }
+
+    private void finalizarConcurso() {
+        Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
+        if (selectedContest != null) {
+            String contestName = selectedContest.get("name");
+            ContestManager.finalizeContest(contestName); // Chama o método do ContestManager
+            UIComponents.showAlert("Concurso Finalizado", "O concurso " + contestName + " foi finalizado.",
+                    AlertType.INFORMATION);
+            loadContestData(); // Recarregar dados para atualizar a tabela
+        } else {
+            UIComponents.showAlert("Erro", "Selecione um concurso para finalizar.", AlertType.INFORMATION);
+        }
+    }
+
+    private void editarConcurso() {
+        Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
+        if (selectedContest != null) {
+            String contestName = selectedContest.get("name");
+
+            // Cria um diálogo para solicitar o novo nome do concurso
+            TextInputDialog dialog = new TextInputDialog(contestName); // O nome atual como sugestão
+            dialog.setTitle("Editar Concurso");
+            dialog.setHeaderText("Renomear Concurso");
+            dialog.setContentText("Digite o novo nome para o concurso:");
+
+            // Mostra o diálogo e aguarda a entrada do usuário
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(newName -> {
+                ContestManager.editContestName(contestName, newName); // Chama o método do ContestManager
+                UIComponents.showAlert("Concurso Editado",
+                        "O concurso " + contestName + " foi renomeado para " + newName + ".", AlertType.INFORMATION);
+                loadContestData(); // Recarregar dados para atualizar a tabela
+            });
+        } else {
+            UIComponents.showAlert("Erro", "Selecione um concurso para editar.", AlertType.INFORMATION);
+        }
+    }
+
+    private void excluirConcurso() {
+        Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
+        if (selectedContest != null) {
+            String contestName = selectedContest.get("name");
+            ContestManager.deleteContest(contestName); // Chama o método do ContestManager
+            UIComponents.showAlert("Concurso Excluído", "O concurso " + contestName + " foi excluído.",
+                    AlertType.INFORMATION);
+            loadContestData(); // Recarregar dados para atualizar a tabela
+        } else {
+            UIComponents.showAlert("Erro", "Selecione um concurso para excluir.", AlertType.INFORMATION);
+        }
     }
 
     public VBox getLayout() {
