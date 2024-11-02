@@ -17,6 +17,7 @@ import screen.TicketPurchaseScreen;
 import screen.TicketSummaryScreen;
 import screen.adm.ContestStatusScreen;
 import screen.adm.RegisterContestScreen;
+import screen.user.SelectContestScreen;
 import utils.UserSession;
 
 public class ScreenNavigator {
@@ -54,7 +55,7 @@ public class ScreenNavigator {
 
     public static <ArrayList> void navigateToTicketSummaryScreen(Stage stage, List<Integer> selectedNumbers) {
         ScreenSize screenSize = ScreenSizeManager.getTicketSummaryScreenSize();
-        TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers,
+        TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers, 
                 UserSession.getLoggedInUserCpf());
         stage.setScene(new Scene(TicketSummaryScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
@@ -82,6 +83,12 @@ public class ScreenNavigator {
     //     ResultsScreen resultsScreen = new ResultsScreen(stage);
     //     stage.setScene(new Scene(resultsScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     // }
+
+    public static void navigateToSelectContestScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        SelectContestScreen selectContestScreen = new SelectContestScreen(stage);
+        stage.setScene(new Scene(selectContestScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
 
     //ADM
     public static void navigateToRegisterContestScreenSize(Stage stage) {

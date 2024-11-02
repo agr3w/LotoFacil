@@ -10,6 +10,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import utils.Contest;
 import utils.UIComponents;
+import utils.UserSession;
 
 public class RegisterContestScreen {
     private VBox layout;
@@ -40,14 +41,15 @@ public class RegisterContestScreen {
                 "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 16px;",
                 e -> {
                     String nomeConcurso = txtNomeConcurso.getText();
-                    String dataConcurso = txtDataConcurso.getText();
+                    String nextCode = ContestFileManager.getNextContestCode();
 
                     // Exemplo de uso ao criar um concurso
                     Contest newContest = new Contest(nomeConcurso, LocalDate.now(), LocalDate.now().plusDays(30),
-                            "1", true);
+                            nextCode, true);
+
                     ContestFileManager.saveContest(newContest);
 
-                    if (nomeConcurso.isEmpty() || dataConcurso.isEmpty()) {
+                    if (nomeConcurso.isEmpty()) {
                         UIComponents.showAlert("Erro", "Por favor, preencha todos os campos.", null);
                     } else {
                         // Implementar lógica de salvamento do concurso aqui

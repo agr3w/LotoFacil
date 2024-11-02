@@ -23,10 +23,11 @@ public class PaymentScreen {
     private String loggedInUser;
     private List<Integer> selectedNumbers;
     private String selectedPaymentMethod = "Boleto"; // Método padrão
-
-    public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers) {
-        this.loggedInUser = loggedInUser;
-        this.selectedNumbers = selectedNumbers;
+    private String contestCode;
+    
+        public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers) {
+            this.loggedInUser = loggedInUser;
+            this.selectedNumbers = selectedNumbers;
 
         initializeUI(stage);
     }

@@ -5,6 +5,11 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.nio.file.Path;
 import utils.Contest;
 
@@ -17,7 +22,7 @@ public class ContestFileManager {
         Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
         try {
             Files.createDirectories(path.getParent());
-            BufferedWriter writer = Files.newBufferedWriter(path);
+            BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
             writer.write("Nome: " + contest.getName() + ";");
             writer.write("DataInicio: " + contest.getStartDate() + ";");
@@ -50,6 +55,81 @@ public class ContestFileManager {
             e.printStackTrace();
         }
         return false; // Retorna false se não houver concursos abertos
+    }
+
+    // Método para obter uma lista de concursos abertos
+    public static List<Map<String, String>> getOpenContests() {
+        List<Map<String, String>> openContests = new ArrayList<>();
+        Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length >= 5 && parts[4].contains("Aberto")) {
+                    Map<String, String> contest = new HashMap<>();
+                    contest.put("name", parts[0].split(":")[1].trim());
+                    contest.put("startDate", parts[1].split(":")[1].trim());
+                    contest.put("endDate", parts[2].split(":")[1].trim());
+                    contest.put("contestCode", parts[3].split(":")[1].trim());
+                    contest.put("status", "Aberto");
+                    openContests.add(contest);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return openContests;
+    }
+
+    // Método para obter uma lista de códigos de concursos abertos
+    public static List<String> getOpenContestCodes() {
+        List<String> openContestCodes = new ArrayList<>();
+        Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts.length >= 5 && parts[4].contains("Aberto")) {
+                    // Extrai apenas o código do concurso
+                    String contestCode = parts[3].split(":")[1].trim();
+                    openContestCodes.add(contestCode);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return openContestCodes;
+    }
+
+    public static String getNextContestCode() {
+        int maxCode = 0;
+        Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                for (String part : parts) {
+                    if (part.startsWith("Codigo: ")) {
+                        // Extrai o valor do código e converte para um número
+                        int code = Integer.parseInt(part.replace("Codigo: ", "").trim());
+                        if (code > maxCode) {
+                            maxCode = code;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de concursos: " + e.getMessage());
+            // Caso o arquivo não exista ou esteja vazio, o código será 0.
+        }
+
+        // Retorna o próximo código, incrementado em 1
+        return String.valueOf(maxCode + 1);
     }
 
 }

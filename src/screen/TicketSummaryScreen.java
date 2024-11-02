@@ -16,12 +16,11 @@ import java.util.List;
 public class TicketSummaryScreen {
     private VBox layout;
     private List<Integer> selectedNumbers;
-    private String loggedInUser;
+    private String loggedInUser;        
     
-
-    public TicketSummaryScreen(Stage stage, List<Integer> selectedNumbers, String loggedInUser) {
-        this.selectedNumbers = selectedNumbers;
-        this.loggedInUser = loggedInUser;
+        public TicketSummaryScreen(Stage stage, List<Integer> selectedNumbers, String loggedInUser) {
+            this.selectedNumbers = selectedNumbers;
+            this.loggedInUser = loggedInUser;
 
         initializeUI(stage);
     }

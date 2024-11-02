@@ -86,7 +86,7 @@ public class MainScreen {
                                         e -> {
                                                 if (ContestFileManager.isContestOpen()) { // Verifica se há concurso
                                                                                           // aberto
-                                                        ScreenNavigator.navigateToPurchaseScreen(stage);
+                                                        ScreenNavigator.navigateToSelectContestScreen(stage);
                                                 } else {
                                                         UIComponents.showAlert("Nenhum Concurso Aberto",
                                                                         "Não há concursos abertos no momento.", null);
@@ -125,7 +125,7 @@ public class MainScreen {
         // Função para atualizar o status do concurso
         private void updateContestStatus() {
                 if (ContestFileManager.isContestOpen()) {
-                        lblContestStatus.setText("Há um concurso aberto! Você pode apostar.");
+                        lblContestStatus.setText("Há concursos abertos! Você pode apostar.");
                         btnComprarBilhete.setDisable(false); // Habilita o botão
                         btnComprarBilhete.setStyle(
                                         "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;");

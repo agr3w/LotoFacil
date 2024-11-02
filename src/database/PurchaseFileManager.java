@@ -2,6 +2,7 @@ package database;
 import java.io.IOException;
 import java.util.List;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.BufferedReader;
@@ -44,14 +45,17 @@ public class PurchaseFileManager {
 
     // Salva os valores do ticket no arquivo
     public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers) {
+        String selectedContestCode = UserSession.getSelectedContestCode(); // Obter o código do concurso da sessão
         Path path = Paths.get(filePath);
         try {
             Files.createDirectories(path.getParent());
-            try (BufferedWriter writer = Files.newBufferedWriter(path, java.nio.file.StandardOpenOption.APPEND)) {
+            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
                 writer.write(loggedInUser + "\n");
                 writer.write(ValidateDate.todayLocalDate().toString() + "\n");
                 writer.write(numbers.toString() + "\n");
-                writer.write(TicketPricing.calculatePrice(numbers.size()) + "\n\n");
+                writer.write(TicketPricing.calculatePrice(numbers.size()) + "\n");
+                writer.write("Código do Concurso: " + selectedContestCode + "\n\n");
+
             }
             return true;
         } catch (IOException e) {
