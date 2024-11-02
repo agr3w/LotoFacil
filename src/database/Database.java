@@ -33,7 +33,6 @@ public class Database {
         return false;
     }
 
-    // Método para verificar se o usuário é ADM
     public static boolean isAdm(String cpf) {
         try {
             Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
@@ -41,12 +40,14 @@ public class Database {
 
             for (String line : lines) {
                 String[] data = line.split(";");
-                String userCpf = data[0].split(": ")[1];
-
-                // Verifica se o CPF do usuário corresponde ao fornecido
-                if (userCpf.equals(cpf)) {
-                    boolean isAdm = data[5].split(": ")[1].equals("1"); // Verifica se o usuário é ADM
-                    return isAdm;
+                if (data.length > 5) { // Verifica se há campos suficientes
+                    String userCpf = data[0].split(": ")[1];
+                    if (userCpf.equals(cpf)) {
+                        boolean isAdm = data[5].split(": ")[1].equals("1"); // Verifica se o usuário é ADM
+                        return isAdm;
+                    }
+                } else {
+                    System.out.println("Linha inválida: " + line); // Para debug
                 }
             }
         } catch (IOException e) {
@@ -66,7 +67,7 @@ public class Database {
             String admValue = "0";
             writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";"
                     + "nome: " + nome + ";" + "email: " + email + ";" +
-                    "ADM: " + admValue);
+                    "ADM: " + admValue  + ";"+ "Telefone: ");
             writer.newLine(); // Adicionar nova linha para o próximo usuário
             writer.close();
 
@@ -93,4 +94,5 @@ public class Database {
             e.printStackTrace();
         }
     }
+
 }

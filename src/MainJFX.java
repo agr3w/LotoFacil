@@ -11,7 +11,7 @@ public class MainJFX extends Application {
         Database.createFilesIfNotExists();
 
         // Carregar a tela de login
-        LoginScreen loginScreen = new LoginScreen(primaryStage);
+        LoginScreen loginScreen =  new LoginScreen(primaryStage);
         Scene scene = new Scene(loginScreen.getLayout(), 800, 600);
         primaryStage.setTitle("LotoFacil - Login"); // necessita ser dinamico em todas as paginas
         primaryStage.setScene(scene);

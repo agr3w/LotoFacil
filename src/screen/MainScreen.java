@@ -1,7 +1,6 @@
 package screen;
 
 import database.ContestFileManager;
-import database.Database;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -24,35 +23,6 @@ public class MainScreen {
         @SuppressWarnings("unused")
         public MainScreen(Stage stage) {
                 layout = new BorderPane();
-
-                // // Barra superior (NAV) com fundo mais escuro
-                // HBox topBar = new HBox(10);
-                // topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10;
-                // -fx-alignment: center;");
-
-                // // Botão de configurações à esquerda
-                // MenuButton configButton = new MenuButton();
-                // configButton.setStyle("-fx-background-radius: 50%; -fx-background-color:
-                // #800080;");
-                // configButton.setText("⚙"); // Ícone de configuração, pode substituir por
-                // imagem
-                // MenuItem perfilItem = new MenuItem("Perfil");
-                // configButton.getItems().addAll(perfilItem);
-
-                // // Ícone de perfil à direita
-                // Button profileIcon = new Button("🌟");
-                // profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color:
-                // #800080;");
-
-                // // Ajustar posicionamento dos ícones na barra
-                // Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
-                // Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do
-                // botão Sair
-                // spacerLeft.setMinWidth(250); // Definir largura mínima do espaçador esquerdo
-                // spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
-
-                // topBar.getChildren().addAll(configButton, spacerLeft, profileIcon,
-                // spacerRight);
 
                 // Conteúdo principal
                 VBox mainContent = new VBox(15); // Espaçamento entre os elementos
@@ -77,6 +47,33 @@ public class MainScreen {
                         // Adicionar botões adicionais para administradores
                         mainContent.getChildren().addAll(btnCadastrarConcurso, btnStatusConcurso);
                 } else {
+                        // Barra superior (NAV) com fundo mais escuro
+                        HBox topBar = new HBox(10);
+                        topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
+
+                        // Botão de configurações à esquerda
+                        MenuButton configButton = new MenuButton();
+                        configButton.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+                        configButton.setText("⚙"); // Ícone de configuração
+
+                        MenuItem perfilItem = new MenuItem("Perfil");
+                        perfilItem.setOnAction(e -> {
+                                ScreenNavigator.navigateToProfileScreen(stage); // Navegar para a tela de perfil
+                        });
+                        configButton.getItems().addAll(perfilItem);
+
+                        // Ícone de perfil à direita
+                        Button profileIcon = new Button("🌟");
+                        profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+
+                        // Ajustar posicionamento dos ícones na barra
+                        Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
+                        Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do botão Sair
+                        spacerLeft.setMinWidth(250); // Definir largura mínima do espaçador esquerdo
+                        spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
+
+                        topBar.getChildren().addAll(configButton, spacerLeft, profileIcon, spacerRight);
+
                         // Label para exibir o status do concurso
                         lblContestStatus = new Label();
 
@@ -107,8 +104,9 @@ public class MainScreen {
 
                         updateContestStatus();
 
-                        // Adicionar botões ao layout principal para usuários comuns
-                        mainContent.getChildren().addAll(lblContestStatus, btnComprarBilhete, btnHistoricoCompras);
+                        layout.setTop(topBar);
+                        mainContent.getChildren().addAll(lblContestStatus, btnComprarBilhete,
+                                        btnHistoricoCompras);
                 }
 
                 // Botão de Sair
@@ -117,8 +115,7 @@ public class MainScreen {
                                 e -> stage.close());
 
                 mainContent.getChildren().add(btnSair);
-                // Colocar a barra superior no topo e o conteúdo principal no centro
-                // layout.setTop(topBar);
+
                 layout.setCenter(mainContent);
         }
 

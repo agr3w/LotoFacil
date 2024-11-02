@@ -18,6 +18,7 @@ import screen.TicketSummaryScreen;
 import screen.adm.ContestStatusScreen;
 import screen.adm.RegisterContestScreen;
 import screen.user.SelectContestScreen;
+import screen.user.profile.ProfileScreen;
 import utils.UserSession;
 
 public class ScreenNavigator {
@@ -88,6 +89,12 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         SelectContestScreen selectContestScreen = new SelectContestScreen(stage);
         stage.setScene(new Scene(selectContestScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    public static void navigateToProfileScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        ProfileScreen profileScreen = new ProfileScreen(stage);
+        stage.setScene(new Scene(profileScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     //ADM
