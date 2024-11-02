@@ -10,6 +10,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 
 import java.util.List;
@@ -34,8 +35,7 @@ public class PaymentScreen {
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
 
-        Label lblTitle = new Label("Tela de Pagamento");
-        lblTitle.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        Label lblTitle = UIComponents.createLabel("Página de pagamento", "-fx-font-size: 20px; -fx-font-weight: bold;"); 
 
         // Grupo de botões para seleção do método de pagamento
         ToggleGroup paymentGroup = new ToggleGroup();
@@ -55,24 +55,21 @@ public class PaymentScreen {
         });
 
         // Exibir valor total
-        Label lblTotal = new Label("Valor Total: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()));
-        lblTotal.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label lblTotal = UIComponents.createLabel("Valor Total: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()), "-fx-font-size: 16px; -fx-font-weight: bold;");
 
         // Botão Confirmar Pagamento
-        Button btnConfirmarPagamento = new Button("Confirmar Pagamento");
-        btnConfirmarPagamento.setOnAction(e -> {
+        Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
             if (confirmarPagamento()) {
                 PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers);
                 System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
-                showConfirmationAlert("Pagamento Confirmado", "Seu pagamento foi realizado com " + selectedPaymentMethod);
+                UIComponents.showAlert("Pagamento Confirmado", "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
             } else {
                 UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.", AlertType.ERROR);
             }
         });
 
         // Botão Voltar
-        Button btnVoltar = new Button("Voltar");
-        btnVoltar.setOnAction(e -> stage.setScene(new Scene(new TicketPurchaseScreen(stage, loggedInUser).getLayout(), 600, 400)));
+        Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers));
 
         layout.getChildren().addAll(lblTitle, lblTotal, rbBoleto, rbCartao, rbPIX, btnConfirmarPagamento, btnVoltar);
         layout.setAlignment(Pos.CENTER);
@@ -80,14 +77,6 @@ public class PaymentScreen {
 
     private boolean confirmarPagamento() {
         return selectedPaymentMethod != null && !selectedPaymentMethod.isEmpty();
-    }
-
-    private void showConfirmationAlert(String title, String message) {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 
     public VBox getLayout() {
