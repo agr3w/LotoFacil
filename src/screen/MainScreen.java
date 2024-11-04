@@ -90,9 +90,9 @@ public class MainScreen {
                                                 }
                                         });
                         // Botões comuns a todos os usuários
-                        Button btnHistoricoCompras = UIComponents.createButton("Histórico de Compras",
+                        Button btnHistoricoCompras = UIComponents.createButton("Resultados",
                                         "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
-                                        e -> ScreenNavigator.navigateToPurchaseHistoryScreen(stage));
+                                        e -> ScreenNavigator.navigateToResultsScreen(stage));
                         // Button btnRegras = UIComponents.createButton("Regras",
                         // "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
                         // e -> ScreenNavigator.navigateToRulesScreen(stage));

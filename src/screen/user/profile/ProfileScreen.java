@@ -220,7 +220,13 @@ public class ProfileScreen {
             mainContent.getChildren().addAll(lblTitle, lblNoCompras);
         } else {
             // Se houver compras, adiciona o título e os cartões ao conteúdo principal
-            mainContent.getChildren().addAll(lblTitle, historicoContainer);
+            // Crie um ScrollPane e adicione o historicoContainer
+            ScrollPane scrollPane = new ScrollPane();
+            scrollPane.setContent(historicoContainer);
+            scrollPane.setFitToWidth(true); // Ajusta a largura do ScrollPane
+
+            // Adiciona o título e o ScrollPane ao conteúdo principal
+            mainContent.getChildren().addAll(lblTitle, scrollPane);
         }
     }
 

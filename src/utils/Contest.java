@@ -1,6 +1,7 @@
 package utils;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Contest {
     private String name;
@@ -8,6 +9,7 @@ public class Contest {
     private LocalDate endDate;
     private String contestCode;
     private boolean isOpen;
+       private List<Integer> winningNumbers;
 
     public Contest(String name, LocalDate startDate, LocalDate endDate, String contestCode, boolean isOpen) {
         this.name = name;
@@ -36,5 +38,14 @@ public class Contest {
 
     public boolean isOpen() {
         return isOpen;
+    }
+
+    public List<Integer> getWinningNumbers() {
+        return winningNumbers;
+    }
+
+    // Método para definir os números vencedores
+    public void setWinningNumbers(List<Integer> winningNumbers) {
+        this.winningNumbers = winningNumbers;
     }
 }

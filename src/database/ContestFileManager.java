@@ -23,12 +23,16 @@ public class ContestFileManager {
         try {
             Files.createDirectories(path.getParent());
             BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            List<Integer> winningNumbers = contest.getWinningNumbers();
 
             writer.write("Nome: " + contest.getName() + ";");
             writer.write("DataInicio: " + contest.getStartDate() + ";");
             writer.write("DataFinal: " + contest.getEndDate() + ";");
             writer.write("Codigo: " + contest.getContestCode() + ";");
             writer.write("Status: " + (contest.isOpen() ? "Aberto" : "Fechado") + ";");
+
+            writer.write("WinningNumbers: " + winningNumbers.toString() + ";"); // Formatação da lista de números
+
             writer.newLine(); // Adiciona nova linha para o próximo concurso
             writer.close();
 
@@ -82,6 +86,7 @@ public class ContestFileManager {
 
         return openContests;
     }
+
     // Método para obter uma lista de concursos abertos
     public static List<Map<String, String>> getAllContests() {
         List<Map<String, String>> AllContests = new ArrayList<>();

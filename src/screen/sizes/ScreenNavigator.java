@@ -8,7 +8,6 @@ import javafx.scene.Scene;
 import screen.LoginScreen;
 import screen.MainScreen;
 import screen.PaymentScreen;
-import screen.PurchaseHistoryScreen;
 import screen.RegisterScreen;
 import screen.ResultsScreen;
 import screen.RulesScreen;
@@ -62,9 +61,9 @@ public class ScreenNavigator {
         stage.setScene(new Scene(TicketSummaryScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
-    public static void navigateToPurchaseHistoryScreen(Stage stage) {
+    public static void navigateToResultsScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getPurchaseHistoryScreenSize();
-        PurchaseHistoryScreen historyScreen = new PurchaseHistoryScreen(stage);
+        ResultsScreen historyScreen = new ResultsScreen(stage);
         stage.setScene(new Scene(historyScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 

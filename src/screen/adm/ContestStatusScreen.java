@@ -67,8 +67,8 @@ public class ContestStatusScreen {
         endDateColumn.setPrefWidth(150);
 
         TableColumn<Map<String, String>, String> statusColumn = new TableColumn<>("Status");
-        statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper("Aberto")); // Todos os concursos são abertos
-                                                                                        
+        statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper("Aberto")); // Todos os concursos são
+                                                                                        // abertos
 
         statusColumn.setPrefWidth(150);
 
@@ -125,9 +125,9 @@ public class ContestStatusScreen {
     private void excluirConcurso() {
         Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
         if (selectedContest != null) {
-            String contestName = selectedContest.get("name");
-            ContestManager.deleteContest(contestName); // Chama o método do ContestManager
-            UIComponents.showAlert("Concurso Excluído", "O concurso " + contestName + " foi excluído.",
+            String contestCode = selectedContest.get("contestCode");
+            ContestManager.deleteContest(contestCode); // Chama o método do ContestManager
+            UIComponents.showAlert("Concurso Excluído", "O concurso " + contestCode + " foi excluído.",
                     AlertType.INFORMATION);
             loadContestData(); // Recarregar dados para atualizar a tabela
         } else {
