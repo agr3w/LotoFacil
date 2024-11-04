@@ -67,7 +67,7 @@ public class Database {
             String admValue = "0";
             writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";"
                     + "nome: " + nome + ";" + "email: " + email + ";" +
-                    "ADM: " + admValue  + ";"+ "Telefone: ");
+                    "ADM: " + admValue + ";" + "Telefone: ");
             writer.newLine(); // Adicionar nova linha para o próximo usuário
             writer.close();
 
@@ -93,6 +93,32 @@ public class Database {
             System.out.println("Erro ao criar os arquivos: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+
+    // Método para deletar o perfil do usuário com base no CPF
+    public static boolean deleteUserProfile(String cpf) {
+        Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
+        List<String> lines;
+        try {
+            // Lê todas as linhas do arquivo
+            lines = Files.readAllLines(path);
+
+            // Filtra as linhas, mantendo apenas as que não correspondem ao CPF do usuário
+            List<String> updatedLines = lines.stream()
+                    .filter(line -> !line.contains("CPF: " + cpf + ";")) // Filtra a linha do usuário
+                    .toList(); // Usa toList para coletar os resultados
+
+            // Reescreve o arquivo sem a linha do usuário deletado
+            Files.write(path, updatedLines, StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+
+            System.out.println("Perfil deletado com sucesso para CPF: " + cpf);
+
+            return true; // Retorna verdadeiro se a exclusão foi bem-sucedida
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Retorna falso em caso de erro
     }
 
 }

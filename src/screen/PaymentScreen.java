@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
+import utils.UserSession;
 
 import java.util.List;
 import database.PurchaseFileManager;
@@ -24,10 +25,12 @@ public class PaymentScreen {
     private List<Integer> selectedNumbers;
     private String selectedPaymentMethod = "Boleto"; // Método padrão
     private String contestCode;
-    
-        public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers) {
-            this.loggedInUser = loggedInUser;
-            this.selectedNumbers = selectedNumbers;
+    private String contestName;
+
+    public PaymentScreen(Stage stage, String loggedInUser, List<Integer> selectedNumbers) {
+        this.loggedInUser = loggedInUser;
+        this.selectedNumbers = selectedNumbers;
+        this.contestName = UserSession.getSelectedContestName();
 
         initializeUI(stage);
     }
@@ -36,7 +39,7 @@ public class PaymentScreen {
         layout = new VBox(20);
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
 
-        Label lblTitle = UIComponents.createLabel("Página de pagamento", "-fx-font-size: 20px; -fx-font-weight: bold;"); 
+        Label lblTitle = UIComponents.createLabel("Página de pagamento", "-fx-font-size: 20px; -fx-font-weight: bold;");
 
         // Grupo de botões para seleção do método de pagamento
         ToggleGroup paymentGroup = new ToggleGroup();
@@ -56,21 +59,26 @@ public class PaymentScreen {
         });
 
         // Exibir valor total
-        Label lblTotal = UIComponents.createLabel("Valor Total: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()), "-fx-font-size: 16px; -fx-font-weight: bold;");
+        Label lblTotal = UIComponents.createLabel(
+                "Valor Total: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()),
+                "-fx-font-size: 16px; -fx-font-weight: bold;");
 
         // Botão Confirmar Pagamento
         Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
             if (confirmarPagamento()) {
-                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers);
+                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName);
                 System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
-                UIComponents.showAlert("Pagamento Confirmado", "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
+                UIComponents.showAlert("Pagamento Confirmado",
+                        "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
             } else {
-                UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.", AlertType.ERROR);
+                UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.",
+                        AlertType.ERROR);
             }
         });
 
         // Botão Voltar
-        Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers));
+        Button btnVoltar = UIComponents.createButton("Voltar", null,
+                e -> ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers));
 
         layout.getChildren().addAll(lblTitle, lblTotal, rbBoleto, rbCartao, rbPIX, btnConfirmarPagamento, btnVoltar);
         layout.setAlignment(Pos.CENTER);

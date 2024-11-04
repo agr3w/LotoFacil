@@ -1,4 +1,5 @@
 package database;
+
 import java.io.IOException;
 import java.util.List;
 import java.nio.file.Paths;
@@ -12,16 +13,23 @@ import utils.UserSession;
 import utils.ValidateDate;
 
 public class PurchaseFileManager {
-    private String selectedNumbers;
-    private String value;
     private String cpf;
     private String dataCompra;
+    private String selectedNumbers;
+    private String value;
+    private String codigoCompra;
+    private String formaPagamento;
+    private String nomeAposta;
 
-    public PurchaseFileManager(String cpf, String dataCompra,  String selectedNumbers, String value) {
+    public PurchaseFileManager(String cpf, String dataCompra, String selectedNumbers, String value, String codigoCompra,
+            String formaPagamento, String nomeAposta) {
         this.cpf = cpf;
         this.dataCompra = dataCompra;
         this.selectedNumbers = selectedNumbers;
         this.value = value;
+        this.codigoCompra = codigoCompra;
+        this.formaPagamento = formaPagamento;
+        this.nomeAposta = nomeAposta;
     }
 
     public String getSelectedNumbersFromFile() {
@@ -40,22 +48,40 @@ public class PurchaseFileManager {
         return dataCompra;
     }
 
+    public String getCodigoCompra() {
+        return codigoCompra;
+    }
+
+    public String getFormaPagamento() {
+        return formaPagamento;
+    }
+
+    public String getNomeAposta() {
+        return nomeAposta;
+    }
+
     private static final String FILE_NAME = "purchases.txt";
     private static final String filePath = "c:\\tmp\\" + FILE_NAME;
 
     // Salva os valores do ticket no arquivo
-    public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers) {
+    public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers, String formaPagamento,
+            String nomeAposta) {
         String selectedContestCode = UserSession.getSelectedContestCode(); // Obter o código do concurso da sessão
+        String codigoCompra = generateUniquePurchaseCode(); // Gerar um código de compra único
         Path path = Paths.get(filePath);
+
         try {
             Files.createDirectories(path.getParent());
-            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND)) {
-                writer.write(loggedInUser + "\n");
-                writer.write(ValidateDate.todayLocalDate().toString() + "\n");
-                writer.write(numbers.toString() + "\n");
-                writer.write(TicketPricing.calculatePrice(numbers.size()) + "\n");
+            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE,
+                    StandardOpenOption.APPEND)) {
+                writer.write("CPF: " + loggedInUser + "\n");
+                writer.write("Data da Compra: " + ValidateDate.todayLocalDate().toString() + "\n");
+                writer.write("Números Selecionados: " + numbers.toString() + "\n");
+                writer.write("Valor Pago: " + TicketPricing.calculatePrice(numbers.size()) + "\n");
+                writer.write("Código da Compra: " + codigoCompra + "\n");
+                writer.write("Forma de Pagamento: " + formaPagamento + "\n");
+                writer.write("Nome da Aposta: " + nomeAposta + "\n");
                 writer.write("Código do Concurso: " + selectedContestCode + "\n\n");
-
             }
             return true;
         } catch (IOException e) {
@@ -65,24 +91,27 @@ public class PurchaseFileManager {
         return false;
     }
 
-    // Carrega as informações do arquivo
+    // Método para carregar as informações do arquivo
     public static List<PurchaseFileManager> loadUserTickets() {
         List<PurchaseFileManager> tickets = new ArrayList<>();
         String loggedInCpf = UserSession.getLoggedInUserCpf();
-
         Path path = Paths.get(filePath);
+
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
-                if (line.startsWith(loggedInCpf)) {
-                    String cpf = line;
-                    String dataCompra = reader.readLine();
-                    String selectedNumbers = reader.readLine();
-                    String value = reader.readLine();
+                if (line.startsWith("CPF: " + loggedInCpf)) {
+                    String cpf = line.split(": ")[1];
+                    String dataCompra = reader.readLine().split(": ")[1];
+                    String selectedNumbers = reader.readLine().split(": ")[1];
+                    String value = reader.readLine().split(": ")[1];
+                    String codigoCompra = reader.readLine().split(": ")[1];
+                    String formaPagamento = reader.readLine().split(": ")[1];
+                    String nomeAposta = reader.readLine().split(": ")[1];
+                    reader.readLine(); // Pular a linha do código do concurso
 
-                    if (cpf != null && selectedNumbers != null && value != null) {
-                        tickets.add(new PurchaseFileManager(cpf, dataCompra,selectedNumbers, value));
-                    }
+                    tickets.add(new PurchaseFileManager(cpf, dataCompra, selectedNumbers, value, codigoCompra,
+                            formaPagamento, nomeAposta));
                 }
             }
         } catch (IOException e) {
@@ -90,5 +119,10 @@ public class PurchaseFileManager {
         }
 
         return tickets;
+    }
+
+    // Método auxiliar para gerar um código de compra único (simples)
+    private static String generateUniquePurchaseCode() {
+        return "COMPRA-" + System.currentTimeMillis();
     }
 }

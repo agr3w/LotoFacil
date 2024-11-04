@@ -27,8 +27,8 @@ public class SelectContestScreen {
         mainContent.setPadding(new Insets(20));
         mainContent.setStyle("-fx-background-color: #DCE8E8; -fx-alignment: center;");
 
-        Label lblTitle = new Label("Selecione um Concurso para Apostar");
-        lblTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
+        Label lblTitle = UIComponents.createLabel("Selecione um Concurso para Apostar",
+                "-fx-font-size: 24px; -fx-font-weight: bold;");
 
         GridPane contestGrid = new GridPane();
         contestGrid.setHgap(15);
@@ -59,10 +59,13 @@ public class SelectContestScreen {
         card.setStyle(
                 "-fx-border-color: #007BFF; -fx-border-width: 2px; -fx-background-color: #FFFFFF; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-alignment: center;");
 
-        Label lblName = new Label("Concurso: " + contest.get("name"));
-        Label lblStartDate = new Label("Início: " + contest.get("startDate"));
-        Label lblEndDate = new Label("Fim: " + contest.get("endDate"));
-        Label lblStatus = new Label("Status: " + (Boolean.parseBoolean(contest.get("status")) ? "Fechado" : "Aberto"));
+        // Exemplo do uso de UIComponents para criar os Labels
+        Label lblName = UIComponents.createLabel("Concurso: " + contest.get("name"), "-fx-font-size: 14px;");
+        Label lblStartDate = UIComponents.createLabel("Início: " + contest.get("startDate"), "-fx-font-size: 14px;");
+        Label lblEndDate = UIComponents.createLabel("Fim: " + contest.get("endDate"), "-fx-font-size: 14px;");
+        Label lblStatus = UIComponents.createLabel(
+                "Status: " + (Boolean.parseBoolean(contest.get("status")) ? "Fechado" : "Aberto"),
+                "-fx-font-size: 14px;");
 
         Button btnSelect = UIComponents.createButton("Selecionar",
                 "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> {
@@ -79,6 +82,7 @@ public class SelectContestScreen {
 
         if (selectedContestCode != null) {
             // Armazena o código do concurso na sessão do usuário
+            UserSession.setSelectedContestName(contest.get("name"));
             UserSession.setSelectedContestCode(selectedContestCode);
 
         } else {

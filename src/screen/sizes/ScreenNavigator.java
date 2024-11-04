@@ -46,6 +46,7 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getLoginScreenSize();
         LoginScreen loginScreen = new LoginScreen(stage);
         stage.setScene(new Scene(loginScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+        stage.show();
     }
 
     public static void navigateToPurchaseScreen(Stage stage) {
