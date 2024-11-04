@@ -30,9 +30,8 @@ public class ContestFileManager {
             writer.write("DataFinal: " + contest.getEndDate() + ";");
             writer.write("Codigo: " + contest.getContestCode() + ";");
             writer.write("Status: " + (contest.isOpen() ? "Aberto" : "Fechado") + ";");
-
-            writer.write("WinningNumbers: " + winningNumbers.toString() + ";"); // Formatação da lista de números
-
+            writer.write("WinningNumbers: " + winningNumbers.toString() + ";");
+            writer.write("TotalBets: " + contest.getNumberOfBets() + ";"); 
             writer.newLine(); // Adiciona nova linha para o próximo concurso
             writer.close();
 

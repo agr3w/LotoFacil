@@ -88,9 +88,9 @@ public class ContestStatusScreen {
     private void finalizarConcurso() {
         Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
         if (selectedContest != null) {
-            String contestName = selectedContest.get("name");
-            ContestManager.finalizeContest(contestName); // Chama o método do ContestManager
-            UIComponents.showAlert("Concurso Finalizado", "O concurso " + contestName + " foi finalizado.",
+            String contestCode = selectedContest.get("contestCode");
+            ContestManager.finalizeContest(contestCode); // Chama o método do ContestManager
+            UIComponents.showAlert("Concurso Finalizado", "O concurso " + contestCode + " foi finalizado.",
                     AlertType.INFORMATION);
             loadContestData(); // Recarregar dados para atualizar a tabela
         } else {

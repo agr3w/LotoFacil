@@ -10,6 +10,8 @@ public class Contest {
     private String contestCode;
     private boolean isOpen;
        private List<Integer> winningNumbers;
+       private int numberOfBets;
+       
 
     public Contest(String name, LocalDate startDate, LocalDate endDate, String contestCode, boolean isOpen) {
         this.name = name;
@@ -17,6 +19,7 @@ public class Contest {
         this.endDate = endDate;
         this.contestCode = contestCode;
         this.isOpen = isOpen;
+        this.numberOfBets = 0;
     }
 
     // Getters e Setters
@@ -47,5 +50,13 @@ public class Contest {
     // Método para definir os números vencedores
     public void setWinningNumbers(List<Integer> winningNumbers) {
         this.winningNumbers = winningNumbers;
+    }
+
+    public void addBet() {
+        this.numberOfBets++; // Incrementa a quantidade de apostas
+    }
+
+    public int getNumberOfBets() {
+        return numberOfBets; // Retorna a quantidade de apostas
     }
 }

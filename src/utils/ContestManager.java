@@ -10,17 +10,21 @@ public class ContestManager {
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
     // Método para finalizar um concurso
-    public static void finalizeContest(String contestName) {
+    public static void finalizeContest(String contestCode) {
         List<Map<String, String>> contests = readContestsFromFile();
 
         for (Map<String, String> contest : contests) {
-            if (contest.get("name").equals(contestName)) {
+            if (contest.get("contestCode").equals(contestCode)) {
                 contest.put("status", "Finalizado"); // Atualiza o status para "Finalizado"
-                break;
+                writeContestsToFile(contests); // Salva as alterações no arquivo
+                System.out.println("Concurso finalizado: " + contestCode);
+
+                return;
             }
         }
 
-        writeContestsToFile(contests); // Salva as alterações no arquivo
+        System.out.println("Concurso não encontrado: " + contestCode);
+
     }
 
     // Método para editar o nome de um concurso
@@ -54,7 +58,7 @@ public class ContestManager {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] parts = line.split(";");
-                if (parts.length >= 6) { // Alterado para 6
+                if (parts.length >= 7) { // Alterado para 7 para incluir TotalBets
                     Map<String, String> contest = new HashMap<>();
                     contest.put("name", parts[0].split(":")[1].trim());
                     contest.put("startDate", parts[1].split(":")[1].trim());
@@ -62,6 +66,7 @@ public class ContestManager {
                     contest.put("contestCode", parts[3].split(":")[1].trim());
                     contest.put("status", parts[4].split(":")[1].trim());
                     contest.put("winningNumbers", parts[5].split(":")[1].trim()); // Nova linha para winningNumbers
+                    contest.put("TotalBets", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
                     contests.add(contest);
                 }
             }
@@ -72,7 +77,7 @@ public class ContestManager {
         return contests;
     }
 
-    // Atualizar o método de escrita para incluir winningNumbers
+    // Atualizar o método de escrita para incluir TotalBets e winningNumbers
     private static void writeContestsToFile(List<Map<String, String>> contests) {
         Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
 
@@ -83,7 +88,8 @@ public class ContestManager {
                 bw.write("DataFinal: " + contest.get("endDate") + ";");
                 bw.write("Codigo: " + contest.get("contestCode") + ";");
                 bw.write("Status: " + contest.get("status") + ";");
-                bw.write("WinningNumbers: " + contest.get("winningNumbers") + ";"); // Nova linha para winningNumbers
+                bw.write("WinningNumbers: " + contest.get("winningNumbers") + ";");
+                bw.write("TotalBets: " + contest.get("TotalBets") + ";"); // Inclui TotalBets
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -97,7 +103,7 @@ public class ContestManager {
 
         // Gerando 20 números únicos entre 1 e 60
         while (numbers.size() < 20) {
-            int number = random.nextInt(60) + 1; // Gera números de 1 a 60
+            int number = random.nextInt(25) + 1; // Gera números de 1 a 60
             if (!numbers.contains(number)) {
                 numbers.add(number);
             }
@@ -122,10 +128,25 @@ public class ContestManager {
         List<Integer> winningNumbers = generateRandomNumbers();
         newContest.put("winningNumbers", winningNumbers.toString()); // Armazena os números como string
 
+        newContest.put("TotalBets", "0"); // Inicializa TotalBets com 0
+
         contests.add(newContest);
         writeContestsToFile(contests); // Salva as alterações no arquivo
     }
 
-    
+    public static void placeBet(String contestCode) {
+        List<Map<String, String>> contests = readContestsFromFile();
+
+        for (Map<String, String> contest : contests) {
+            if (contest.get("contestCode").equals(contestCode)) {
+                int currentBets = Integer.parseInt(contest.get("TotalBets"));
+                currentBets++;
+                contest.put("TotalBets", String.valueOf(currentBets)); // Atualiza a contagem de apostas
+                writeContestsToFile(contests); // Salva as alterações no arquivo
+                return;
+            }
+        }
+        System.out.println("Concurso não encontrado: " + contestCode);
+    }
 
 }
