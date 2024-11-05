@@ -10,23 +10,24 @@ import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import utils.ContestManager;
 
 import java.util.List;
+import java.util.Map;
 
 public class ResultsScreen {
     private VBox layout;
     private ScrollPane scrollPane;
     private VBox purchaseList;
 
-
     public ResultsScreen(Stage stage) {
         layout = new VBox(10);
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 
-        // Título da tela de histórico de compras
+        // Título da tela de resultados
         Label lblTitle = UIComponents.createLabel(
-                "Histórico de Compras",
+                "Resultados do Concurso",
                 "-fx-font-size: 24px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
         // Caixa para listar as compras com barra de rolagem
@@ -35,7 +36,6 @@ public class ResultsScreen {
         scrollPane.setStyle("-fx-background: #f5f5f5; -fx-border-color: #d0d0d0;");
 
         // Botão de voltar
-        @SuppressWarnings("unused")
         Button btnVoltar = UIComponents.createButton(
                 "Voltar",
                 "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;",
@@ -55,37 +55,70 @@ public class ResultsScreen {
 
         if (!tickets.isEmpty()) {
             for (PurchaseFileManager ticket : tickets) {
-                VBox purchaseBox = new VBox(5);
-                purchaseBox.setPadding(new Insets(10));
-                purchaseBox.setStyle(
-                        "-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;");
+                // Aqui você pode buscar os resultados do concurso
+                Map<String, String> contest = ContestManager.getContestByCode(ticket.getContestCode());
+                if (contest != null) {
+                    // Verifica se o concurso está finalizado
+                    if ("Finalizado".equals(contest.get("status"))) {
+                        String winningNumbersString = contest.get("winningNumbers");
+                        List<Integer> winningNumbers = ContestManager.parseWinningNumbers(winningNumbersString);
+                        List<Integer> selectedNumbers = ContestManager
+                                .parseSelectedNumbers(ticket.getSelectedNumbersFromFile());
+                        int correctCount = ContestManager.countCorrectNumbers(selectedNumbers, winningNumbers);
 
-                // Exibindo o CPF
-                Label userLabel = UIComponents.createLabel(
-                    "CPF: " + ticket.getCpfFromFile(),
-                    "-fx-font-size: 14px; -fx-text-fill: #333;"
-                );
+                        String resultMessage = correctCount >= 11 ? "Você ganhou! Números acertados: " + correctCount
+                                : "Você perdeu! Números acertados: " + correctCount;
 
-                // Exibindo os números selecionados
-                Label numbersLabel = UIComponents.createLabel(
-                    "Números Selecionados: " + ticket.getSelectedNumbersFromFile(),
-                    "-fx-font-size: 12px; -fx-text-fill: #555;"
-                );
+                        VBox purchaseBox = new VBox(5);
+                        purchaseBox.setPadding(new Insets(10));
+                        purchaseBox.setStyle(
+                                "-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;");
 
-                // Exibindo o valor da compra
-                Label valueLabel = UIComponents.createLabel(
-                    "Valor: " + ticket.getValueFromFile(),
-                    "-fx-font-size: 12px; -fx-text-fill: #555;"
-                );
-                purchaseBox.getChildren().addAll(userLabel ,numbersLabel ,valueLabel);
+                        // Exibindo o CPF
+                        Label userLabel = UIComponents.createLabel("CPF: " + ticket.getCpfFromFile(),
+                                "-fx-font-size: 14px; -fx-text-fill: #333;");
+                        // Exibindo os números selecionados
+                        Label numbersLabel = UIComponents.createLabel(
+                                "Números Selecionados: " + ticket.getSelectedNumbersFromFile(),
+                                "-fx-font-size: 12px; -fx-text-fill: #555;");
+                        // Exibindo o valor da compra
+                        Label valueLabel = UIComponents.createLabel("Valor: " + ticket.getValueFromFile(),
+                                "-fx-font-size: 12px; -fx-text-fill: #555;");
+                        // Exibindo o resultado
+                        Label resultLabel = UIComponents.createLabel(resultMessage,
+                                "-fx-font-size: 12px; -fx-text-fill: #333;");
 
-                purchaseList.getChildren().add(purchaseBox);
+                        purchaseBox.getChildren().addAll(userLabel, numbersLabel, valueLabel, resultLabel);
+                        purchaseList.getChildren().add(purchaseBox);
+                    } else {
+                        // Exibe uma mensagem informando que o concurso não está finalizado
+                        VBox purchaseBox = new VBox(5);
+                        purchaseBox.setPadding(new Insets(10));
+                        purchaseBox.setStyle(
+                                "-fx-background-color: #f5f5f5; -fx-border-color: #d0d0d0; -fx-border-radius: 5; -fx-background-radius: 5;");
+
+                        // Exibindo o CPF
+                        Label userLabel = UIComponents.createLabel("CPF: " + ticket.getCpfFromFile(),
+                                "-fx-font-size: 14px; -fx-text-fill: #333;");
+                        // Exibindo os números selecionados
+                        Label numbersLabel = UIComponents.createLabel(
+                                "Números Selecionados: " + ticket.getSelectedNumbersFromFile(),
+                                "-fx-font-size: 12px; -fx-text-fill: #555;");
+                        // Exibindo o valor da compra
+                        Label valueLabel = UIComponents.createLabel("Valor: " + ticket.getValueFromFile(),
+                                "-fx-font-size: 12px; -fx-text-fill: #555;");
+                        // Exibindo mensagem informando que o concurso não está finalizado
+                        Label resultLabel = UIComponents.createLabel("O concurso ainda não foi finalizado.",
+                                "-fx-font-size: 12px; -fx-text-fill: #777;");
+
+                        purchaseBox.getChildren().addAll(userLabel, numbersLabel, valueLabel, resultLabel);
+                        purchaseList.getChildren().add(purchaseBox);
+                    }
+                }
             }
         } else {
-            Label noPurchaseLabel = UIComponents.createLabel(
-                "Nenhuma compra encontrada para o usuário atual.",
-                "-fx-font-size: 14px; -fx-text-fill: #333;"
-            );
+            Label noPurchaseLabel = UIComponents.createLabel("Nenhuma compra encontrada para o usuário atual.",
+                    "-fx-font-size: 14px; -fx-text-fill: #333;");
             purchaseList.getChildren().add(noPurchaseLabel);
         }
 

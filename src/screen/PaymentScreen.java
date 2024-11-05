@@ -31,7 +31,7 @@ public class PaymentScreen {
         this.loggedInUser = loggedInUser;
         this.selectedNumbers = selectedNumbers;
         this.contestName = UserSession.getSelectedContestName();
-
+        this.contestCode = UserSession.getSelectedContestCode();
         initializeUI(stage);
     }
 
@@ -66,7 +66,7 @@ public class PaymentScreen {
         // Botão Confirmar Pagamento
         Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
             if (confirmarPagamento()) {
-                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName);
+                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName, contestCode);
                 System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
                 UIComponents.showAlert("Pagamento Confirmado",
                         "Seu pagamento foi realizado com " + selectedPaymentMethod, null);

@@ -9,24 +9,6 @@ public class ContestManager {
                                                                     // armazenados
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
-    // Método para finalizar um concurso
-    public static void finalizeContest(String contestCode) {
-        List<Map<String, String>> contests = readContestsFromFile();
-
-        for (Map<String, String> contest : contests) {
-            if (contest.get("contestCode").equals(contestCode)) {
-                contest.put("status", "Finalizado"); // Atualiza o status para "Finalizado"
-                writeContestsToFile(contests); // Salva as alterações no arquivo
-                System.out.println("Concurso finalizado: " + contestCode);
-
-                return;
-            }
-        }
-
-        System.out.println("Concurso não encontrado: " + contestCode);
-
-    }
-
     // Método para editar o nome de um concurso
     public static void editContestName(String oldName, String newName) {
         List<Map<String, String>> contests = readContestsFromFile();
@@ -101,15 +83,16 @@ public class ContestManager {
         List<Integer> numbers = new ArrayList<>();
         Random random = new Random();
 
-        // Gerando 20 números únicos entre 1 e 60
+        // Gerando 20 números únicos entre 1 e 25
         while (numbers.size() < 20) {
-            int number = random.nextInt(25) + 1; // Gera números de 1 a 60
+            int number = random.nextInt(25) + 1; // Gera números de 1 a 25
             if (!numbers.contains(number)) {
                 numbers.add(number);
             }
         }
 
-        Collections.sort(numbers); // Opcional: ordena os números
+        Collections.shuffle(numbers);
+
         return numbers;
     }
 
@@ -147,6 +130,71 @@ public class ContestManager {
             }
         }
         System.out.println("Concurso não encontrado: " + contestCode);
+    }
+
+    // Método para finalizar um concurso
+    public static void finalizeContest(String contestCode) {
+        List<Map<String, String>> contests = readContestsFromFile();
+
+        for (Map<String, String> contest : contests) {
+            if (contest.get("contestCode").equals(contestCode)) {
+                contest.put("status", "Finalizado"); // Atualiza o status para "Finalizado"
+                writeContestsToFile(contests); // Salva as alterações no arquivo
+
+                System.out.println("Concurso finalizado: " + contestCode);
+                return;
+            }
+        }
+        System.out.println("Concurso não encontrado: " + contestCode);
+    }
+
+    public static List<Integer> parseWinningNumbers(String winningNumbersString) {
+        String[] parts = winningNumbersString.replaceAll("[\\[\\]]", "").split(", ");
+        List<Integer> winningNumbers = new ArrayList<>();
+        for (String num : parts) {
+            winningNumbers.add(Integer.parseInt(num));
+        }
+        return winningNumbers;
+    }
+
+    public static List<Integer> parseSelectedNumbers(String selectedNumbersString) {
+        String[] parts = selectedNumbersString.replaceAll("[\\[\\]]", "").split(", ");
+        List<Integer> selectedNumbers = new ArrayList<>();
+        for (String num : parts) {
+            selectedNumbers.add(Integer.parseInt(num));
+        }
+        return selectedNumbers;
+    }
+
+    public static int countCorrectNumbers(List<Integer> selectedNumbers, List<Integer> winningNumbers) {
+    int count = 0;
+
+    // As duas listas devem ter o mesmo tamanho para verificar as posições correspondentes
+    int size = Math.min(selectedNumbers.size(), winningNumbers.size());
+
+    // Itera sobre os números até o tamanho mínimo das duas listas
+    for (int i = 0; i < size; i++) {
+        // Compara os números na mesma posição
+        if (selectedNumbers.get(i).equals(winningNumbers.get(i))) {
+            count++; // Conta o número correto
+        }
+    }
+
+    return count;
+}
+
+    
+
+    // Método para obter os detalhes do concurso pelo código
+    public static Map<String, String> getContestByCode(String contestCode) {
+        List<Map<String, String>> contests = readContestsFromFile();
+
+        for (Map<String, String> contest : contests) {
+            if (contest.get("contestCode").equals(contestCode)) {
+                return contest; // Retorna o concurso correspondente
+            }
+        }
+        return null; // Retorna null se o concurso não for encontrado
     }
 
 }

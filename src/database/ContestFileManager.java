@@ -31,7 +31,7 @@ public class ContestFileManager {
             writer.write("Codigo: " + contest.getContestCode() + ";");
             writer.write("Status: " + (contest.isOpen() ? "Aberto" : "Fechado") + ";");
             writer.write("WinningNumbers: " + winningNumbers.toString() + ";");
-            writer.write("TotalBets: " + contest.getNumberOfBets() + ";"); 
+            writer.write("TotalBets: " + contest.getNumberOfBets() + ";");
             writer.newLine(); // Adiciona nova linha para o próximo concurso
             writer.close();
 
@@ -95,14 +95,14 @@ public class ContestFileManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-                if (parts.length >= 5 && parts[4].contains("Aberto")) {
-                    Map<String, String> contest = new HashMap<>();
-                    contest.put("name", parts[0].split(":")[1].trim());
-                    contest.put("startDate", parts[1].split(":")[1].trim());
-                    contest.put("endDate", parts[2].split(":")[1].trim());
-                    contest.put("contestCode", parts[3].split(":")[1].trim());
-                    AllContests.add(contest);
-                }
+
+                Map<String, String> contest = new HashMap<>();
+                contest.put("name", parts[0].split(":")[1].trim());
+                contest.put("startDate", parts[1].split(":")[1].trim());
+                contest.put("endDate", parts[2].split(":")[1].trim());
+                contest.put("contestCode", parts[3].split(":")[1].trim());
+                AllContests.add(contest);
+
             }
         } catch (IOException e) {
             e.printStackTrace();

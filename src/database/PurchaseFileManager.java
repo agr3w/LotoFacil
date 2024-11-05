@@ -20,20 +20,26 @@ public class PurchaseFileManager {
     private String codigoCompra;
     private String formaPagamento;
     private String nomeAposta;
-
-    public PurchaseFileManager(String cpf, String dataCompra, String selectedNumbers, String value, String codigoCompra,
-            String formaPagamento, String nomeAposta) {
-        this.cpf = cpf;
-        this.dataCompra = dataCompra;
-        this.selectedNumbers = selectedNumbers;
-        this.value = value;
-        this.codigoCompra = codigoCompra;
-        this.formaPagamento = formaPagamento;
-        this.nomeAposta = nomeAposta;
+    private String contestCode;
+    
+        public PurchaseFileManager(String cpf, String dataCompra, String selectedNumbers, String value, String codigoCompra,
+                String formaPagamento, String nomeAposta, String contestCode) {
+            this.cpf = cpf;
+            this.dataCompra = dataCompra;
+            this.selectedNumbers = selectedNumbers;
+            this.value = value;
+            this.codigoCompra = codigoCompra;
+            this.formaPagamento = formaPagamento;
+            this.nomeAposta = nomeAposta;
+            this.contestCode = contestCode;
     }
 
     public String getSelectedNumbersFromFile() {
         return selectedNumbers;
+    }
+
+    public String getContestCode() {
+        return contestCode;
     }
 
     public String getValueFromFile() {
@@ -65,8 +71,7 @@ public class PurchaseFileManager {
 
     // Salva os valores do ticket no arquivo
     public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers, String formaPagamento,
-            String nomeAposta) {
-        String selectedContestCode = UserSession.getSelectedContestCode(); // Obter o código do concurso da sessão
+            String nomeAposta, String selectedContestCode) {
         String codigoCompra = generateUniquePurchaseCode(); // Gerar um código de compra único
         Path path = Paths.get(filePath);
 
@@ -108,10 +113,11 @@ public class PurchaseFileManager {
                     String codigoCompra = reader.readLine().split(": ")[1];
                     String formaPagamento = reader.readLine().split(": ")[1];
                     String nomeAposta = reader.readLine().split(": ")[1];
+                    String codeContest = reader.readLine().split(": ")[1];
                     reader.readLine(); // Pular a linha do código do concurso
 
                     tickets.add(new PurchaseFileManager(cpf, dataCompra, selectedNumbers, value, codigoCompra,
-                            formaPagamento, nomeAposta));
+                            formaPagamento, nomeAposta, codeContest));
                 }
             }
         } catch (IOException e) {
