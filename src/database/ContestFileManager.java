@@ -101,6 +101,7 @@ public class ContestFileManager {
                 contest.put("startDate", parts[1].split(":")[1].trim());
                 contest.put("endDate", parts[2].split(":")[1].trim());
                 contest.put("contestCode", parts[3].split(":")[1].trim());
+                contest.put("status", parts[4].split(":")[1].trim());                
                 AllContests.add(contest);
 
             }

@@ -67,8 +67,7 @@ public class ContestStatusScreen {
         endDateColumn.setPrefWidth(150);
 
         TableColumn<Map<String, String>, String> statusColumn = new TableColumn<>("Status");
-        statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper("Aberto")); // Todos os concursos são
-                                                                                        // abertos
+        statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("status")));
 
         statusColumn.setPrefWidth(150);
 
