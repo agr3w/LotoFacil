@@ -11,6 +11,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
+import utils.ContestManager;
 import utils.UIComponents;
 import utils.UserSession;
 
@@ -67,6 +68,7 @@ public class PaymentScreen {
         Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
             if (confirmarPagamento()) {
                 PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName, contestCode);
+                ContestManager.placeBet(contestCode);
                 System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
                 UIComponents.showAlert("Pagamento Confirmado",
                         "Seu pagamento foi realizado com " + selectedPaymentMethod, null);

@@ -79,12 +79,6 @@ public class ScreenNavigator {
     //     stage.setScene(new Scene(rulesScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     // }
 
-    // public static void navigateToResultsScreen(Stage stage) {
-    //     ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
-    //     ResultsScreen resultsScreen = new ResultsScreen(stage);
-    //     stage.setScene(new Scene(resultsScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
-    // }
-
     public static void navigateToSelectContestScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         SelectContestScreen selectContestScreen = new SelectContestScreen(stage);

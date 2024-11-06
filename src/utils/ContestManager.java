@@ -141,6 +141,8 @@ public class ContestManager {
                 contest.put("status", "Finalizado"); // Atualiza o status para "Finalizado"
                 writeContestsToFile(contests); // Salva as alterações no arquivo
 
+
+
                 System.out.println("Concurso finalizado: " + contestCode);
                 return;
             }
