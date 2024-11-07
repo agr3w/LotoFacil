@@ -70,7 +70,7 @@ public class ResultsScreen {
                         String resultMessage = correctCount >= 11 ? "Você ganhou! Números acertados: " + correctCount
                                 : "Você perdeu! Números acertados: " + correctCount;
 
-                        Label winningNumbersLabel = UIComponents.createLabel("Número vencedor: " + winningNumbers,null);
+                        // Label winningNumbersLabel = UIComponents.createLabel("Número vencedor: " + winningNumbers,null);
 
                         VBox purchaseBox = new VBox(5);
                         purchaseBox.setPadding(new Insets(10));
@@ -91,7 +91,7 @@ public class ResultsScreen {
                         Label resultLabel = UIComponents.createLabel(resultMessage,
                                 "-fx-font-size: 12px; -fx-text-fill: #333;");
 
-                        purchaseBox.getChildren().addAll(userLabel, numbersLabel, valueLabel, resultLabel, winningNumbersLabel);
+                        purchaseBox.getChildren().addAll(userLabel, numbersLabel, valueLabel, resultLabel);
                         purchaseList.getChildren().add(purchaseBox);
                     } else {
                         // Exibe uma mensagem informando que o concurso não está finalizado

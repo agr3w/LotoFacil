@@ -21,17 +21,17 @@ public class PurchaseFileManager {
     private String formaPagamento;
     private String nomeAposta;
     private String contestCode;
-    
-        public PurchaseFileManager(String cpf, String dataCompra, String selectedNumbers, String value, String codigoCompra,
-                String formaPagamento, String nomeAposta, String contestCode) {
-            this.cpf = cpf;
-            this.dataCompra = dataCompra;
-            this.selectedNumbers = selectedNumbers;
-            this.value = value;
-            this.codigoCompra = codigoCompra;
-            this.formaPagamento = formaPagamento;
-            this.nomeAposta = nomeAposta;
-            this.contestCode = contestCode;
+
+    public PurchaseFileManager(String cpf, String dataCompra, String selectedNumbers, String value, String codigoCompra,
+            String formaPagamento, String nomeAposta, String contestCode) {
+        this.cpf = cpf;
+        this.dataCompra = dataCompra;
+        this.selectedNumbers = selectedNumbers;
+        this.value = value;
+        this.codigoCompra = codigoCompra;
+        this.formaPagamento = formaPagamento;
+        this.nomeAposta = nomeAposta;
+        this.contestCode = contestCode;
     }
 
     public String getSelectedNumbersFromFile() {
