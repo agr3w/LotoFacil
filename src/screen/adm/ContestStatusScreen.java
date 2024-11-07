@@ -29,7 +29,7 @@ public class ContestStatusScreen {
 
         // Inicializar tabela
         table = new TableView<>();
-        table.setPrefWidth(600);
+        table.setPrefWidth(800); // Aumentar a largura para acomodar novas colunas
         setupTableColumns();
 
         // Carregar dados reais
@@ -68,19 +68,39 @@ public class ContestStatusScreen {
 
         TableColumn<Map<String, String>, String> statusColumn = new TableColumn<>("Status");
         statusColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("status")));
-
         statusColumn.setPrefWidth(150);
 
         TableColumn<Map<String, String>, String> codeColumn = new TableColumn<>("Código");
         codeColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("contestCode")));
         codeColumn.setPrefWidth(100);
 
-        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn, codeColumn);
+        // Nova coluna para Arrecadação Total
+        TableColumn<Map<String, String>, String> totalRevenueColumn = new TableColumn<>("Arrecadação Total");
+        totalRevenueColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("totalRevenue")));
+        totalRevenueColumn.setPrefWidth(150);
+
+        // Nova coluna para Total de Prêmios
+        TableColumn<Map<String, String>, String> totalPrizesColumn = new TableColumn<>("Total de Prêmios");
+        totalPrizesColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("totalPrizes")));
+        totalPrizesColumn.setPrefWidth(150);
+
+        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn, codeColumn, totalRevenueColumn, totalPrizesColumn);
     }
 
     private void loadContestData() {
         List<Map<String, String>> contests = ContestFileManager.getAllContests(); // Chama o método que você criou
         table.getItems().clear(); // Limpar itens antes de carregar novos dados
+
+        for (Map<String, String> contest : contests) {
+            // Calcular arrecadação total e total de prêmios
+            double totalRevenue = ContestManager.calculateTotalBets(contest.get("contestCode"));
+            double totalPrizes = ContestManager.calculateTotalPrizes(contest.get("contestCode")); // Método que você deve implementar
+
+            // Adicionar informações monetárias ao mapa do concurso
+            contest.put("totalRevenue", String.format("R$ %.2f", totalRevenue));
+            contest.put("totalPrizes", String.format("R$ %.2f", totalPrizes));
+        }
+
         table.getItems().addAll(contests);
     }
 

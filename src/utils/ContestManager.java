@@ -5,6 +5,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import database.PurchaseFileManager;
+import screen.ResultsScreen;
 
 public class ContestManager {
     private static final String CONTEST_FILE_NAME = "contests.txt"; // Caminho do arquivo onde os concursos estão
@@ -51,6 +52,8 @@ public class ContestManager {
                     contest.put("status", parts[4].split(":")[1].trim());
                     contest.put("winningNumbers", parts[5].split(":")[1].trim()); // Nova linha para winningNumbers
                     contest.put("TotalBets", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
+                    contest.put("totalRevenue", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
+                    contest.put("totalPrizes", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
                     contests.add(contest);
                 }
             }
@@ -74,6 +77,8 @@ public class ContestManager {
                 bw.write("Status: " + contest.get("status") + ";");
                 bw.write("WinningNumbers: " + contest.get("winningNumbers") + ";");
                 bw.write("TotalBets: " + contest.get("TotalBets") + ";"); // Inclui TotalBets
+                bw.write("totalRevenue: " + contest.get("totalRevenue") + ";"); // Inclui TotalBets
+                bw.write("totalPrizes: " + contest.get("totalPrizes") + ";"); // Inclui TotalBets
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -151,7 +156,6 @@ public class ContestManager {
                     writeContestsToFile(contests);
 
                     System.out.println("Concurso finalizado: " + contestCode);
-                    distributePrizes(contestCode);
                     return;
                 }
             }
@@ -255,46 +259,6 @@ public class ContestManager {
         return totalBets;
     }
 
-    // Método para distribuir os prêmios com base no total de apostas
-    public static void distributePrizes(String contestCode) {
-        try {
-            List<Map<String, String>> contests = readContestsFromFile();
-            double totalBets = calculateTotalBets(contestCode);
-
-            if (totalBets == 0.0) {
-                System.out.println("Não há apostas registradas para este concurso.");
-                return;
-            }
-
-            for (Map<String, String> contest : contests) {
-                if (contest.get("contestCode").equals(contestCode)) {
-                    // Distribuição dos prêmios
-                    double firstPrize = totalBets * 0.35;
-                    double secondPrize = totalBets * 0.25;
-                    double thirdPrize = totalBets * 0.20;
-                    double fourthPrize = totalBets * 0.15;
-                    double fifthPrize = totalBets * 0.05;
-
-                    // Exibir os prêmios
-                    System.out.println("\n=== Distribuição de Prêmios ===");
-                    System.out.println("Total de Apostas: R$ " + String.format("%.2f", totalBets));
-                    System.out.println("Prêmio do Primeiro Lugar: R$ " + String.format("%.2f", firstPrize));
-                    System.out.println("Prêmio do Segundo Lugar: R$ " + String.format("%.2f", secondPrize));
-                    System.out.println("Prêmio do Terceiro Lugar: R$ " + String.format("%.2f", thirdPrize));
-                    System.out.println("Prêmio do Quarto Lugar: R$ " + String.format("%.2f", fourthPrize));
-                    System.out.println("Prêmio do Quinto Lugar: R$ " + String.format("%.2f", fifthPrize));
-                    System.out.println("==============================\n");
-
-                    return;
-                }
-            }
-            System.out.println("Concurso não encontrado: " + contestCode);
-        } catch (Exception e) {
-            System.out.println("Erro ao distribuir prêmios: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
     // Método para determinar os vencedores
     public static void determineWinners(String contestCode) {
         Map<String, String> contest = getContestByCode(contestCode);
@@ -331,4 +295,60 @@ public class ContestManager {
         }
     }
 
+    public static double calculateTotalPrizes(String contestCode) {
+        double totalPrizes = 0.0;
+        Map<String, String> contest = getContestByCode(contestCode);
+
+        if (contest == null) {
+            System.out.println("Concurso não encontrado: " + contestCode);
+            return totalPrizes;
+        }
+
+        List<Integer> winningNumbers = parseWinningNumbers(contest.get("winningNumbers"));
+        List<PurchaseFileManager> tickets = PurchaseFileManager.loadUserTickets(); // Carrega todos os bilhetes
+
+        for (PurchaseFileManager ticket : tickets) {
+            if (ticket.getContestCode().equals(contestCode)) {
+                List<Integer> selectedNumbers = parseSelectedNumbers(ticket.getSelectedNumbersFromFile());
+                int correctCount = countCorrectNumbers(selectedNumbers, winningNumbers);
+                double ticketValue = 0.0;
+
+                // Converte o valor do ticket de String para Double
+                try {
+                    ticketValue = Double.parseDouble(ticket.getValueFromFile());
+                } catch (NumberFormatException e) {
+                    System.err.println("Erro ao converter o valor do ticket: " + e.getMessage());
+                }
+
+                // Calcula o prêmio com base na contagem de acertos
+                double prize = calculatePrize(correctCount, ticketValue);
+                totalPrizes += prize; // Adiciona o prêmio ao total
+            }
+        }
+        return totalPrizes; // Retorna o total de prêmios
+    }
+
+    public static double calculatePrize(int correctCount, double ticketValue) {
+                double grossPrizePercentage = 0.4335; // 43.35%
+                double fixedPrize11 = 6.00;
+                double fixedPrize12 = 12.00;
+                double fixedPrize13 = 30.00;
+                double totalGrossPrize = ticketValue * grossPrizePercentage;
+
+                // Deduzir prêmios fixos
+                if (correctCount == 11) {
+                        return totalGrossPrize - fixedPrize11;
+                } else if (correctCount == 12) {
+                        return totalGrossPrize - fixedPrize12;
+                } else if (correctCount == 13) {
+                        return totalGrossPrize - fixedPrize13;
+                } else if (correctCount == 14) {
+                        // 32% do restante para 14 acertos
+                        return totalGrossPrize * 0.32; 
+                } else if (correctCount == 15) {
+                        // 68% do restante para 15 acertos
+                        return totalGrossPrize * 0.68; 
+                }
+                return 0; // Sem prêmio
+        }
 }
