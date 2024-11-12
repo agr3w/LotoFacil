@@ -271,42 +271,6 @@ public class ContestManager {
         return totalBets;
     }
 
-    // Método para determinar os vencedores
-    public static void determineWinners(String contestCode) {
-        Map<String, String> contest = getContestByCode(contestCode);
-        if (contest == null) {
-            System.out.println("Concurso não encontrado: " + contestCode);
-            return;
-        }
-
-        List<Integer> winningNumbers = parseWinningNumbers(contest.get("winningNumbers"));
-        List<PurchaseFileManager> tickets = PurchaseFileManager.loadUserTickets();
-
-        Map<Integer, List<String>> winners = new HashMap<>();
-        for (int i = 11; i <= 15; i++) {
-            winners.put(i, new ArrayList<>());
-        }
-
-        for (PurchaseFileManager ticket : tickets) {
-            if (ticket.getContestCode().equals(contestCode)) {
-                List<Integer> selectedNumbers = parseSelectedNumbers(ticket.getSelectedNumbersFromFile());
-                int correctCount = countCorrectNumbers(selectedNumbers, winningNumbers);
-                if (correctCount >= 11) {
-                    winners.get(correctCount).add(ticket.getCpfFromFile());
-                }
-            }
-        }
-
-        // Exibir vencedores
-        for (int i = 15; i >= 11; i--) {
-            System.out.println("Vencedores com " + i + " acertos: " + winners.get(i).size());
-            for (String cpf : winners.get(i)) {
-                System.out.println("CPF: " + cpf);
-            }
-            System.out.println();
-        }
-    }
-
     public static double calculateTotalPrizes(String contestCode) {
         double totalPrizes = 0.0;
         Map<String, String> contest = getContestByCode(contestCode);
@@ -342,17 +306,18 @@ public class ContestManager {
 
     public static double calculatePrize(int correctCount, double totalPrizePool) {
         double prize = 0;
+        double totalPrizeDistribuation = totalPrizePool * 0.4335; //Apenas o valor de premios que sera distribuido
 
         if (correctCount == 11) {
-            prize = totalPrizePool * 0.10; // Exemplo: 10% do total para 11 acertos
+            prize = totalPrizeDistribuation * 0.10; // Exemplo: 10% do total para 11 acertos
         } else if (correctCount == 12) {
-            prize = totalPrizePool * 0.20; // Exemplo: 20% do total para 12 acertos
+            prize = totalPrizeDistribuation * 0.20; // Exemplo: 20% do total para 12 acertos
         } else if (correctCount == 13) {
-            prize = totalPrizePool * 0.30; // Exemplo: 30% do total para 13 acertos
+            prize = totalPrizeDistribuation * 0.30; // Exemplo: 30% do total para 13 acertos
         } else if (correctCount == 14) {
-            prize = totalPrizePool * 0.32; // 32% do total para 14 acertos
-        } else if (correctCount >= 15) {
-            prize = totalPrizePool * 0.68; // 68% do total para 15 acertos ou mais
+            prize = totalPrizeDistribuation * 0.32; // 32% do total para 14 acertos
+        } else if (correctCount == 15) {
+            prize = totalPrizeDistribuation * 0.68; // 68% do total para 15 acertos
         }
 
         return prize;

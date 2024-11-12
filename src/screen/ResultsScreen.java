@@ -66,8 +66,6 @@ public class ResultsScreen {
                         List<Integer> winningNumbers = ContestManager.parseWinningNumbers(winningNumbersString);
                         List<Integer> selectedNumbers = ContestManager.parseSelectedNumbers(ticket.getSelectedNumbersFromFile());
                         int correctCount = ContestManager.countCorrectNumbers(selectedNumbers, winningNumbers);
-    
-                        // Converte o valor do ticket de String para Double
                         
                         try {                           
                             ticketValue = Double.parseDouble(ticket.getValueFromFile());
