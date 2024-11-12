@@ -76,7 +76,8 @@ public class ContestStatusScreen {
 
         // Nova coluna para Arrecadação Total
         TableColumn<Map<String, String>, String> totalRevenueColumn = new TableColumn<>("Arrecadação Total");
-        totalRevenueColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("totalRevenue")));
+        totalRevenueColumn
+                .setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("totalRevenue")));
         totalRevenueColumn.setPrefWidth(150);
 
         // Nova coluna para Total de Prêmios
@@ -84,7 +85,13 @@ public class ContestStatusScreen {
         totalPrizesColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("totalPrizes")));
         totalPrizesColumn.setPrefWidth(150);
 
-        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn, codeColumn, totalRevenueColumn, totalPrizesColumn);
+        TableColumn<Map<String, String>, String> totalCoporationShareColumn = new TableColumn<>("Total da corporação");
+        totalCoporationShareColumn
+                .setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("corporationShare")));
+        totalCoporationShareColumn.setPrefWidth(150);
+
+        table.getColumns().addAll(nameColumn, startDateColumn, endDateColumn, statusColumn, codeColumn,
+                totalRevenueColumn, totalPrizesColumn, totalCoporationShareColumn);
     }
 
     private void loadContestData() {
@@ -93,12 +100,15 @@ public class ContestStatusScreen {
 
         for (Map<String, String> contest : contests) {
             // Calcular arrecadação total e total de prêmios
-            double totalRevenue = ContestManager.calculateTotalBets(contest.get("contestCode"));
-            double totalPrizes = ContestManager.calculateTotalPrizes(contest.get("contestCode")); // Método que você deve implementar
+            double totalRevenue = Double.parseDouble(contest.get("totalRevenue"));
+            double totalPrizes = Double.parseDouble(contest.get("totalPrizes"));
+            double corporationShare = Double.parseDouble(contest.get("corporationShare"));
 
             // Adicionar informações monetárias ao mapa do concurso
             contest.put("totalRevenue", String.format("R$ %.2f", totalRevenue));
             contest.put("totalPrizes", String.format("R$ %.2f", totalPrizes));
+            contest.put("corporationShare", String.format("R$ %.2f", corporationShare));
+
         }
 
         table.getItems().addAll(contests);

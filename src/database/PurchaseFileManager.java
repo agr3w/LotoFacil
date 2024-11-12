@@ -80,13 +80,13 @@ public class PurchaseFileManager {
             try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE,
                     StandardOpenOption.APPEND)) {
                 writer.write("CPF: " + loggedInUser + "\n");
+                writer.write("Código do Concurso: " + selectedContestCode + "\n");
                 writer.write("Data da Compra: " + ValidateDate.todayLocalDate().toString() + "\n");
                 writer.write("Números Selecionados: " + numbers.toString() + "\n");
                 writer.write("Valor Pago: " + TicketPricing.calculatePrice(numbers.size()) + "\n");
                 writer.write("Código da Compra: " + codigoCompra + "\n");
                 writer.write("Forma de Pagamento: " + formaPagamento + "\n");
-                writer.write("Nome da Aposta: " + nomeAposta + "\n");
-                writer.write("Código do Concurso: " + selectedContestCode + "\n\n");
+                writer.write("Nome da Aposta: " + nomeAposta + "\n\n");
             }
             return true;
         } catch (IOException e) {
@@ -107,17 +107,18 @@ public class PurchaseFileManager {
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("CPF: " + loggedInCpf)) {
                     String cpf = line.split(": ")[1];
+                    String codeContest = reader.readLine().split(": ")[1];
                     String dataCompra = reader.readLine().split(": ")[1];
                     String selectedNumbers = reader.readLine().split(": ")[1];
                     String value = reader.readLine().split(": ")[1];
                     String codigoCompra = reader.readLine().split(": ")[1];
                     String formaPagamento = reader.readLine().split(": ")[1];
                     String nomeAposta = reader.readLine().split(": ")[1];
-                    String codeContest = reader.readLine().split(": ")[1];
-                    reader.readLine(); // Pular a linha do código do concurso
+                    reader.readLine();
 
-                    tickets.add(new PurchaseFileManager(cpf, dataCompra, selectedNumbers, value, codigoCompra,
-                            formaPagamento, nomeAposta, codeContest));
+                    tickets.add(
+                            new PurchaseFileManager(cpf, dataCompra, selectedNumbers, value, codigoCompra,
+                                    formaPagamento, nomeAposta, codeContest));
                 }
             }
         } catch (IOException e) {

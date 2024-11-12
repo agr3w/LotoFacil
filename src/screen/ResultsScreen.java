@@ -19,6 +19,7 @@ public class ResultsScreen {
         private VBox layout;
         private ScrollPane scrollPane;
         private VBox purchaseList;
+        double ticketValue;
 
         @SuppressWarnings("unused")
         public ResultsScreen(Stage stage) {
@@ -67,15 +68,16 @@ public class ResultsScreen {
                         int correctCount = ContestManager.countCorrectNumbers(selectedNumbers, winningNumbers);
     
                         // Converte o valor do ticket de String para Double
-                        double ticketValue = 0.0;
-                        try {
+                        
+                        try {                           
                             ticketValue = Double.parseDouble(ticket.getValueFromFile());
                         } catch (NumberFormatException e) {
                             // Trate a exceção conforme necessário, por exemplo, logando ou exibindo uma mensagem
                             System.err.println("Erro ao converter o valor do ticket: " + e.getMessage());
                         }
-    
-                        double prize = ContestManager.calculatePrize(correctCount, ticketValue);
+                        double totalPrizeValue = Double.parseDouble(contest.get("totalPrizes"));
+
+                        double prize = ContestManager.calculatePrize(correctCount, totalPrizeValue); 
                         String resultMessage = correctCount >= 11 ? "Você ganhou! Números acertados: " + correctCount
                                 : "Você perdeu! Números acertados: " + correctCount;
     

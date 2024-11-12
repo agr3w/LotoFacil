@@ -5,7 +5,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import database.PurchaseFileManager;
-import screen.ResultsScreen;
 
 public class ContestManager {
     private static final String CONTEST_FILE_NAME = "contests.txt"; // Caminho do arquivo onde os concursos estão
@@ -54,6 +53,8 @@ public class ContestManager {
                     contest.put("TotalBets", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
                     contest.put("totalRevenue", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
                     contest.put("totalPrizes", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
+                    contest.put("corporationShare", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
+
                     contests.add(contest);
                 }
             }
@@ -79,6 +80,7 @@ public class ContestManager {
                 bw.write("TotalBets: " + contest.get("TotalBets") + ";"); // Inclui TotalBets
                 bw.write("totalRevenue: " + contest.get("totalRevenue") + ";"); // Inclui TotalBets
                 bw.write("totalPrizes: " + contest.get("totalPrizes") + ";"); // Inclui TotalBets
+                bw.write("corporationShare: " + contest.get("corporationShare") + ";"); // Inclui TotalBets
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -139,7 +141,6 @@ public class ContestManager {
         System.out.println("Concurso não encontrado: " + contestCode);
     }
 
-    // Atualizar o método finalizeContest para incluir a distribuição de prêmios
     public static void finalizeContest(String contestCode) {
         try {
             List<Map<String, String>> contests = readContestsFromFile();
@@ -148,14 +149,31 @@ public class ContestManager {
             for (Map<String, String> contest : contests) {
                 if (contest.get("contestCode").equals(contestCode)) {
                     found = true;
+
                     if (contest.get("status").equals("Finalizado")) {
                         System.out.println("Este concurso já está finalizado.");
                         return;
                     }
+
                     contest.put("status", "Finalizado");
+
+                    // Passo 1: Calcular receita total e separar porcentagens
+                    double totalRevenue = calculateTotalBets(contestCode);
+                    double prizePool = totalRevenue * 0.6; // 60% para prêmios
+                    double corporationShare = totalRevenue * 0.4; // 40% para a corporação
+
+                    // Atualiza os valores no mapa
+                    contest.put("totalRevenue", String.valueOf(totalRevenue));
+                    contest.put("totalPrizes", String.valueOf(prizePool));
+                    contest.put("corporationShare", String.valueOf(corporationShare));
+
+                    // Salva as alterações no arquivo
                     writeContestsToFile(contests);
 
                     System.out.println("Concurso finalizado: " + contestCode);
+                    System.out.println("Receita total: " + totalRevenue);
+                    System.out.println("Total de prêmios distribuídos: " + prizePool);
+                    System.out.println("Parte da corporação: " + corporationShare);
                     return;
                 }
             }
@@ -229,23 +247,17 @@ public class ContestManager {
 
         try (BufferedReader br = Files.newBufferedReader(path)) {
             String line;
+            boolean isCorrectContest = false;
+
             while ((line = br.readLine()) != null) {
-                // Procurar por linhas que contenham o código do concurso
+                // Verificar se a linha contém o código do concurso
                 if (line.trim().equals("Código do Concurso: " + contestCode)) {
-                    // Procurar pelo valor da aposta nas linhas anteriores
-                    String[] fileContent = Files.readAllLines(path).toArray(new String[0]);
-                    for (int i = 0; i < fileContent.length; i++) {
-                        if (fileContent[i].trim().equals("Código do Concurso: " + contestCode)) {
-                            // Procurar pelo valor pago nas linhas anteriores
-                            for (int j = Math.max(0, i - 7); j < i; j++) {
-                                if (fileContent[j].startsWith("Valor Pago: ")) {
-                                    String valorStr = fileContent[j].split(": ")[1].trim();
-                                    totalBets += Double.parseDouble(valorStr);
-                                    break;
-                                }
-                            }
-                        }
-                    }
+                    isCorrectContest = true; // Ativa o sinalizador quando o concurso é encontrado
+                } else if (isCorrectContest && line.startsWith("Valor Pago: ")) {
+                    // Se for a linha com o valor da aposta, somar ao total
+                    String valorStr = line.split(": ")[1].trim();
+                    totalBets += Double.parseDouble(valorStr);
+                    isCorrectContest = false; // Resetar o sinalizador para procurar o próximo concurso
                 }
             }
         } catch (IOException e) {
@@ -328,27 +340,22 @@ public class ContestManager {
         return totalPrizes; // Retorna o total de prêmios
     }
 
-    public static double calculatePrize(int correctCount, double ticketValue) {
-                double grossPrizePercentage = 0.4335; // 43.35%
-                double fixedPrize11 = 6.00;
-                double fixedPrize12 = 12.00;
-                double fixedPrize13 = 30.00;
-                double totalGrossPrize = ticketValue * grossPrizePercentage;
+    public static double calculatePrize(int correctCount, double totalPrizePool) {
+        double prize = 0;
 
-                // Deduzir prêmios fixos
-                if (correctCount == 11) {
-                        return totalGrossPrize - fixedPrize11;
-                } else if (correctCount == 12) {
-                        return totalGrossPrize - fixedPrize12;
-                } else if (correctCount == 13) {
-                        return totalGrossPrize - fixedPrize13;
-                } else if (correctCount == 14) {
-                        // 32% do restante para 14 acertos
-                        return totalGrossPrize * 0.32; 
-                } else if (correctCount == 15) {
-                        // 68% do restante para 15 acertos
-                        return totalGrossPrize * 0.68; 
-                }
-                return 0; // Sem prêmio
+        if (correctCount == 11) {
+            prize = totalPrizePool * 0.10; // Exemplo: 10% do total para 11 acertos
+        } else if (correctCount == 12) {
+            prize = totalPrizePool * 0.20; // Exemplo: 20% do total para 12 acertos
+        } else if (correctCount == 13) {
+            prize = totalPrizePool * 0.30; // Exemplo: 30% do total para 13 acertos
+        } else if (correctCount == 14) {
+            prize = totalPrizePool * 0.32; // 32% do total para 14 acertos
+        } else if (correctCount >= 15) {
+            prize = totalPrizePool * 0.68; // 68% do total para 15 acertos ou mais
         }
+
+        return prize;
+    }
+
 }
