@@ -51,10 +51,9 @@ public class ContestManager {
                     contest.put("status", parts[4].split(":")[1].trim());
                     contest.put("winningNumbers", parts[5].split(":")[1].trim()); // Nova linha para winningNumbers
                     contest.put("TotalBets", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
-                    contest.put("totalRevenue", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
-                    contest.put("totalPrizes", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
-                    contest.put("corporationShare", parts[6].split(":")[1].trim()); // Inicializa o total de apostas
-
+                    contest.put("totalRevenue", parts[7].split(":")[1].trim()); // Inicializa o total de apostas
+                    contest.put("totalPrizes", parts[8].split(":")[1].trim()); // Inicializa o total de apostas
+                    contest.put("corporationShare", parts[9].split(":")[1].trim()); // Inicializa o total de apostas
                     contests.add(contest);
                 }
             }

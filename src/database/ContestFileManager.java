@@ -32,9 +32,9 @@ public class ContestFileManager {
             writer.write("Status: " + (contest.isOpen() ? "Aberto" : "Fechado") + ";");
             writer.write("WinningNumbers: " + winningNumbers.toString() + ";");
             writer.write("TotalBets: " + contest.getNumberOfBets() + ";");
-            writer.write("totalRevenue: " + ";");
-            writer.write("totalPrizes: " + ";");
-            writer.write("corporationShare: " + ";");
+            writer.write("totalRevenue: " + "0" + ";");
+            writer.write("totalPrizes: " + "0" + ";");
+            writer.write("corporationShare: " + "0" + ";");
             writer.newLine(); // Adiciona nova linha para o próximo concurso
             writer.close();
 
@@ -79,6 +79,9 @@ public class ContestFileManager {
                     contest.put("endDate", parts[2].split(":")[1].trim());
                     contest.put("contestCode", parts[3].split(":")[1].trim());
                     contest.put("status", "Aberto");
+                    contest.put("totalRevenue", parts[7].split(":")[1].trim());
+                    contest.put("totalPrizes", parts[8].split(":")[1].trim());
+                    contest.put("corporationShare", parts[9].split(":")[1].trim());
                     openContests.add(contest);
                 }
             }

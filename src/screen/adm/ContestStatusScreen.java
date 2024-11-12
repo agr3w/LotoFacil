@@ -95,7 +95,7 @@ public class ContestStatusScreen {
     }
 
     private void loadContestData() {
-        List<Map<String, String>> contests = ContestFileManager.getAllContests(); // Chama o método que você criou
+        List<Map<String, String>> contests = ContestFileManager.getAllContests();
         table.getItems().clear(); // Limpar itens antes de carregar novos dados
 
         for (Map<String, String> contest : contests) {
