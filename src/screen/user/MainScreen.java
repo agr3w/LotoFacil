@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 import database.ContestFileManager;
 import javafx.scene.control.Button;

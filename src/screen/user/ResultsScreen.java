@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

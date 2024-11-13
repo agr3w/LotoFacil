@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 import java.time.format.DateTimeFormatter;
 import database.Database;

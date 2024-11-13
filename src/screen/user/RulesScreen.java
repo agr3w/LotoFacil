@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 public class RulesScreen {
     

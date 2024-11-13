@@ -2,7 +2,7 @@ import database.Database;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import screen.LoginScreen;
+import screen.user.LoginScreen;
 
 public class MainJFX extends Application {
     @Override

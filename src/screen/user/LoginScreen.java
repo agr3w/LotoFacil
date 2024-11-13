@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 import database.Database;
 import javafx.geometry.Insets;

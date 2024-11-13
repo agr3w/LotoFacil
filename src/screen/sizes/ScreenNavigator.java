@@ -5,18 +5,18 @@ import javafx.stage.Stage;
 import java.util.List;
 
 import javafx.scene.Scene;
-import screen.LoginScreen;
-import screen.MainScreen;
-import screen.PaymentScreen;
-import screen.RegisterScreen;
-import screen.ResultsScreen;
-import screen.RulesScreen;
-import screen.TermsScreen;
-import screen.TicketPurchaseScreen;
-import screen.TicketSummaryScreen;
 import screen.adm.ContestStatusScreen;
 import screen.adm.RegisterContestScreen;
+import screen.user.LoginScreen;
+import screen.user.MainScreen;
+import screen.user.PaymentScreen;
+import screen.user.RegisterScreen;
+import screen.user.ResultsScreen;
+import screen.user.RulesScreen;
 import screen.user.SelectContestScreen;
+import screen.user.TermsScreen;
+import screen.user.TicketPurchaseScreen;
+import screen.user.TicketSummaryScreen;
 import screen.user.profile.ProfileScreen;
 import utils.UserSession;
 

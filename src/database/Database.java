@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 public class Database {
-    private static final String[] FILE_NAMES = { "users.txt", "purchases.txt" };
+    private static final String[] FILE_NAMES = { "users.txt", "purchases.txt", "contests.txt" };
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
     // Método para verificar credenciais

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import database.ContestFileManager;
 
+@SuppressWarnings("unused")
 public class SelectContestScreen {
     private BorderPane layout;
     private Stage stage;
@@ -29,6 +30,8 @@ public class SelectContestScreen {
 
         Label lblTitle = UIComponents.createLabel("Selecione um Concurso para Apostar",
                 "-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToMainScreen(stage));
 
         GridPane contestGrid = new GridPane();
         contestGrid.setHgap(15);
@@ -48,11 +51,10 @@ public class SelectContestScreen {
             }
         }
 
-        mainContent.getChildren().addAll(lblTitle, contestGrid);
+        mainContent.getChildren().addAll(lblTitle, contestGrid, btnVoltar);
         layout.setCenter(mainContent);
     }
 
-    @SuppressWarnings("unused")
     private VBox createContestCard(Map<String, String> contest) {
         VBox card = new VBox(10);
         card.setPadding(new Insets(10));

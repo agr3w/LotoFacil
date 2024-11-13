@@ -1,4 +1,4 @@
-package screen;
+package screen.user;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -67,11 +67,13 @@ public class PaymentScreen {
         // Botão Confirmar Pagamento
         Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
             if (confirmarPagamento()) {
-                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName, contestCode);
+                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName,
+                        contestCode);
                 ContestManager.placeBet(contestCode);
                 System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
                 UIComponents.showAlert("Pagamento Confirmado",
                         "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
+                ScreenNavigator.navigateToMainScreen(stage);
             } else {
                 UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.",
                         AlertType.ERROR);
