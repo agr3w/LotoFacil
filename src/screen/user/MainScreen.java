@@ -40,12 +40,16 @@ public class MainScreen {
                                         "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
                                         e -> ScreenNavigator.navigateToContestStatusScreen(stage));
 
+                        Button btnStatusUsuarios = UIComponents.createButton("Status dos usuarios",
+                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
+                                        e -> ScreenNavigator.navigateToUserManagementScreen(stage));
+
                         btnCadastrarConcurso.setTooltip(new Tooltip("Cadastre um novo concurso."));
                         // btnResultados.setTooltip(new Tooltip("Veja os resultados anteriores."));
                         btnStatusConcurso.setTooltip(new Tooltip("Verifique o status dos concursos."));
 
                         // Adicionar botões adicionais para administradores
-                        mainContent.getChildren().addAll(btnCadastrarConcurso, btnStatusConcurso);
+                        mainContent.getChildren().addAll(btnCadastrarConcurso, btnStatusConcurso, btnStatusUsuarios);
                 } else {
                         // Barra superior (NAV) com fundo mais escuro
                         HBox topBar = new HBox(10);

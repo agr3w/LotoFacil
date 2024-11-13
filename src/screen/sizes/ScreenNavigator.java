@@ -7,6 +7,7 @@ import java.util.List;
 import javafx.scene.Scene;
 import screen.adm.ContestStatusScreen;
 import screen.adm.RegisterContestScreen;
+import screen.adm.UserManagementScreen;
 import screen.user.LoginScreen;
 import screen.user.MainScreen;
 import screen.user.PaymentScreen;
@@ -102,6 +103,12 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         ContestStatusScreen contestStatusScreen = new ContestStatusScreen(stage);
         stage.setScene(new Scene(contestStatusScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
+
+    public static void navigateToUserManagementScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        UserManagementScreen userManagementScreen = new UserManagementScreen(stage);
+        stage.setScene(new Scene(userManagementScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     // Adicione mais métodos para outras telas conforme necessário

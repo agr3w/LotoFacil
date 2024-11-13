@@ -80,7 +80,6 @@ public class Database {
 
     // Método para salvar um novo usuário no arquivo, se o CPF e o e-mail forem
     // únicos
-    // No arquivo Database.java
     public static boolean saveUser(String nome, String email, String cpf, String nascimento, String senha) {
         if (isUserExists(cpf, email)) {
             System.out.println("Erro: Já existe um usuário com este CPF ou e-mail.");
