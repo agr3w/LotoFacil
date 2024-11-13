@@ -57,23 +57,53 @@ public class Database {
         return false; // Retorna false se não encontrar o usuário ou se não for ADM
     }
 
-    // Método para salvar um novo usuário no arquivo
-    public static void saveUser(String nome, String email, String cpf, String Nascimento, String senha) {
+    // Método para verificar se um CPF ou e-mail já está registrado
+    public static boolean isUserExists(String cpf, String email) {
+        try {
+            Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
+            List<String> lines = Files.readAllLines(path);
+
+            for (String line : lines) {
+                String[] data = line.split(";");
+                String userCpf = data[0].split(": ")[1];
+                String userEmail = data[4].split(": ")[1];
+
+                if (userCpf.equals(cpf) || userEmail.equalsIgnoreCase(email)) {
+                    return true; // Retorna true se o CPF ou e-mail já existir
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false; // Retorna false se não encontrar duplicidades
+    }
+
+    // Método para salvar um novo usuário no arquivo, se o CPF e o e-mail forem
+    // únicos
+    // No arquivo Database.java
+    public static boolean saveUser(String nome, String email, String cpf, String nascimento, String senha) {
+        if (isUserExists(cpf, email)) {
+            System.out.println("Erro: Já existe um usuário com este CPF ou e-mail.");
+            return false; // Retorna false se o usuário já existe
+        }
+
         Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]);
         try {
             Files.createDirectories(path.getParent());
             BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 
             String admValue = "0";
-            writer.write("CPF: " + cpf + ";" + "DataNascimento: " + Nascimento + ";" + "senha: " + senha + ";"
+            writer.write("CPF: " + cpf + ";" + "DataNascimento: " + nascimento + ";" + "senha: " + senha + ";"
                     + "nome: " + nome + ";" + "email: " + email + ";" +
                     "ADM: " + admValue + ";" + "Telefone: ");
-            writer.newLine(); // Adicionar nova linha para o próximo usuário
+            writer.newLine();
             writer.close();
 
             System.out.println("Usuário salvo: " + nome);
+            return true; // Retorna true se o usuário foi salvo com sucesso
         } catch (IOException e) {
             e.printStackTrace();
+            return false; // Retorna false em caso de erro ao salvar
         }
     }
 

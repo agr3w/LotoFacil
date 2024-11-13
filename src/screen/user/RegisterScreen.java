@@ -69,12 +69,21 @@ public class RegisterScreen {
                             checkTermos)) {
                         if (txtSenha.getText().equals(txtConfSenha.getText())) {
                             if (ValidateDate.isOfLegalAge(datePickerNasc.getValue())) {
-                                Database.saveUser(txtNome.getText(), txtEmail.getText(), txtCPF.getText(),
+                                // Tenta salvar o usuário e verifica o retorno
+                                boolean userSaved = Database.saveUser(
+                                        txtNome.getText(),
+                                        txtEmail.getText(),
+                                        txtCPF.getText(),
                                         datePickerNasc.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
                                         txtSenha.getText());
-                                UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.", null);
 
-                                ScreenNavigator.navigateToLoginScreen(stage);
+                                if (userSaved) {
+                                    UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.",
+                                            null);
+                                    ScreenNavigator.navigateToLoginScreen(stage);
+                                } else {
+                                    UIComponents.showAlert("Erro de Registro", "CPF ou e-mail já registrados.", null);
+                                }
                             } else {
                                 UIComponents.showAlert("Erro de Registro", "Usuário deve ser maior de idade.", null);
                             }
