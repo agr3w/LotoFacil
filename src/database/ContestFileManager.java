@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,8 +18,32 @@ public class ContestFileManager {
     private static final String CONTEST_FILE_NAME = "contests.txt";
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
 
-    // Método para criar e salvar um concurso
+    // No arquivo ContestFileManager.java
+    public static boolean isStartDateTaken(LocalDate startDate) {
+        Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(";");
+                if (parts[1].contains("DataInicio: " + startDate)) { // Verifica a data de início
+                    return true; // Retorna true se a data já existe
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false; // Retorna false se a data não foi encontrada
+    }
+
     public static void saveContest(Contest contest) {
+        // Verifica se a data de início já existe
+        if (isStartDateTaken(contest.getStartDate())) {
+            System.out.println("Erro: Já existe um concurso com esta data de início.");
+            return; // Sai do método sem salvar o concurso
+        }
+
         Path path = Paths.get(DIRECTORY_PATH + CONTEST_FILE_NAME);
         try {
             Files.createDirectories(path.getParent());
@@ -169,5 +194,7 @@ public class ContestFileManager {
         // Retorna o próximo código, incrementado em 1
         return String.valueOf(maxCode + 1);
     }
+
+    
 
 }

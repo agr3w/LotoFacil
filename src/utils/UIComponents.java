@@ -48,11 +48,15 @@ public class UIComponents {
 
     // Exibe alertas
     public static Alert showAlert(String title, String message, AlertType type) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        if (type == null) {
+            type = AlertType.INFORMATION;
+        }
+        Alert alert = new Alert(type);
         alert.setTitle(title);
-        alert.setHeaderText(null);
         alert.setContentText(message);
+        alert.setHeaderText(null);
         alert.showAndWait();
         return alert;
     }
+
 }
