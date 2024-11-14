@@ -8,8 +8,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
-import database.Database;
 import database.UserManager;
+
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -95,19 +96,66 @@ public class UserManagementScreen {
     }
 
     private void adicionarUsuario() {
-        // Criar um diálogo ou formulário para adicionar um novo usuário
-        // Exemplo: Diálogo de entrada para nome, email, CPF, etc.
-        TextInputDialog dialog = new TextInputDialog();
-        dialog.setTitle("Adicionar Novo Usuário");
-        dialog.setHeaderText("Preencha os dados do novo usuário");
-        dialog.setContentText("Nome:");
+        // Criar campos utilizando UIComponents
+        TextField nomeField = UIComponents.createTextField("Nome", "");
+        TextField cpfField = UIComponents.createTextField("CPF", "");
+        TextField emailField = UIComponents.createTextField("Email", "");
+        PasswordField senhaField = UIComponents.createPasswordField("Senha", "");
+        TextField telefoneField = UIComponents.createTextField("Telefone", "");
 
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(nome -> {
-            // Adicione lógica para salvar novo usuário
-            UserManager.saveUserData(nome, "", "", "", "", "", ""); // Substitua com os dados reais
-            loadUserData(); // Recarregar dados para atualizar a tabela
-        });
+        // Criar o ComboBox para selecionar ADM (1 para Sim, 0 para Não)
+        ComboBox<String> admComboBox = new ComboBox<>();
+        admComboBox.getItems().addAll("1", "0"); // "1" para Admin, "0" para não admin
+        admComboBox.setValue("0"); // Valor padrão para ADM (não admin)
+
+        // Criar o DatePicker para selecionar Data de Nascimento
+        DatePicker datePicker = UIComponents.createDatePicker("Data de Nascimento", "");
+
+        // Criar o layout do formulário
+        VBox vbox = new VBox(10);
+        vbox.getChildren().addAll(
+                nomeField,
+                cpfField,
+                emailField,
+                senhaField,
+                telefoneField,
+                admComboBox,
+                datePicker);
+
+        // Criar o diálogo para adicionar novo usuário
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Adicionar Novo Usuário");
+        alert.setHeaderText("Preencha os dados do novo usuário");
+        alert.getDialogPane().setContent(vbox);
+
+        // Exibir o alerta e esperar a confirmação
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            // Verificar se todos os campos foram preenchidos
+            String nome = nomeField.getText();
+            String cpf = cpfField.getText();
+            String email = emailField.getText();
+            String senha = senhaField.getText();
+            String telefone = telefoneField.getText();
+            String dataNascimento = datePicker.getValue() != null
+                    ? datePicker.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    : "";
+
+            if (nome.isEmpty() || cpf.isEmpty() || email.isEmpty() || senha.isEmpty() || telefone.isEmpty()
+                    || dataNascimento.isEmpty()) {
+                UIComponents.showAlert("Erro", "Todos os campos devem ser preenchidos.", Alert.AlertType.ERROR);
+                return; // Impede de continuar se algum campo estiver vazio
+            }
+
+            // Obter o valor de ADM selecionado
+            String adm = admComboBox.getValue();
+
+            // Chamar o método para salvar o novo usuário
+            UserManager.saveNewUser(cpf, nome, email, dataNascimento, senha, telefone, adm);
+
+            // Recarregar os dados para atualizar a tabela
+            loadUserData();
+        }
     }
 
     private void editarUser() {
@@ -115,49 +163,49 @@ public class UserManagementScreen {
         if (selectedUser != null) {
             String telefone = selectedUser.get("Telefone");
             String adm = selectedUser.get("ADM");
-    
+
             // Criar um diálogo para editar telefone e ADM
             Dialog<String> dialog = new Dialog<>();
             dialog.setTitle("Editar Usuário");
             dialog.setHeaderText("Edite as informações do usuário");
-    
+
             // Criar os campos para telefone e ADM
             TextField telefoneField = new TextField(telefone);
             ComboBox<String> admComboBox = new ComboBox<>();
             admComboBox.getItems().addAll("1", "0"); // 1 - Verdadeiro (Admin), 0 - Falso (não Admin)
             admComboBox.setValue(adm); // Define o valor atual do ADM
-    
+
             // Criar o layout do diálogo
             VBox vbox = new VBox(10);
             vbox.getChildren().addAll(new Label("Novo telefone:"), telefoneField,
                     new Label("Validação de Administrador:"), admComboBox);
-    
+
             dialog.getDialogPane().setContent(vbox);
-    
+
             // Botões do diálogo
             ButtonType saveButtonType = new ButtonType("Salvar", ButtonBar.ButtonData.OK_DONE);
             dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
-    
+
             dialog.setResultConverter(dialogButton -> {
                 if (dialogButton == saveButtonType) {
                     return telefoneField.getText() + ";" + admComboBox.getValue();
                 }
                 return null;
             });
-    
+
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(data -> {
                 String[] newValues = data.split(";");
-                String newPhone = newValues[0];  // Novo telefone
-                String newAdm = newValues[1];    // Novo valor do ADM
-    
+                String newPhone = newValues[0]; // Novo telefone
+                String newAdm = newValues[1]; // Novo valor do ADM
+
                 if (newPhone != null && !newPhone.trim().isEmpty()) {
                     // Obtenha o CPF do usuário selecionado
                     String cpf = selectedUser.get("CPF");
-    
+
                     // Atualize os dados do usuário (telefone e ADM)
                     UserManager.updateUserPhoneAndAdm(cpf, newPhone, newAdm); // Chama o novo método
-    
+
                     // Recarregar os dados para atualizar a tabela
                     loadUserData();
                 } else {
@@ -168,15 +216,12 @@ public class UserManagementScreen {
             UIComponents.showAlert("Erro", "Selecione um usuário para editar.", AlertType.INFORMATION);
         }
     }
-    
-    
-    
 
     private void excluirUsuario() {
         Map<String, String> selectedUser = table.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             String cpf = selectedUser.get("cpf");
-            Database.deleteUserProfile(cpf); // Exclui o usuário pelo CPF
+            UserManager.deleteUserProfile(cpf); // Exclui o usuário pelo CPF
             UIComponents.showAlert("Usuário Excluído", "O usuário com CPF " + cpf + " foi excluído.",
                     AlertType.INFORMATION);
             loadUserData(); // Recarregar dados para atualizar a tabela

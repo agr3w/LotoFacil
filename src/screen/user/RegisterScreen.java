@@ -40,6 +40,14 @@ public class RegisterScreen {
         // CPF
         Label lblCPF = UIComponents.createLabel("CPF", null);
         TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 300;");
+        txtCPF.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                txtCPF.setText(newValue.replaceAll("[^\\d]", "")); // Permite apenas números
+            }
+            if (newValue.length() > 11) {
+                txtCPF.setText(newValue.substring(0, 11)); // Limita a 11 dígitos
+            }
+        });
 
         // Senha
         Label lblSenha = UIComponents.createLabel("Senha", null);
@@ -82,13 +90,13 @@ public class RegisterScreen {
                                             null);
                                     ScreenNavigator.navigateToLoginScreen(stage);
                                 } else {
-                                    UIComponents.showAlert("Erro de Registro", "CPF ou e-mail já registrados.", null);
+                                    UIComponents.showAlert("Informação de Registro", "CPF ou e-mail já registrados.", null);
                                 }
                             } else {
-                                UIComponents.showAlert("Erro de Registro", "Usuário deve ser maior de idade.", null);
+                                UIComponents.showAlert("Informação de Registro", "Usuário deve ser maior de idade.", null);
                             }
                         } else {
-                            UIComponents.showAlert("Erro de Registro", "Senhas não coincidem", null);
+                            UIComponents.showAlert("Informação de Registro", "Senhas não coincidem", null);
                         }
                     }
                 });
@@ -99,18 +107,35 @@ public class RegisterScreen {
                 lblSenha, txtSenha, lblConfSenha, txtConfSenha, checkTermos, btnRetornoLogin, btnTermos, btnRegistrar);
     }
 
-    // Valida os campos de entrada
+    // Validação dos campos de entrada, incluindo CPF e Email
     private boolean validateFields(TextField txtNome, DatePicker datePickerNasc, TextField txtEmail, TextField txtCPF,
             PasswordField txtSenha, PasswordField txtConfSenha, CheckBox checkTermos) {
+
+        // Verifica se todos os campos obrigatórios foram preenchidos
         if (txtNome.getText().isEmpty() || datePickerNasc.getValue() == null || txtEmail.getText().isEmpty()
                 || txtCPF.getText().isEmpty() || txtSenha.getText().isEmpty() || txtConfSenha.getText().isEmpty()) {
-            UIComponents.showAlert("Erro de Registro", "Todos os campos devem ser preenchidos.", null);
+            UIComponents.showAlert("Informação de Registro", "Todos os campos devem ser preenchidos.", null);
             return false;
         }
+
+        // Verificação de concordância com os Termos de Serviço
         if (!checkTermos.isSelected()) {
-            UIComponents.showAlert("Erro de Registro", "Você deve concordar com os Termos de Serviço.", null);
+            UIComponents.showAlert("Informação de Registro", "Você deve concordar com os Termos de Serviço.", null);
             return false;
         }
+
+        // Verificação de quantidade de dígitos do CPF
+        if (txtCPF.getText().length() != 11) {
+            UIComponents.showAlert("Informação de Registro", "O CPF deve conter exatamente 11 dígitos.", null);
+            return false;
+        }
+
+        // Validação do formato do Email
+        if (!txtEmail.getText().contains("@")) {
+            UIComponents.showAlert("Informação de Registro", "O e-mail deve conter o caractere '@'.", null);
+            return false;
+        }
+
         return true;
     }
 

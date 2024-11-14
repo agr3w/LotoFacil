@@ -5,7 +5,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,24 +38,26 @@ public class UserManager {
         return userData; // Retorna os dados do usuário
     }
 
-    public static void saveUserData(String cpf, String nome, String email, String dataNascimento, String senha, String telefone, String adm) {
+    public static void saveUserData(String cpf, String nome, String email, String dataNascimento, String senha,
+            String telefone, String adm) {
         Path path = Paths.get(DIRECTORY_PATH + USER_FILE_NAME);
         List<String> allUsers = new ArrayList<>();
-    
+
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.contains("CPF: " + cpf)) {
                     // Atualiza as informações do usuário
                     line = "CPF: " + cpf + "; DataNascimento: " + dataNascimento + "; senha: " + senha +
-                           "; nome: " + nome + "; email: " + email + "; ADM: " + adm + ";" + "Telefone: " + telefone + ";"; // Atualizando apenas os campos relevantes
+                            "; nome: " + nome + "; email: " + email + "; ADM: " + adm + ";" + "Telefone: " + telefone
+                            + ";"; // Atualizando apenas os campos relevantes
                 }
                 allUsers.add(line); // Armazena todas as linhas
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    
+
         // Sobrescreve o arquivo com os dados atualizados
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             for (String user : allUsers) {
@@ -67,7 +68,6 @@ public class UserManager {
             e.printStackTrace();
         }
     }
-    
 
     // Método para buscar todos os usuários no arquivo
     public static List<Map<String, String>> getAllUsers() {
@@ -107,7 +107,7 @@ public class UserManager {
     public static void updateUserPhoneAndAdm(String cpf, String telefone, String adm) {
         Path path = Paths.get(DIRECTORY_PATH + USER_FILE_NAME);
         List<String> allUsers = new ArrayList<>();
-    
+
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -122,31 +122,100 @@ public class UserManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    
+
         // Sobrescreve o arquivo com as alterações apenas no usuário modificado
         try (BufferedWriter writer = Files.newBufferedWriter(path)) {
             for (String user : allUsers) {
-                writer.write(user);  // Escreve cada linha de volta ao arquivo
+                writer.write(user); // Escreve cada linha de volta ao arquivo
                 writer.newLine();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    
+
     // Método auxiliar para atualizar a linha com o novo telefone e ADM
     private static String updateLineWithNewPhoneAndAdm(String line, String telefone, String adm) {
         String[] parts = line.split(";");
         for (int i = 0; i < parts.length; i++) {
             if (parts[i].contains("Telefone:")) {
-                parts[i] = "Telefone: " + telefone;  // Atualiza o telefone
+                parts[i] = "Telefone: " + telefone; // Atualiza o telefone
             }
             if (parts[i].contains("ADM:")) {
-                parts[i] = "ADM: " + adm;  // Atualiza o ADM
+                parts[i] = "ADM: " + adm; // Atualiza o ADM
             }
         }
-        return String.join(";", parts);  // Junta as partes de volta em uma linha
+        return String.join(";", parts); // Junta as partes de volta em uma linha
+    }
+
+    public static void saveNewUser(String cpf, String nome, String email, String dataNascimento, String senha,
+            String telefone, String adm) {
+        Path path = Paths.get(DIRECTORY_PATH + USER_FILE_NAME);
+        List<String> allUsers = new ArrayList<>();
+
+        // Tentar abrir o arquivo para adicionar o novo usuário
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                allUsers.add(line); // Adiciona todas as linhas já existentes
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Cria a linha com os dados do novo usuário
+        String newUser = "CPF: " + cpf + "; DataNascimento: " + dataNascimento + "; senha: " + senha +
+                "; nome: " + nome + "; email: " + email + "; ADM: " + adm + ";" + "Telefone: " + telefone + ";";
+
+        // Adiciona o novo usuário à lista de usuários
+        allUsers.add(newUser);
+
+        // Sobrescreve o arquivo com a nova lista de usuários
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            for (String user : allUsers) {
+                writer.write(user); // Escreve a linha de cada usuário
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static boolean deleteUserProfile(String cpf) {
+        Path path = Paths.get(DIRECTORY_PATH + USER_FILE_NAME);
+        List<String> allUsers = new ArrayList<>();
+        boolean userFound = false;
+    
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (!line.contains("CPF: " + cpf)) {
+                    allUsers.add(line); // Adiciona o usuário apenas se o CPF não for o do usuário a ser excluído
+                } else {
+                    userFound = true; // Marca que o usuário foi encontrado
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false; // Em caso de erro, retornamos falso
+        }
+    
+        if (userFound) {
+            // Sobrescreve o arquivo com a lista de usuários atualizada
+            try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+                for (String user : allUsers) {
+                    writer.write(user);
+                    writer.newLine();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false; // Em caso de erro ao reescrever, retornamos falso
+            }
+            return true; // Retorna true se a exclusão foi bem-sucedida
+        }
+    
+        return false; // Caso o CPF não tenha sido encontrado
     }
     
-    
+
 }
