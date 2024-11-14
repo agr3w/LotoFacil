@@ -8,6 +8,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
+import utils.ValidateDate;
 import database.UserManager;
 
 import java.time.format.DateTimeFormatter;
@@ -109,7 +110,8 @@ public class UserManagementScreen {
         admComboBox.setValue("0"); // Valor padrão para ADM (não admin)
 
         // Criar o DatePicker para selecionar Data de Nascimento
-        DatePicker datePicker = UIComponents.createDatePicker("Data de Nascimento", "");
+        DatePicker datePicker = ValidateDate.createDatePicker("Selecione sua data de nascimento",
+        "-fx-min-width: 300", null);
 
         // Criar o layout do formulário
         VBox vbox = new VBox(10);

@@ -29,10 +29,13 @@ public class RegisterScreen {
         Label lblNome = UIComponents.createLabel("Nome Completo:", null);
         TextField txtNome = UIComponents.createTextField("Digite seu nome completo", "-fx-max-width: 300;");
 
+        Label lblError = new Label();
+        lblError.setVisible(false);
+        
         // Data Nascimento
         Label lblDataNasc = UIComponents.createLabel("Data de Nascimento:", null);
-        DatePicker datePickerNasc = UIComponents.createDatePicker("Selecione sua data de nascimento",
-                "-fx-min-width: 300");
+        DatePicker datePickerNasc = ValidateDate.createDatePicker("Selecione sua data de nascimento",
+        "-fx-min-width: 300", lblError); // Passa o Label de erro
 
         // Email
         Label lblEmail = UIComponents.createLabel("Email", null);
@@ -106,7 +109,7 @@ public class RegisterScreen {
                 });
 
         // Adiciona todos os componentes ao layout
-        layout.getChildren().addAll(lblCadastro, lblNome, txtNome, lblDataNasc, datePickerNasc, lblEmail, txtEmail,
+        layout.getChildren().addAll(lblCadastro, lblNome, txtNome, lblDataNasc, datePickerNasc, lblError, lblEmail, txtEmail,
                 lblCPF, txtCPF,
                 lblSenha, txtSenha, lblConfSenha, txtConfSenha, checkTermos, btnRetornoLogin, btnTermos, btnRegistrar);
     }
@@ -148,8 +151,8 @@ public class RegisterScreen {
         termsDialog.setTitle("Termos de Serviço");
 
         // Estilo personalizado para o cabeçalho e conteúdo
-        Label lblHeader = new Label("Termos de Serviço");
-        lblHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #800080;");
+        Label lblHeader = UIComponents.createLabel("Termos de Serviço",
+                "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #800080;");
 
         TextArea txtTermos = new TextArea("Aqui estão os termos de serviço detalhados...");
         txtTermos.setWrapText(true);

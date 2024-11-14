@@ -2,12 +2,10 @@ package utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
-import java.time.format.DateTimeFormatter;
 
 public class UIComponents {
 
@@ -37,13 +35,6 @@ public class UIComponents {
         button.setStyle(style);
         button.setOnAction(eventHandler);
         return button;
-    }
-
-    public static DatePicker createDatePicker(String text, String style) {
-        DatePicker datePicker = new DatePicker();
-        datePicker.setPromptText(text);
-        DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return datePicker;
     }
 
     // Exibe alertas
