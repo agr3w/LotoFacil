@@ -5,8 +5,9 @@ import java.time.format.DateTimeFormatter;
 import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
@@ -17,33 +18,32 @@ public class RegisterScreen {
     private VBox layout;
 
     public RegisterScreen(Stage stage) {
-        layout = new VBox(10);
+        layout = new VBox(10); // Menor espaçamento entre os campos
+        stage.setTitle("LotoFacil - Registro de novo usuário");
         layout.setPadding(new Insets(20));
-        layout.setAlignment(Pos.CENTER);
+        layout.setAlignment(Pos.TOP_CENTER); // Alinhamento do conteúdo no topo para otimizar o uso do espaço
 
         // Título da tela
         Label lblCadastro = UIComponents.createLabel("Cadastro de Usuário",
                 "-fx-font-size: 22px; -fx-text-fill: #800080; -fx-font-weight: bold;");
-
+        
         // Nome Completo
         Label lblNome = UIComponents.createLabel("Nome Completo:", null);
-        TextField txtNome = UIComponents.createTextField("Digite seu nome completo", "-fx-max-width: 300;");
-
+        TextField txtNome = UIComponents.createTextField("Digite seu nome completo", "-fx-max-width: 280;");
         Label lblError = new Label();
         lblError.setVisible(false);
-        
         // Data Nascimento
         Label lblDataNasc = UIComponents.createLabel("Data de Nascimento:", null);
         DatePicker datePickerNasc = ValidateDate.createDatePicker("Selecione sua data de nascimento",
-        "-fx-min-width: 300", lblError); // Passa o Label de erro
+                "-fx-min-width: 280", lblError); // Passa o Label de erro
 
         // Email
         Label lblEmail = UIComponents.createLabel("Email", null);
-        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 300;");
+        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 280;");
 
         // CPF
         Label lblCPF = UIComponents.createLabel("CPF", null);
-        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 300;");
+        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 280;");
         txtCPF.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 txtCPF.setText(newValue.replaceAll("[^\\d]", "")); // Permite apenas números
@@ -55,14 +55,15 @@ public class RegisterScreen {
 
         // Senha
         Label lblSenha = UIComponents.createLabel("Senha", null);
-        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 300;");
+        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 280;");
 
         // Confirmar Senha
         Label lblConfSenha = UIComponents.createLabel("Confirmar senha", null);
-        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 300;");
+        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 280;");
 
         // Checkbox para termos de serviço
         CheckBox checkTermos = new CheckBox("Concordo com os Termos de Serviço");
+        checkTermos.setStyle("-fx-font-size: 12px;");
 
         // Botão de Termos de Serviço
         Button btnTermos = UIComponents.createButton("Termos de Serviço",
@@ -108,10 +109,17 @@ public class RegisterScreen {
                     }
                 });
 
+        // Agrupamento dos botões de forma mais compacta
+        HBox buttonGroup = new HBox(10, btnRetornoLogin, btnTermos, btnRegistrar);
+        buttonGroup.setAlignment(Pos.CENTER); // Alinha os botões ao centro
+        buttonGroup.setPadding(new Insets(10, 0, 0, 0)); // Espaçamento superior para os botões
+
         // Adiciona todos os componentes ao layout
-        layout.getChildren().addAll(lblCadastro, lblNome, txtNome, lblDataNasc, datePickerNasc, lblError, lblEmail, txtEmail,
-                lblCPF, txtCPF,
-                lblSenha, txtSenha, lblConfSenha, txtConfSenha, checkTermos, btnRetornoLogin, btnTermos, btnRegistrar);
+        layout.getChildren().addAll(
+                lblCadastro, lblNome, txtNome, lblDataNasc, datePickerNasc, lblError, lblEmail,
+                txtEmail, lblCPF, txtCPF, lblSenha, txtSenha, lblConfSenha, txtConfSenha,
+                checkTermos, buttonGroup
+        );
     }
 
     // Validação dos campos de entrada, incluindo CPF e Email

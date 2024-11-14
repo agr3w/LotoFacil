@@ -52,7 +52,7 @@ public class ContestStatusScreen {
         layout.getChildren().addAll(titleLabel, table, buttonBox, btnVoltar);
     }
 
-    @SuppressWarnings({ "unchecked", "unused" })
+    @SuppressWarnings({ "unchecked" })
     private void setupTableColumns() {
         TableColumn<Map<String, String>, String> nameColumn = new TableColumn<>("Nome do Concurso");
         nameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("name")));

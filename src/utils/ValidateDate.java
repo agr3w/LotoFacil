@@ -18,6 +18,7 @@ public class ValidateDate {
         return Period.between(pickedDate, todayLocalDate()).getYears() >= 18;
     }
 
+    @SuppressWarnings("unused")
     public static DatePicker createDatePicker(String text, String style, Label errorLabel) {
         DatePicker datePicker = new DatePicker();
         datePicker.setPromptText(text);
