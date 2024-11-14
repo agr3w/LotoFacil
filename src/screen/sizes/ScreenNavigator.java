@@ -13,9 +13,7 @@ import screen.user.MainScreen;
 import screen.user.PaymentScreen;
 import screen.user.RegisterScreen;
 import screen.user.ResultsScreen;
-import screen.user.RulesScreen;
 import screen.user.SelectContestScreen;
-import screen.user.TermsScreen;
 import screen.user.TicketPurchaseScreen;
 import screen.user.TicketSummaryScreen;
 import screen.user.profile.ProfileScreen;
@@ -28,12 +26,6 @@ public class ScreenNavigator {
         ScreenSize screenSize = ScreenSizeManager.getMainScreenSize();
         MainScreen mainScreen = new MainScreen(stage);
         stage.setScene(new Scene(mainScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
-    }
-
-    public static void navigateToTermsScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getTermsScreenSize();
-        TermsScreen termsScreen = new TermsScreen(stage);
-        stage.setScene(new Scene(termsScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToRegisterScreen(Stage stage) {

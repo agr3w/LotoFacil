@@ -1,5 +1,6 @@
 package screen.user;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import database.Database;
 import javafx.geometry.Insets;
@@ -62,8 +63,9 @@ public class RegisterScreen {
 
         // Botão de Termos de Serviço
         Button btnTermos = UIComponents.createButton("Termos de Serviço",
-                "-fx-background-color: #ffff; -fx-text-fill: black;",
-                e -> ScreenNavigator.navigateToTermsScreen(stage));
+                "-fx-background-color: #ffff; -fx-text-fill: black;", e -> {
+                    showTermsDialog();
+                });
 
         // Botão de retorno para login
         Button btnRetornoLogin = UIComponents.createButton("Retornar",
@@ -90,10 +92,12 @@ public class RegisterScreen {
                                             null);
                                     ScreenNavigator.navigateToLoginScreen(stage);
                                 } else {
-                                    UIComponents.showAlert("Informação de Registro", "CPF ou e-mail já registrados.", null);
+                                    UIComponents.showAlert("Informação de Registro", "CPF ou e-mail já registrados.",
+                                            null);
                                 }
                             } else {
-                                UIComponents.showAlert("Informação de Registro", "Usuário deve ser maior de idade.", null);
+                                UIComponents.showAlert("Informação de Registro", "Usuário deve ser maior de idade.",
+                                        null);
                             }
                         } else {
                             UIComponents.showAlert("Informação de Registro", "Senhas não coincidem", null);
@@ -137,6 +141,31 @@ public class RegisterScreen {
         }
 
         return true;
+    }
+
+    private void showTermsDialog() {
+        Dialog<Void> termsDialog = new Dialog<>();
+        termsDialog.setTitle("Termos de Serviço");
+
+        // Estilo personalizado para o cabeçalho e conteúdo
+        Label lblHeader = new Label("Termos de Serviço");
+        lblHeader.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #800080;");
+
+        TextArea txtTermos = new TextArea("Aqui estão os termos de serviço detalhados...");
+        txtTermos.setWrapText(true);
+        txtTermos.setEditable(false);
+        txtTermos.setMaxHeight(300);
+        txtTermos.setMaxWidth(400);
+
+        ButtonType btnClose = new ButtonType("Fechar", ButtonBar.ButtonData.OK_DONE);
+        termsDialog.getDialogPane().getButtonTypes().add(btnClose);
+
+        VBox content = new VBox(10, lblHeader, txtTermos);
+        content.setPadding(new Insets(10));
+        content.setAlignment(Pos.CENTER);
+        termsDialog.getDialogPane().setContent(content);
+
+        termsDialog.showAndWait();
     }
 
     public VBox getLayout() {
