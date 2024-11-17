@@ -8,7 +8,7 @@ public class UserSession {
     private static String loggedInUserCpf;
     private static Map<String, String> selectedContest;
     private static String selectedContestCode;
-    private static String selectedContestName; // Adicione esta variável
+    private static String selectedContestName;
 
     public static boolean isAdminLoggedIn() {
         if (Database.isAdm(loggedInUserCpf)) {
@@ -51,6 +51,14 @@ public class UserSession {
 
     public static String getSelectedContestName() {
         return selectedContestName;
+    }
+
+    public static String getLoggedInUserName() {
+        String cpf = getLoggedInUserCpf();
+        if (cpf == null || cpf.isEmpty()) {
+            return null; // Nenhum usuário logado
+        }
+        return Database.getUserNameByCpf(cpf); // Consulta o nome pelo CPF no banco de dados
     }
 
 }

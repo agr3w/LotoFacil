@@ -150,4 +150,28 @@ public class Database {
         return false; // Retorna falso em caso de erro
     }
 
+    public static String getUserNameByCpf(String cpf) {
+        Path path = Paths.get(DIRECTORY_PATH + FILE_NAMES[0]); // Caminho para o arquivo de usuários
+        try {
+            // Lê todas as linhas do arquivo
+            List<String> lines = Files.readAllLines(path);
+    
+            // Procura pela linha que contém o CPF
+            for (String line : lines) {
+                if (line.contains("CPF: " + cpf + ";")) {
+                    String[] parts = line.split(";"); // Divide a linha pelos delimitadores
+                    for (String part : parts) {
+                        if (part.trim().startsWith("nome:")) {
+                            return part.replace("nome:", "").trim(); // Retorna o nome extraído
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        return null;
+    }
+
 }

@@ -1,6 +1,7 @@
 package screen.user;
 
 import database.ContestFileManager;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
@@ -9,7 +10,8 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
@@ -19,6 +21,8 @@ public class MainScreen {
         private BorderPane layout;
         private Label lblContestStatus;
         private Button btnComprarBilhete;
+        private String userName = UserSession.getLoggedInUserName();
+
 
         @SuppressWarnings("unused")
         public MainScreen(Stage stage) {
@@ -34,9 +38,6 @@ public class MainScreen {
                         Button btnCadastrarConcurso = UIComponents.createButton("CADASTRAR CONCURSO",
                                         "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
                                         e -> ScreenNavigator.navigateToRegisterContestScreenSize(stage));
-                        // Button btnResultados = UIComponents.createButton("Resultados",
-                        // "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
-                        // e -> ScreenNavigator.navigateToResultsScreen(stage));
                         Button btnStatusConcurso = UIComponents.createButton("Status dos concursos",
                                         "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
                                         e -> ScreenNavigator.navigateToContestStatusScreen(stage));
@@ -46,38 +47,45 @@ public class MainScreen {
                                         e -> ScreenNavigator.navigateToUserManagementScreen(stage));
 
                         btnCadastrarConcurso.setTooltip(new Tooltip("Cadastre um novo concurso."));
-                        // btnResultados.setTooltip(new Tooltip("Veja os resultados anteriores."));
                         btnStatusConcurso.setTooltip(new Tooltip("Verifique o status dos concursos."));
+                        btnStatusUsuarios.setTooltip(new Tooltip("Verifique o status dos usuários."));
 
                         // Adicionar botões adicionais para administradores
                         mainContent.getChildren().addAll(btnCadastrarConcurso, btnStatusConcurso, btnStatusUsuarios);
                 } else {
-                        // Barra superior (NAV) com fundo mais escuro
-                        HBox topBar = new HBox(10);
-                        topBar.setStyle("-fx-background-color: #EEEEEE; -fx-padding: 10; -fx-alignment: center;");
+                        // Barra superior (NAV) com fundo mais escuro e estilização
+                        HBox topBar = new HBox();
+                        topBar.setStyle("-fx-background-color: #800080; -fx-padding: 10;");
+                        topBar.setAlignment(Pos.CENTER_LEFT);
 
-                        // Botão de configurações à esquerda
-                        MenuButton configButton = new MenuButton();
-                        configButton.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
-                        configButton.setText("⚙"); // Ícone de configuração
+                        // Ícone de configurações à esquerda
+                        MenuButton configButton = new MenuButton("👤");
+                        configButton.setStyle(
+                                        "-fx-font-size: 16px; -fx-text-fill: white; -fx-background-color: transparent; -fx-padding: 5; -fx-cursor: hand;");
 
                         MenuItem perfilItem = new MenuItem("Perfil");
                         perfilItem.setOnAction(e -> {
                                 ScreenNavigator.navigateToProfileScreen(stage); // Navegar para a tela de perfil
                         });
-                        configButton.getItems().addAll(perfilItem);
+                        MenuItem sairItem = new MenuItem("Trocar Usuário");
+                        sairItem.setOnAction(e -> {
+                                ScreenNavigator.navigateToLoginScreen(stage); // Navegar para a tela de login
+                        });
+                        configButton.getItems().addAll(perfilItem, sairItem);
 
-                        // Ícone de perfil à direita
-                        Button profileIcon = new Button("🌟");
-                        profileIcon.setStyle("-fx-background-radius: 50%; -fx-background-color: #800080;");
+                        // Espaço central para a mensagem de boas-vindas
+                        Label lblWelcome = UIComponents.createLabel(
+                                        "Bem-vindo, " + userName,
+                                        "-fx-font-size: 16px; -fx-text-fill: white; -fx-font-weight: bold;");
 
-                        // Ajustar posicionamento dos ícones na barra
-                        Pane spacerLeft = new Pane(); // Espaço à esquerda para separar os ícones
-                        Pane spacerRight = new Pane(); // Espaço à direita para separar o ícone do botão Sair
-                        spacerLeft.setMinWidth(250); // Definir largura mínima do espaçador esquerdo
-                        spacerRight.setMinWidth(150); // Definir largura mínima do espaçador direito
+                        // Adicionando espaçadores para organizar os elementos
+                        Region spacerLeft = new Region();
+                        Region spacerRight = new Region();
+                        HBox.setHgrow(spacerLeft, Priority.ALWAYS);
+                        HBox.setHgrow(spacerRight, Priority.ALWAYS);
 
-                        topBar.getChildren().addAll(configButton, spacerLeft, profileIcon, spacerRight);
+                        // Adiciona os elementos à barra superior
+                        topBar.getChildren().addAll(configButton, spacerLeft, lblWelcome, spacerRight);
 
                         // Label para exibir o status do concurso
                         lblContestStatus = new Label();
@@ -95,7 +103,7 @@ public class MainScreen {
                                                 }
                                         });
                         // Botões comuns a todos os usuários
-                        Button btnHistoricoCompras = UIComponents.createButton("Resultados",
+                        Button btnResultadosDeSorteios = UIComponents.createButton("Resultados",
                                         "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
                                         e -> ScreenNavigator.navigateToResultsScreen(stage));
                         // Button btnRegras = UIComponents.createButton("Regras",
@@ -104,14 +112,14 @@ public class MainScreen {
 
                         // Adicionar Tooltips
                         btnComprarBilhete.setTooltip(new Tooltip("Compre bilhetes para o próximo sorteio."));
-                        btnHistoricoCompras.setTooltip(new Tooltip("Veja o histórico de compras."));
+                        btnResultadosDeSorteios.setTooltip(new Tooltip("Veja o histórico de compras."));
                         // btnRegras.setTooltip(new Tooltip("Leia as regras do jogo."));
 
                         updateContestStatus();
 
                         layout.setTop(topBar);
                         mainContent.getChildren().addAll(lblContestStatus, btnComprarBilhete,
-                                        btnHistoricoCompras);
+                                        btnResultadosDeSorteios);
                 }
 
                 // Botão de Sair
