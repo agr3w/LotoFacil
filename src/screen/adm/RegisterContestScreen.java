@@ -20,6 +20,7 @@ public class RegisterContestScreen {
     @SuppressWarnings("unused")
     public RegisterContestScreen(Stage stage) {
         layout = new VBox(20); // Espaçamento entre os elementos
+        stage.setTitle("LotoFacil - Registro de Novo Concurso");
         layout.setStyle(
                 "-fx-padding: 20; -fx-alignment: center; -fx-align-itens: center; -fx-background-color: #DCE8E8;");
 
@@ -28,8 +29,8 @@ public class RegisterContestScreen {
                 "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         // Campos para registro
-        TextField txtNomeConcurso = new TextField();
-        txtNomeConcurso.setPromptText("Digite o nome do concurso");
+        Label lblNomeConcurso = UIComponents.createLabel("Nome do Concurso", null);
+        TextField txtNomeConcurso = UIComponents.createTextField("Digite o nome do concurso", null);
 
         // Botão de salvar
         Button btnSalvar = UIComponents.createButton("Salvar Concurso",

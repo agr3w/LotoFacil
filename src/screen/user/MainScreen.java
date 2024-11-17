@@ -23,6 +23,7 @@ public class MainScreen {
         @SuppressWarnings("unused")
         public MainScreen(Stage stage) {
                 layout = new BorderPane();
+                stage.setTitle("LotoFacil - Menu Principal");
 
                 // Conteúdo principal
                 VBox mainContent = new VBox(15); // Espaçamento entre os elementos

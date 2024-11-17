@@ -19,6 +19,7 @@ public class LoginScreen {
     @SuppressWarnings("unused")
     public LoginScreen(Stage stage) {
         layout = new VBox(10);
+        stage.setTitle("LotoFacil - Login");
         layout.setPadding(new Insets(20));
         layout.setAlignment(Pos.CENTER);
 

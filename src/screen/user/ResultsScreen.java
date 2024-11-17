@@ -24,6 +24,7 @@ public class ResultsScreen {
         @SuppressWarnings("unused")
         public ResultsScreen(Stage stage) {
                 layout = new VBox(10);
+                stage.setTitle("LotoFacil - Resultados");
                 layout.setPadding(new Insets(20));
                 layout.setAlignment(Pos.CENTER);
 

@@ -42,6 +42,7 @@ public class ProfileScreen {
 
         // Criar menu à esquerda
         menu = new VBox(10);
+        stage.setTitle("LotoFacil - Perfil de Usuário");
         menu.setStyle("-fx-padding: 10; -fx-background-color: #F0F0F0; -fx-min-width: 200;");
 
         // Adicionar itens ao menu

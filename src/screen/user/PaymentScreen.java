@@ -38,6 +38,7 @@ public class PaymentScreen {
 
     private void initializeUI(Stage stage) {
         layout = new VBox(20);
+        stage.setTitle("LotoFacil - Pagamento");
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
 
         Label lblTitle = UIComponents.createLabel("Página de pagamento", "-fx-font-size: 20px; -fx-font-weight: bold;");

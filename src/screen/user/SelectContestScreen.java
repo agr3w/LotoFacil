@@ -25,6 +25,7 @@ public class SelectContestScreen {
         this.stage = stage;
         layout = new BorderPane();
         VBox mainContent = new VBox(15);
+        stage.setTitle("LotoFacil - Seleção de Concurso");
         mainContent.setPadding(new Insets(20));
         mainContent.setStyle("-fx-background-color: #DCE8E8; -fx-alignment: center;");
 

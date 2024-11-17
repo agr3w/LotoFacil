@@ -30,6 +30,7 @@ public class TicketPurchaseScreen {
 
     public TicketPurchaseScreen(Stage stage, String cpfUsuarioLogado) {
         layout = new VBox(20);
+        stage.setTitle("LotoFacil - Compra de Bilhete");
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
         numberSelection = new NumberSelection();
 

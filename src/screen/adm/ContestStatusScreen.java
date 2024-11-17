@@ -22,6 +22,7 @@ public class ContestStatusScreen {
     @SuppressWarnings("unused")
     public ContestStatusScreen(Stage stage) {
         layout = new VBox(15);
+        stage.setTitle("LotoFacil - Status de Concursos");
         layout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;");
 
         Label titleLabel = new Label("Status dos Concursos");
