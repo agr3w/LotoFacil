@@ -78,7 +78,6 @@ public class MainScreen {
                 // Adiciona os elementos à barra superior
                 topBar.getChildren().addAll(configButton, spacerLeft, lblWelcome, spacerRight);
 
-
                 // Verificar se o usuário é um administrador
                 if (UserSession.isAdminLoggedIn()) {
 
@@ -125,6 +124,12 @@ public class MainScreen {
                                                         + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
                                         e -> ScreenNavigator.navigateToResultsScreen(stage));
 
+                        // Botão "Regras"
+                        Button btnRegras = UIComponents.createButton("REGRAS",
+                                        "-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; "
+                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                        e -> ScreenNavigator.navigateToRulesScreen(stage));
+
                         // Tooltips para orientação
                         btnComprarBilhete.setTooltip(new Tooltip("Compre bilhetes para o próximo sorteio."));
                         btnResultadosDeSorteios.setTooltip(new Tooltip("Veja os resultados anteriores."));
@@ -133,7 +138,7 @@ public class MainScreen {
                         updateContestStatus();
 
                         mainContent.getChildren().addAll(lblContestStatus, btnComprarBilhete,
-                                        btnResultadosDeSorteios);
+                                        btnResultadosDeSorteios, btnRegras);
                 }
 
                 // Botão de Sair

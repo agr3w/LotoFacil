@@ -13,6 +13,7 @@ import screen.user.MainScreen;
 import screen.user.PaymentScreen;
 import screen.user.RegisterScreen;
 import screen.user.ResultsScreen;
+import screen.user.RulesScreen;
 import screen.user.SelectContestScreen;
 import screen.user.TicketPurchaseScreen;
 import screen.user.TicketSummaryScreen;
@@ -21,56 +22,56 @@ import utils.UserSession;
 
 public class ScreenNavigator {
 
-    //User
+    // User
     public static void navigateToMainScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getMainScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         MainScreen mainScreen = new MainScreen(stage);
         stage.setScene(new Scene(mainScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToRegisterScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getRegisterScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         RegisterScreen registerScreen = new RegisterScreen(stage);
         stage.setScene(new Scene(registerScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToLoginScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getLoginScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         LoginScreen loginScreen = new LoginScreen(stage);
         stage.setScene(new Scene(loginScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
         stage.show();
     }
 
     public static void navigateToPurchaseScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getPurchaseScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         TicketPurchaseScreen ticketPurchaseScreen = new TicketPurchaseScreen(stage, UserSession.getLoggedInUserCpf());
         stage.setScene(new Scene(ticketPurchaseScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static <ArrayList> void navigateToTicketSummaryScreen(Stage stage, List<Integer> selectedNumbers) {
-        ScreenSize screenSize = ScreenSizeManager.getTicketSummaryScreenSize();
-        TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers, 
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        TicketSummaryScreen TicketSummaryScreen = new TicketSummaryScreen(stage, selectedNumbers,
                 UserSession.getLoggedInUserCpf());
         stage.setScene(new Scene(TicketSummaryScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToResultsScreen(Stage stage) {
-        ScreenSize screenSize = ScreenSizeManager.getPurchaseHistoryScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         ResultsScreen historyScreen = new ResultsScreen(stage);
         stage.setScene(new Scene(historyScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToPaymentScreen(Stage stage, List<Integer> selectedNumbers) {
-        ScreenSize screenSize = ScreenSizeManager.getTicketPaymentScreenSize();
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         PaymentScreen paymentScreen = new PaymentScreen(stage, UserSession.getLoggedInUserCpf(), selectedNumbers);
         stage.setScene(new Scene(paymentScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
-    // public static void navigateToRulesScreen(Stage stage) {
-    //     ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
-    //     RulesScreen rulesScreen = new RulesScreen(stage);
-    //     stage.setScene(new Scene(rulesScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
-    // }
+    public static void navigateToRulesScreen(Stage stage) {
+        ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
+        RulesScreen rulesScreen = new RulesScreen(stage);
+        stage.setScene(new Scene(rulesScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+    }
 
     public static void navigateToSelectContestScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
@@ -84,13 +85,13 @@ public class ScreenNavigator {
         stage.setScene(new Scene(profileScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
 
-    //ADM
+    // ADM
     public static void navigateToRegisterContestScreenSize(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         RegisterContestScreen registerContestScreen = new RegisterContestScreen(stage);
         stage.setScene(new Scene(registerContestScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
     }
-    
+
     public static void navigateToContestStatusScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         ContestStatusScreen contestStatusScreen = new ContestStatusScreen(stage);
