@@ -33,7 +33,7 @@ public class SelectContestScreen {
                 "-fx-font-size: 24px; -fx-font-weight: bold;");
 
         Button btnVoltar = UIComponents.createButton("Voltar",
-                "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px ; -fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2); -fx-cursor: hand;",
+                "-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px ; -fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2); -fx-cursor: hand;",
                 e -> ScreenNavigator.navigateToMainScreen(stage));
 
         GridPane contestGrid = new GridPane();

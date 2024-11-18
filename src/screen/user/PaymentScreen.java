@@ -41,7 +41,9 @@ public class PaymentScreen {
         stage.setTitle("LotoFacil - Pagamento");
         layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
 
-        Label lblTitle = UIComponents.createLabel("Página de pagamento", "-fx-font-size: 20px; -fx-font-weight: bold;");
+        // Título
+        Label lblTitle = UIComponents.createLabel("Página de Pagamento", 
+                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #007BFF;");
 
         // Grupo de botões para seleção do método de pagamento
         ToggleGroup paymentGroup = new ToggleGroup();
@@ -49,12 +51,15 @@ public class PaymentScreen {
         RadioButton rbBoleto = new RadioButton("Boleto");
         rbBoleto.setToggleGroup(paymentGroup);
         rbBoleto.setSelected(true); // Boleto como opção padrão
+        styleRadioButton(rbBoleto);
 
         RadioButton rbCartao = new RadioButton("Cartão");
         rbCartao.setToggleGroup(paymentGroup);
+        styleRadioButton(rbCartao);
 
         RadioButton rbPIX = new RadioButton("PIX");
         rbPIX.setToggleGroup(paymentGroup);
+        styleRadioButton(rbPIX);
 
         paymentGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
             selectedPaymentMethod = ((RadioButton) newValue).getText();
@@ -63,37 +68,53 @@ public class PaymentScreen {
         // Exibir valor total
         Label lblTotal = UIComponents.createLabel(
                 "Valor Total: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()),
-                "-fx-font-size: 16px; -fx-font-weight: bold;");
+                "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #333;");
 
         // Botão Confirmar Pagamento
-        Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", loggedInUser, e -> {
-            if (confirmarPagamento()) {
-                PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName,
-                        contestCode);
-                ContestManager.placeBet(contestCode);
-                System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
-                UIComponents.showAlert("Pagamento Confirmado",
-                        "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
-                ScreenNavigator.navigateToMainScreen(stage);
-            } else {
-                UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.",
-                        AlertType.ERROR);
-            }
-        });
+        Button btnConfirmarPagamento = UIComponents.createButton("Confirmar Pagamento", 
+                "-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;", 
+                e -> {
+                    if (confirmarPagamento()) {
+                        PurchaseFileManager.saveBetToFile(loggedInUser, selectedNumbers, selectedPaymentMethod, contestName, contestCode);
+                        ContestManager.placeBet(contestCode);
+                        System.out.println("Pagamento Confirmado com " + selectedPaymentMethod + "!");
+                        UIComponents.showAlert("Pagamento Confirmado",
+                                "Seu pagamento foi realizado com " + selectedPaymentMethod, null);
+                        ScreenNavigator.navigateToMainScreen(stage);
+                    } else {
+                        UIComponents.showAlert("Erro no Pagamento", "Por favor, selecione um método de pagamento válido.",
+                                AlertType.ERROR);
+                    }
+                });
 
         // Botão Voltar
-        Button btnVoltar = UIComponents.createButton("Voltar", null,
+        Button btnVoltar = UIComponents.createButton("Voltar", 
+                "-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;", 
                 e -> ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers));
 
+        // Efeito de hover nos botões
+        addButtonHoverEffect(btnConfirmarPagamento, "#32CD32", "#98FB98");
+        addButtonHoverEffect(btnVoltar, "#4169E1", "#6495ED");
+
+        // Organizando os elementos no layout
         layout.getChildren().addAll(lblTitle, lblTotal, rbBoleto, rbCartao, rbPIX, btnConfirmarPagamento, btnVoltar);
         layout.setAlignment(Pos.CENTER);
+    }
+
+    public VBox getLayout() {
+        return layout;
     }
 
     private boolean confirmarPagamento() {
         return selectedPaymentMethod != null && !selectedPaymentMethod.isEmpty();
     }
 
-    public VBox getLayout() {
-        return layout;
+    private void styleRadioButton(RadioButton radioButton) {
+        radioButton.setStyle("-fx-font-size: 16px; -fx-text-fill: #333;");
+    }
+
+    private void addButtonHoverEffect(Button button, String normalColor, String hoverColor) {
+        button.setOnMouseEntered(event -> button.setStyle("-fx-background-color: " + hoverColor + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;"));
+        button.setOnMouseExited(event -> button.setStyle("-fx-background-color: " + normalColor + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;"));
     }
 }

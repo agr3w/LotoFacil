@@ -26,30 +26,53 @@ public class TicketSummaryScreen {
 
     @SuppressWarnings("unused")
     private void initializeUI(Stage stage) {
-        layout = new VBox(20);
+        layout = new VBox(20); // Espaçamento entre os elementos
         stage.setTitle("LotoFacil - Resumo de Compra");
-        layout.setStyle("-fx-padding: 20; -fx-background-color: #DCE8E8; -fx-alignment: center;");
+        layout.setStyle("-fx-padding: 20; -fx-background-color: #F0F4F8; -fx-alignment: center;");
 
-        Label lblTitle = UIComponents.createLabel("Resumo da Aposta", "-fx-font-size: 20px; -fx-font-weight: bold;");
+        // Título
+        Label lblTitle = UIComponents.createLabel("Resumo da Aposta",
+                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #007BFF;");
 
-        Label lblContestName = UIComponents.createLabel("Nome do Concurso" + contestName, null);
-        Label lblNumbers = UIComponents.createLabel("Números Selecionados: " + selectedNumbers.toString(), null);
-        Label lblValor = UIComponents
-                .createLabel("Valor a se pagar: R$ " + TicketPricing.calculatePrice(selectedNumbers.size()), null);
+        // Informações do concurso
+        Label lblContestName = UIComponents.createLabel("Nome do Concurso: " + contestName,
+                "-fx-font-size: 16px; -fx-text-fill: #333;");
+        Label lblNumbers = UIComponents.createLabel("Números Selecionados: " + selectedNumbers.toString(),
+                "-fx-font-size: 16px; -fx-text-fill: #333;");
 
-        Button btnConfirmar = UIComponents.createButton("Confirmar", null, e -> {
-            // Aqui você pode chamar um método para salvar a aposta
-            ScreenNavigator.navigateToPaymentScreen(stage, selectedNumbers);
-        });
+        // Informações de valor
+        double price = TicketPricing.calculatePrice(selectedNumbers.size());
+        Label lblValor = UIComponents.createLabel("Valor a se pagar: R$ " + String.format("%.2f", price),
+                "-fx-font-size: 16px; -fx-text-fill: #333;");
 
-        Button btnVoltar = UIComponents.createButton("Voltar", null,
+        // Botão de confirmar
+        Button btnConfirmar = UIComponents.createButton("Confirmar",
+                "-fx-background-color: #32CD32; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;",
+                e -> ScreenNavigator.navigateToPaymentScreen(stage, selectedNumbers));
+
+        // Botão de voltar
+        Button btnVoltar = UIComponents.createButton("Voltar",
+                "-fx-background-color: #4169E1; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5;",
                 e -> ScreenNavigator.navigateToPurchaseScreen(stage));
 
+        // Efeito de hover nos botões
+        addButtonHoverEffect(btnConfirmar, "#32CD32", "#98FB98");
+        addButtonHoverEffect(btnVoltar, "#4169E1", "#6495ED");
+
+        // Organizando os elementos no layout
         layout.getChildren().addAll(lblTitle, lblContestName, lblNumbers, lblValor, btnConfirmar, btnVoltar);
         layout.setAlignment(Pos.CENTER);
     }
 
     public VBox getLayout() {
         return layout;
+    }
+
+    @SuppressWarnings("unused")
+    private void addButtonHoverEffect(Button button, String normalColor, String hoverColor) {
+        button.setOnMouseEntered(e -> button.setStyle("-fx-background-color: " + hoverColor
+                + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;"));
+        button.setOnMouseExited(e -> button.setStyle("-fx-background-color: " + normalColor
+                + "; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;"));
     }
 }
