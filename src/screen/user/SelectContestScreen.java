@@ -32,7 +32,9 @@ public class SelectContestScreen {
         Label lblTitle = UIComponents.createLabel("Selecione um Concurso para Apostar",
                 "-fx-font-size: 24px; -fx-font-weight: bold;");
 
-        Button btnVoltar = UIComponents.createButton("Voltar", null, e -> ScreenNavigator.navigateToMainScreen(stage));
+        Button btnVoltar = UIComponents.createButton("Voltar",
+                "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 8px ; -fx-border-radius: 5; -fx-background-radius: 5; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2); -fx-cursor: hand;",
+                e -> ScreenNavigator.navigateToMainScreen(stage));
 
         GridPane contestGrid = new GridPane();
         contestGrid.setHgap(15);
@@ -57,23 +59,46 @@ public class SelectContestScreen {
     }
 
     private VBox createContestCard(Map<String, String> contest) {
-        VBox card = new VBox(10);
-        card.setPadding(new Insets(10));
+        VBox card = new VBox(10); // Espaçamento entre os elementos do card
+        card.setPadding(new Insets(15));
         card.setStyle(
-                "-fx-border-color: #007BFF; -fx-border-width: 2px; -fx-background-color: #FFFFFF; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 10, 0, 0, 0); -fx-alignment: center;");
+                "-fx-border-color: linear-gradient(to right, #020024, #800080); " +
+                        "-fx-border-width: 2px; " +
+                        "-fx-background-color: linear-gradient(to bottom, #f9f9f9, #ffffff); " +
+                        "-fx-background-radius: 10; " +
+                        "-fx-border-radius: 10; " +
+                        "-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.15), 10, 0, 5, 5); " +
+                        "-fx-alignment: center;");
 
-        // Exemplo do uso de UIComponents para criar os Labels
-        Label lblName = UIComponents.createLabel("Concurso: " + contest.get("name"), "-fx-font-size: 14px;");
-        Label lblStartDate = UIComponents.createLabel("Início: " + contest.get("startDate"), "-fx-font-size: 14px;");
-        Label lblEndDate = UIComponents.createLabel("Fim: " + contest.get("endDate"), "-fx-font-size: 14px;");
+        // Labels estilizados
+        Label lblName = UIComponents.createLabel(
+                "Concurso: " + contest.get("name"),
+                "-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+        Label lblStartDate = UIComponents.createLabel(
+                "Início: " + contest.get("startDate"),
+                "-fx-font-size: 14px; -fx-text-fill: #555555;");
+        Label lblEndDate = UIComponents.createLabel(
+                "Fim: " + contest.get("endDate"),
+                "-fx-font-size: 14px; -fx-text-fill: #555555;");
         Label lblStatus = UIComponents.createLabel(
                 "Status: " + (Boolean.parseBoolean(contest.get("status")) ? "Fechado" : "Aberto"),
-                "-fx-font-size: 14px;");
+                "-fx-font-size: 14px; -fx-text-fill: " +
+                        (Boolean.parseBoolean(contest.get("status")) ? "#FF0000;" : "#008000;")
+        );
 
-        Button btnSelect = UIComponents.createButton("Selecionar",
-                "-fx-background-color: #007BFF; -fx-text-fill: white;", e -> {
-                    handleContestSelection(contest);
-                });
+        // Botão "Selecionar"
+        Button btnSelect = UIComponents.createButton(
+                "Selecionar",
+                "-fx-background-color: #9370DB;" +
+                        "-fx-text-fill: white; " +
+                        "-fx-font-size: 14px; " +
+                        "-fx-font-weight: bold; " +
+                        "-fx-padding: 8 15; " +
+                        "-fx-border-radius: 8; " +
+                        "-fx-background-radius: 8; " +
+                        "-fx-cursor: hand; " +
+                        "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 10, 0, 2, 2);",
+                e -> handleContestSelection(contest));
 
         card.getChildren().addAll(lblName, lblStartDate, lblEndDate, lblStatus, btnSelect);
         return card;
@@ -81,7 +106,7 @@ public class SelectContestScreen {
 
     private void handleContestSelection(Map<String, String> contest) {
         // Extrai o código do concurso selecionado
-        String selectedContestCode = contest.get("contestCode"); // Certifique-se de que a chave seja "codigo"
+        String selectedContestCode = contest.get("contestCode");
 
         if (selectedContestCode != null) {
             // Armazena o código do concurso na sessão do usuário

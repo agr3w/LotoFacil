@@ -18,11 +18,12 @@ public class RulesScreen {
     public RulesScreen(Stage stage) {
         // Criação do layout principal
         layout = new BorderPane();
-        layout.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);"); // Cor de fundo degradê
+        layout.setStyle("-fx-background-color: linear-gradient(to bottom, #f5f7fa, #c3cfe2);");
 
         // Conteúdo central
         VBox centralContent = new VBox(15);
-        centralContent.setPadding(new Insets(20, 50, 20, 50)); // Adicionando espaçamento interno
+        stage.setTitle("LotoFacil - Regras");
+        centralContent.setPadding(new Insets(20, 40, 20, 40)); // Adicionando espaçamento interno
         centralContent.setAlignment(Pos.CENTER);
         centralContent.setStyle("-fx-background-color: #ffffff; -fx-border-color: #dddddd; -fx-border-radius: 10; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 10, 0, 0, 5);");
 

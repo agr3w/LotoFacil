@@ -46,7 +46,7 @@ public class MainScreen {
                 // MenuItem "Perfil"
                 MenuItem perfilItem = new MenuItem("Perfil");
                 perfilItem.setStyle(
-                                "-fx-font-size: 14px; -fx-text-fill: #FFFFFF; -fx-background-color: #6A5ACD; "
+                                "-fx-font-size: 14px; -fx-text-fill: #FFFFFF; -fx-background-color: #6A5ACD; -fx-cursor: hand; "
                                                 + "-fx-padding: 10px; -fx-font-weight: bold; -fx-border-radius: 5;");
                 perfilItem.setOnAction(e -> {
                         ScreenNavigator.navigateToProfileScreen(stage); // Navegar para a tela de perfil
@@ -54,7 +54,7 @@ public class MainScreen {
 
                 // MenuItem "Trocar Usuário"
                 MenuItem sairItem = new MenuItem("Trocar Usuário");
-                sairItem.setStyle("-fx-font-size: 14px; -fx-text-fill: #FFFFFF; -fx-background-color: #FF4500; "
+                sairItem.setStyle("-fx-font-size: 14px; -fx-text-fill: #FFFFFF; -fx-background-color: #FF4500; -fx-cursor: hand; "
                                 + "-fx-padding: 10px; -fx-font-weight: bold; -fx-border-radius: 5;");
                 sairItem.setOnAction(e -> {
                         ScreenNavigator.navigateToLoginScreen(stage); // Navegar para a tela de login
@@ -82,14 +82,14 @@ public class MainScreen {
                 if (UserSession.isAdminLoggedIn()) {
 
                         Button btnCadastrarConcurso = UIComponents.createButton("CADASTRAR CONCURSO",
-                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> ScreenNavigator.navigateToRegisterContestScreenSize(stage));
                         Button btnStatusConcurso = UIComponents.createButton("Status dos concursos",
-                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> ScreenNavigator.navigateToContestStatusScreen(stage));
 
                         Button btnStatusUsuarios = UIComponents.createButton("Status dos usuarios",
-                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> ScreenNavigator.navigateToUserManagementScreen(stage));
 
                         btnCadastrarConcurso.setTooltip(new Tooltip("Cadastre um novo concurso."));
@@ -107,7 +107,7 @@ public class MainScreen {
                         // Botão "Comprar Bilhete"
                         btnComprarBilhete = UIComponents.createButton("COMPRAR BILHETE",
                                         "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; "
-                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> {
                                                 if (ContestFileManager.isContestOpen()) { // Verifica se há concurso
                                                                                           // aberto
@@ -121,13 +121,13 @@ public class MainScreen {
                         // Botão "Resultados"
                         Button btnResultadosDeSorteios = UIComponents.createButton("RESULTADOS",
                                         "-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; "
-                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> ScreenNavigator.navigateToResultsScreen(stage));
 
                         // Botão "Regras"
                         Button btnRegras = UIComponents.createButton("REGRAS",
                                         "-fx-background-color: #9370DB; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; "
-                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                                        + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                         e -> ScreenNavigator.navigateToRulesScreen(stage));
 
                         // Tooltips para orientação
@@ -144,7 +144,7 @@ public class MainScreen {
                 // Botão de Sair
                 Button btnSair = UIComponents.createButton("Sair",
                                 "-fx-background-color: #FF0000; -fx-text-fill: white; -fx-font-size: 14px; "
-                                                + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
+                                                + "-fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200; -fx-cursor: hand;",
                                 e -> stage.close());
 
                 mainContent.getChildren().add(btnSair);
