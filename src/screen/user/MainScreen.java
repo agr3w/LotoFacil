@@ -78,18 +78,19 @@ public class MainScreen {
                 // Adiciona os elementos à barra superior
                 topBar.getChildren().addAll(configButton, spacerLeft, lblWelcome, spacerRight);
 
+
                 // Verificar se o usuário é um administrador
                 if (UserSession.isAdminLoggedIn()) {
 
                         Button btnCadastrarConcurso = UIComponents.createButton("CADASTRAR CONCURSO",
-                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold; -fx-min-Width: 200;",
+                                        "-fx-background-color: #FFA500; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
                                         e -> ScreenNavigator.navigateToRegisterContestScreenSize(stage));
                         Button btnStatusConcurso = UIComponents.createButton("Status dos concursos",
-                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
+                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
                                         e -> ScreenNavigator.navigateToContestStatusScreen(stage));
 
                         Button btnStatusUsuarios = UIComponents.createButton("Status dos usuarios",
-                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px;",
+                                        "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-pref-width: 200;",
                                         e -> ScreenNavigator.navigateToUserManagementScreen(stage));
 
                         btnCadastrarConcurso.setTooltip(new Tooltip("Cadastre um novo concurso."));

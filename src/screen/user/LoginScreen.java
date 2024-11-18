@@ -4,6 +4,8 @@ import database.Database;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
@@ -24,7 +26,13 @@ public class LoginScreen {
         layout.setAlignment(Pos.CENTER);
 
         // Logo da LotoFácil
-        Label lblLogo = UIComponents.createLabel("LOTOFACIL",
+        ImageView logoImg = new ImageView(
+                new Image(getClass().getResource("/imgs/logo-lotofacil.png").toExternalForm()));
+        logoImg.setFitWidth(50);
+        logoImg.setPreserveRatio(true);
+        logoImg.setStyle("-fx-padding: 10;");
+
+        Label lblLogo = UIComponents.createLabel("LOTOFÁCIL",
                 "-fx-font-size: 32px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
         // campos de login
@@ -51,7 +59,8 @@ public class LoginScreen {
 
         Hyperlink forgotPassword = new Hyperlink("Esqueci minha senha");
 
-        layout.getChildren().addAll(lblLogo, lblLogiCpf, txtCPF, lblLoginSenha, txtSenha, btnEntrar, btnRegistrar,
+        layout.getChildren().addAll(logoImg, lblLogo, lblLogiCpf, txtCPF, lblLoginSenha, txtSenha, btnEntrar,
+                btnRegistrar,
                 forgotPassword);
     }
 
