@@ -6,6 +6,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.Contest;
+import utils.ContestManager;
 import utils.UIComponents;
 import utils.UserSession;
 import javafx.scene.input.KeyCode;
@@ -42,6 +43,13 @@ public class ProfileScreen {
 
         // Criar menu à esquerda
         menu = new VBox(10);
+        menu.setStyle("""
+                    -fx-padding: 20;
+                    -fx-background-color: #E3E7EA;
+                    -fx-min-width: 220;
+                    -fx-alignment: top-center;
+                    -fx-spacing: 15;
+                """);
         stage.setTitle("LotoFacil - Perfil de Usuário");
         menu.setStyle("-fx-padding: 10; -fx-background-color: #F0F0F0; -fx-min-width: 200;");
 
@@ -49,8 +57,13 @@ public class ProfileScreen {
         Label lblPerfil = createClickableLabel("Perfil", e -> showPerfilContent());
         Label lblHistoricoCompras = createClickableLabel("Histórico de Compras", e -> showHistoricoContent());
         Label lblConfiguracoes = createClickableLabel("Configurações", e -> showConfiguracoesContent());
-        Button btnVoltar = UIComponents.createButton("Voltar", "-fx-backgroundcolor: red",
+        Button btnVoltar = UIComponents.createButton("Voltar", "-fx-background-color: #D9534F; -fx-text-fill: white; -fx-cursor: hand",
                 e -> ScreenNavigator.navigateToMainScreen(stage));
+
+        lblPerfil.setStyle("-fx-font-size: 16; -fx-text-fill: #333; -fx-font-weight: bold; -fx-cursor: hand;");
+        lblHistoricoCompras
+                .setStyle("-fx-font-size: 16; -fx-text-fill: #333; -fx-font-weight: bold; -fx-cursor: hand;");
+        lblConfiguracoes.setStyle("-fx-font-size: 16; -fx-text-fill: #333; -fx-font-weight: bold;-fx-cursor: hand;");
 
         menu.getChildren().addAll(lblPerfil, lblHistoricoCompras, lblConfiguracoes, btnVoltar);
 
@@ -69,52 +82,6 @@ public class ProfileScreen {
         label.setStyle("-fx-cursor: hand; -fx-font-size: 16px; -fx-text-fill: #800080;");
         label.setOnMouseClicked(eventHandler);
         return label;
-    }
-
-    private void showPerfilContent() {
-        mainContent.getChildren().clear();
-        Label lblTitle = new Label("Perfil do Usuário");
-        lblTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold;");
-
-        // Campos para editar as informações do usuário
-        txtNome = new TextField();
-        txtEmail = new TextField();
-        txtCelular = new TextField();
-
-        // Botão para editar as informações
-        btnEditar = new Button("Editar");
-        btnEditar.setOnAction(e -> toggleEdit());
-
-        loadUserData(); // Carrega os dados do usuário no início
-
-        // Exibir informações do usuário
-        HBox buttonBox = new HBox(10, btnEditar);
-        buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
-
-        mainContent.getChildren().addAll(lblTitle, new Label("Nome:"), txtNome,
-                new Label("Email:"), txtEmail,
-                new Label("Celular:"), txtCelular,
-                buttonBox);
-        setFieldsEditable(false); // Começa como somente leitura
-    }
-
-    private void toggleEdit() {
-        isEditable = !isEditable;
-        setFieldsEditable(isEditable);
-        btnEditar.setText(isEditable ? "Salvar" : "Editar");
-
-        if (!isEditable) {
-            saveUserData(); // Salva os dados se não estiver em modo de edição
-        }
-    }
-
-    private void setFieldsEditable(boolean editable) {
-        txtNome.setEditable(editable);
-        txtEmail.setEditable(editable);
-        txtCelular.setEditable(editable);
-        txtNome.setStyle(editable ? "-fx-background-color: #FFFFFF;" : "-fx-background-color: #E0E0E0;");
-        txtEmail.setStyle(editable ? "-fx-background-color: #FFFFFF;" : "-fx-background-color: #E0E0E0;");
-        txtCelular.setStyle(editable ? "-fx-background-color: #FFFFFF;" : "-fx-background-color: #E0E0E0;");
     }
 
     private void loadUserData() {
@@ -170,40 +137,161 @@ public class ProfileScreen {
         }
     }
 
+    private void showPerfilContent() {
+        mainContent.getChildren().clear();
+
+        // Título estilizado
+        Label lblTitle = new Label("Perfil do Usuário");
+        lblTitle.setStyle("-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4A4A4A; -fx-padding: 0 0 20 0;");
+
+        // Campos para editar as informações do usuário
+        txtNome = new TextField();
+        txtEmail = new TextField();
+        txtCelular = new TextField();
+
+        // Estiliza os campos de texto
+        String textFieldStyle = "-fx-font-size: 14px; -fx-padding: 10; -fx-background-radius: 5; " +
+                "-fx-border-color: #DCDCDC; -fx-border-radius: 5;";
+        txtNome.setStyle(textFieldStyle);
+        txtEmail.setStyle(textFieldStyle);
+        txtCelular.setStyle(textFieldStyle);
+
+        // Botão para editar as informações
+        btnEditar = new Button("Editar");
+        btnEditar.setStyle("-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 14px; " +
+                "-fx-padding: 10 20; -fx-background-radius: 5; -fx-cursor: hand;");
+        btnEditar.setOnMouseEntered(e -> btnEditar.setStyle("-fx-background-color: #9932CC; -fx-text-fill: white; " +
+                "-fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 5;"));
+        btnEditar.setOnMouseExited(e -> btnEditar.setStyle("-fx-background-color: #800080; -fx-text-fill: white; " +
+                "-fx-font-size: 14px; -fx-padding: 10 20; -fx-background-radius: 5;"));
+        btnEditar.setOnAction(e -> toggleEdit());
+
+        loadUserData(); // Carrega os dados do usuário no início
+
+        // Layout principal
+        VBox profileBox = new VBox(15);
+        profileBox.setStyle("-fx-padding: 20; -fx-background-color: #F8F8FF; -fx-background-radius: 10;");
+        profileBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        // Layout para os campos de entrada
+        GridPane gridPane = new GridPane();
+        gridPane.setHgap(10);
+        gridPane.setVgap(15);
+        gridPane.setStyle("-fx-alignment: center;");
+        gridPane.add(new Label("Nome:"), 0, 0);
+        gridPane.add(txtNome, 1, 0);
+        gridPane.add(new Label("Email:"), 0, 1);
+        gridPane.add(txtEmail, 1, 1);
+        gridPane.add(new Label("Celular:"), 0, 2);
+        gridPane.add(txtCelular, 1, 2);
+
+        // Estilizar os rótulos
+        for (int i = 0; i < gridPane.getChildren().size(); i++) {
+            if (gridPane.getChildren().get(i) instanceof Label) {
+                ((Label) gridPane.getChildren().get(i)).setStyle("-fx-font-size: 14px; -fx-text-fill: #4A4A4A;");
+            }
+        }
+
+        // Botões alinhados no centro
+        HBox buttonBox = new HBox(10, btnEditar);
+        buttonBox.setAlignment(javafx.geometry.Pos.CENTER);
+
+        // Adicionar elementos ao layout principal
+        profileBox.getChildren().addAll(lblTitle, gridPane, buttonBox);
+
+        mainContent.getChildren().add(profileBox);
+        setFieldsEditable(false); // Começa como somente leitura
+    }
+
+    private void toggleEdit() {
+        isEditable = !isEditable;
+        setFieldsEditable(isEditable);
+        btnEditar.setText(isEditable ? "Salvar" : "Editar");
+
+        if (!isEditable) {
+            saveUserData(); // Salva os dados se não estiver em modo de edição
+        }
+    }
+
+    private void setFieldsEditable(boolean editable) {
+        txtNome.setEditable(editable);
+        txtEmail.setEditable(editable);
+        txtCelular.setEditable(editable);
+
+        String readonlyStyle = "-fx-background-color: #E0E0E0; -fx-font-size: 14px; -fx-padding: 10; " +
+                "-fx-background-radius: 5; -fx-border-color: #DCDCDC; -fx-border-radius: 5;";
+        String editableStyle = "-fx-background-color: #FFFFFF; -fx-font-size: 14px; -fx-padding: 10; " +
+                "-fx-background-radius: 5; -fx-border-color: #DCDCDC; -fx-border-radius: 5;";
+
+        txtNome.setStyle(editable ? editableStyle : readonlyStyle);
+        txtEmail.setStyle(editable ? editableStyle : readonlyStyle);
+        txtCelular.setStyle(editable ? editableStyle : readonlyStyle);
+    }
+
     private void showHistoricoContent() {
         // Limpa o conteúdo atual do mainContent
         mainContent.getChildren().clear();
 
         // Título da seção
         Label lblTitle = UIComponents.createLabel("Histórico de Compras",
-                "-fx-font-size: 24px; -fx-font-weight: bold;");
+                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4A4A4A; -fx-padding: 0 0 20 0;");
 
         // Carrega o histórico de compras filtrado pelo CPF do usuário logado
         List<PurchaseFileManager> historicoCompras = PurchaseFileManager.loadUserTickets();
 
         // Layout para exibir os cartões
-        VBox historicoContainer = new VBox(10);
+        VBox historicoContainer = new VBox(15); // Maior espaçamento entre os cartões
         historicoContainer.setStyle("-fx-padding: 20;");
 
         // Itera sobre cada compra no histórico e cria um cartão para exibir os detalhes
         for (PurchaseFileManager compra : historicoCompras) {
-            VBox card = new VBox(5);
+            VBox card = new VBox(10); // Espaçamento maior entre as linhas do cartão
             card.setStyle(
-                    "-fx-border-color: #800080; -fx-border-width: 2; -fx-padding: 10; -fx-background-color: #F5F5F5;");
+                    "-fx-border-color: #800080; -fx-border-radius: 10; -fx-border-width: 2; -fx-padding: 15; " +
+                            "-fx-background-color: #F8F8FF; -fx-background-radius: 10; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 4, 0.5, 0, 2);");
+
+            // Busca os detalhes do concurso pelo código
+            Map<String, String> contestDetails = ContestManager.getContestByCode(compra.getContestCode());
 
             // Labels para mostrar as informações da compra
             Label lblCodigo = UIComponents.createLabel("Código da Compra: " + compra.getCodigoCompra(),
-                    "-fx-font-size: 14px;");
-            Label lblNomeAposta = UIComponents.createLabel("Nome da Aposta: " + compra.getNomeAposta(),
+                    "-fx-font-size: 14px; -fx-font-weight: bold;");
+            Label lblNomeAposta = UIComponents.createLabel("Nome do Concurso: " + compra.getNomeAposta(),
                     "-fx-font-size: 14px;");
             Label lblValor = UIComponents.createLabel("Valor Pago: R$ " + compra.getValueFromFile(),
+                    "-fx-font-size: 14px; -fx-text-fill: #228B22;");
+            Label lblValoresApostados = UIComponents.createLabel(
+                    "Valores Apostados: " + compra.getSelectedNumbersFromFile(),
                     "-fx-font-size: 14px;");
-            Label lblValoresApostados = UIComponents
-                    .createLabel("Valores Apostados: " + compra.getSelectedNumbersFromFile(), "-fx-font-size: 14px;");
             Label lblDataCompra = UIComponents.createLabel("Data da Compra: " + compra.getDataCompra(),
                     "-fx-font-size: 14px;");
             Label lblFormaPagamento = UIComponents.createLabel("Forma de Pagamento: " + compra.getFormaPagamento(),
                     "-fx-font-size: 14px;");
+
+            // Verifica se o concurso foi finalizado e adiciona o prêmio ao cartão
+            if (contestDetails != null && "Finalizado".equals(contestDetails.get("status"))) {
+                List<Integer> selectedNumbers = ContestManager
+                        .parseSelectedNumbers(compra.getSelectedNumbersFromFile());
+                List<Integer> winningNumbers = ContestManager.parseWinningNumbers(contestDetails.get("winningNumbers"));
+                int correctCount = ContestManager.countCorrectNumbers(selectedNumbers, winningNumbers);
+
+                double totalPrizePool = Double.parseDouble(contestDetails.get("totalPrizes"));
+                double prize = ContestManager.calculatePrize(correctCount, totalPrizePool);
+
+                Label lblStatusConcurso = UIComponents.createLabel("Status do Concurso: Finalizado",
+                        "-fx-font-size: 14px; -fx-text-fill: #FF4500;");
+                Label lblPremio = UIComponents.createLabel("Prêmio: R$ " + String.format("%.2f", prize),
+                        "-fx-font-size: 14px; -fx-text-fill: #FFD700;");
+
+                Label lblValoresVencedores = UIComponents.createLabel("Valores vencedores: " + winningNumbers,
+                        "-fx-font-size: 14px;");
+
+                card.getChildren().addAll(lblStatusConcurso, lblPremio, lblValoresVencedores);
+            } else {
+                Label lblStatusConcurso = UIComponents.createLabel("Status do Concurso: Não Finalizado",
+                        "-fx-font-size: 14px; -fx-text-fill: #4A4A4A;");
+                card.getChildren().add(lblStatusConcurso);
+            }
 
             // Adiciona as labels ao cartão
             card.getChildren().addAll(lblCodigo, lblNomeAposta, lblValor, lblValoresApostados, lblDataCompra,
@@ -216,36 +304,41 @@ public class ProfileScreen {
         // Se o histórico estiver vazio, mostra uma mensagem informativa
         if (historicoCompras.isEmpty()) {
             Label lblNoCompras = UIComponents.createLabel("Nenhum histórico de compras encontrado.",
-                    "-fx-font-size: 16px; -fx-text-fill: #800080;");
-
+                    "-fx-font-size: 16px; -fx-text-fill: #800080; -fx-padding: 20; -fx-alignment: center;");
             mainContent.getChildren().addAll(lblTitle, lblNoCompras);
         } else {
             // Se houver compras, adiciona o título e os cartões ao conteúdo principal
-            // Crie um ScrollPane e adicione o historicoContainer
             ScrollPane scrollPane = new ScrollPane();
             scrollPane.setContent(historicoContainer);
-            scrollPane.setFitToWidth(true); // Ajusta a largura do ScrollPane
-
-            // Adiciona o título e o ScrollPane ao conteúdo principal
+            scrollPane.setFitToWidth(true);
+            scrollPane.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
             mainContent.getChildren().addAll(lblTitle, scrollPane);
         }
     }
 
     private void showConfiguracoesContent() {
         mainContent.getChildren().clear();
-        Label lblTitle = UIComponents.createLabel("Configurações", "-fx-font-size: 24px; -fx-font-weight: bold;");
+
+        Label lblTitle = UIComponents.createLabel("Configurações",
+                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4A4A4A; -fx-padding: 0 0 20 0;");
 
         // Exibir opções de configurações
         Label lblConfiguracoes = UIComponents.createLabel("Aqui você pode modificar suas configurações.",
-                "-fx-font-size: 14px;");
+                "-fx-font-size: 14px; -fx-padding: 0 0 20 0; -fx-text-fill: #4A4A4A;");
 
         // Botão de deletar perfil na "Danger Zone"
         Button btnDeleteProfile = UIComponents.createButton("Deletar Perfil",
-                "-fx-background-color: red; -fx-text-fill: white;", e -> {
-                    showPasswordPrompt(); // Chama o método para pedir a senha
+                "-fx-background-color: #FF6347; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20; " +
+                        "-fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;",
+                e -> {
+                    showPasswordPrompt();
                 });
 
-        mainContent.getChildren().addAll(lblTitle, lblConfiguracoes, btnDeleteProfile);
+        // Adiciona espaçamento e alinhamento ao botão
+        VBox buttonContainer = new VBox(btnDeleteProfile);
+        buttonContainer.setStyle("-fx-alignment: center; -fx-padding: 20;");
+
+        mainContent.getChildren().addAll(lblTitle, lblConfiguracoes, buttonContainer);
     }
 
     // Método para solicitar a senha do usuário
