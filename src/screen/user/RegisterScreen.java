@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
+import utils.FieldValidator;
 import utils.UIComponents;
 import utils.ValidateDate;
 
@@ -108,27 +109,23 @@ public class RegisterScreen {
                             lblNomeError, lblDataError, lblEmailError, lblCPFError, lblSenhaErrorFirst,
                             lblSenhaErrorSecond, lblConfSenhaError);
                     if (valid) {
-                        if (txtSenha.getText().equals(txtConfSenha.getText())) {
-                            if (ValidateDate.isOfLegalAge(datePickerNasc.getValue())) {
-                                boolean userSaved = Database.saveUser(
-                                        txtNome.getText(),
-                                        txtEmail.getText(),
-                                        txtCPF.getText(),
-                                        datePickerNasc.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
-                                        txtSenha.getText());
+                        if (ValidateDate.isOfLegalAge(datePickerNasc.getValue())) {
+                            boolean userSaved = Database.saveUser(
+                                    txtNome.getText(),
+                                    txtEmail.getText(),
+                                    txtCPF.getText(),
+                                    datePickerNasc.getValue().format(DateTimeFormatter.ofPattern("dd-MM-yyyy")),
+                                    txtSenha.getText());
 
-                                if (userSaved) {
-                                    UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.",
-                                            null);
-                                    ScreenNavigator.navigateToLoginScreen(stage);
-                                } else {
-                                    UIComponents.showAlert("Informação de Registro", "CPF ou e-mail já registrados.",
-                                            null);
-                                }
+                            if (userSaved) {
+                                UIComponents.showAlert("Registro Concluído", "Usuário registrado com sucesso.",
+                                        null);
+                                ScreenNavigator.navigateToLoginScreen(stage);
                             } else {
-                                UIComponents.showAlert("Informação de Registro", "Usuário deve ser maior de idade.",
+                                UIComponents.showAlert("Informação de Registro", "CPF ou e-mail já registrados.",
                                         null);
                             }
+
                         } else {
                             UIComponents.showAlert("Informação de Registro", "Senhas não coincidem", null);
                         }
@@ -148,8 +145,8 @@ public class RegisterScreen {
 
         // Adicionando o ScrollPane
         ScrollPane scrollPane = new ScrollPane(layout);
-        scrollPane.setFitToWidth(true); 
-        scrollPane.setFitToHeight(true); 
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
         scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
@@ -158,148 +155,22 @@ public class RegisterScreen {
     }
 
     private boolean validateFields(TextField txtNome, DatePicker datePickerNasc, TextField txtEmail, TextField txtCPF,
-            PasswordField txtSenha, PasswordField txtConfSenha, CheckBox checkTermos, Label lblNomeError,
-            Label lblDataError,
-            Label lblEmailError, Label lblCPFError, Label lblSenhaErrorFirst, Label lblSenhaErrorSecond,
-            Label lblConfSenhaError) {
+            PasswordField txtSenha, PasswordField txtConfSenha, CheckBox checkTermos,
+            Label lblNomeError, Label lblDataError, Label lblEmailError, Label lblCPFError,
+            Label lblSenhaErrorFirst, Label lblSenhaErrorSecond, Label lblConfSenhaError) {
 
         boolean isValid = true;
 
-        // Verificar e atualizar campos individualmente
-
-        if (txtNome.getText().contentEquals(";")) {
-            txtNome.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-            lblNomeError.setText("O nome não é válido.");
-            lblNomeError.setVisible(true);
-            lblNomeError.setManaged(true);
-            isValid = false;
-        }
-
-        if (txtNome.getText().isEmpty()) {
-            txtNome.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-            lblNomeError.setText("Nome é obrigatório.");
-            lblNomeError.setVisible(true);
-            lblNomeError.setManaged(true);
-            isValid = false;
-        } else {
-            txtNome.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-            lblNomeError.setVisible(false);
-            lblNomeError.setManaged(false);
-        }
-
-        if (datePickerNasc.getValue() == null) {
-            datePickerNasc.setStyle("-fx-border-color: red; -fx-min-width: 280;");
-            lblDataError.setText("Data de náscimento é obrigatório.");
-            lblDataError.setVisible(true);
-            lblDataError.setManaged(true);
-            isValid = false;
-        } else {
-            datePickerNasc.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-            lblDataError.setVisible(false);
-            lblDataError.setManaged(false);
-        }
-
-        if (txtEmail.getText().isEmpty() || !txtEmail.getText().contains("@")) {
-            txtEmail.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-            lblEmailError.setText("Email inválido.");
-            lblEmailError.setVisible(true);
-            lblEmailError.setManaged(true);
-            isValid = false;
-        } else {
-            txtEmail.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-            lblEmailError.setVisible(false);
-            lblEmailError.setManaged(false);
-        }
-
-        if (txtCPF.getText().length() != 11) {
-            txtCPF.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-            lblCPFError.setText("CPF deve conter 11 dígitos.");
-            lblCPFError.setVisible(true);
-            lblCPFError.setManaged(true);
-            isValid = false;
-        } else {
-            txtCPF.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-            lblCPFError.setVisible(false);
-            lblCPFError.setManaged(false);
-        }
-
-        if (!txtSenha.getText().equals(txtConfSenha.getText())) {
-            txtConfSenha.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-            lblConfSenhaError.setText("Senhas não coincidem.");
-            lblConfSenhaError.setVisible(true);
-            lblConfSenhaError.setManaged(true);
-            isValid = false;
-        } else {
-            txtConfSenha.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-            lblConfSenhaError.setVisible(false);
-            lblConfSenhaError.setManaged(false);
-        }
-
-        if (!checkTermos.isSelected()) {
-            isValid = false;
-            UIComponents.showAlert("Informação de Registro", "Você deve concordar com os Termos de Serviço.", null);
-        }
-
-        if (txtSenha.getText().isEmpty()) {
-
-        }
-
-        setupPasswordValidation(txtSenha, lblSenhaErrorFirst, lblSenhaErrorSecond);
+        // Validação de todos os campos e retorno do resultado
+        isValid &= FieldValidator.validateName(txtNome, lblNomeError); // Valida o nome
+        isValid &= FieldValidator.validateDate(datePickerNasc, lblDataError); // Valida a data de nascimento
+        isValid &= FieldValidator.validateEmail(txtEmail, lblEmailError); // Valida o email
+        isValid &= FieldValidator.validateCPF(txtCPF, lblCPFError); // Valida o CPF
+        isValid &= FieldValidator.validatePassword(txtSenha, txtConfSenha, lblSenhaErrorFirst, lblSenhaErrorSecond,
+                lblConfSenhaError); // Valida senha
+        isValid &= FieldValidator.validateTerms(checkTermos); // Valida os termos de serviço
 
         return isValid;
-    }
-
-    // Método que será chamado para configurar as validações
-    private void setupPasswordValidation(PasswordField txtSenha, Label lblSenhaErrorFirst, Label lblSenhaErrorSecond) {
-        // Validação de comprimento
-        validSenhaLength(txtSenha, lblSenhaErrorFirst);
-
-        // Validação de presença de número
-        validSenhaContainsNumber(txtSenha, lblSenhaErrorSecond);
-    }
-
-    // Método para verificar se a senha é válida
-    private boolean validateFields(PasswordField txtSenha, Label lblSenhaErrorFirst, Label lblSenhaErrorSecond) {
-        boolean isValid = true;
-
-        // Verifica se ambos os critérios são atendidos
-        if (txtSenha.getText().length() >= 6 && txtSenha.getText().matches(".*\\d.*")) {
-            txtSenha.setStyle("-fx-border-color: green; -fx-max-width: 280;");
-        } else {
-            isValid = false; // Se algum critério não for atendido
-        }
-
-        return isValid;
-    }
-
-    // Método para validar o comprimento da senha
-    private void validSenhaLength(PasswordField txtSenha, Label lblSenhaErrorFirst) {
-        txtSenha.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Verifica se a senha tem pelo menos 6 caracteres
-            if (newValue.length() < 6) {
-                txtSenha.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-                lblSenhaErrorFirst.setText("Deve conter no mínimo 6 caracteres.");
-                lblSenhaErrorFirst.setStyle("-fx-text-fill: red;"); // Cor da fonte do erro
-            } else {
-                lblSenhaErrorFirst.setStyle("-fx-text-fill: green;"); // Cor da fonte de sucesso
-            }
-        });
-    }
-
-    // Método para validar a presença de números na senha
-    private void validSenhaContainsNumber(PasswordField txtSenha, Label lblSenhaErrorSecond) {
-        txtSenha.textProperty().addListener((observable, oldValue, newValue) -> {
-            // Verifica se a senha contém pelo menos um número
-            if (!newValue.matches(".*\\d.*")) {
-                txtSenha.setStyle("-fx-border-color: red; -fx-max-width: 280;");
-                lblSenhaErrorSecond.setText("Deve conter no mínimo 1 número.");
-                lblSenhaErrorSecond.setVisible(true);
-                lblSenhaErrorSecond.setStyle("-fx-text-fill: red;"); // Cor da fonte do erro
-            } else {
-                lblSenhaErrorSecond.setVisible(true); // Mantém visível
-                lblSenhaErrorSecond.setStyle("-fx-text-fill: green;"); // Cor da fonte de sucesso
-            }
-        });
     }
 
     private void showTermsDialog() {
