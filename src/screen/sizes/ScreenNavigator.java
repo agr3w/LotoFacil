@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import java.util.List;
 
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import screen.adm.ContestStatusScreen;
 import screen.adm.RegisterContestScreen;
 import screen.adm.UserManagementScreen;
@@ -32,7 +33,15 @@ public class ScreenNavigator {
     public static void navigateToRegisterScreen(Stage stage) {
         ScreenSize screenSize = ScreenSizeManager.getComumScreenSize();
         RegisterScreen registerScreen = new RegisterScreen(stage);
-        stage.setScene(new Scene(registerScreen.getLayout(), screenSize.getWidth(), screenSize.getHeight()));
+
+        ScrollPane scrollPane = new ScrollPane(registerScreen.getLayout());
+        scrollPane.setFitToWidth(true);
+        scrollPane.setFitToHeight(true);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        // Define a nova cena com o ScrollPane
+        stage.setScene(new Scene(scrollPane, screenSize.getWidth(), screenSize.getHeight()));
     }
 
     public static void navigateToLoginScreen(Stage stage) {
