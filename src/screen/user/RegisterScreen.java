@@ -26,35 +26,51 @@ public class RegisterScreen {
         layout.setAlignment(Pos.TOP_CENTER);
 
         // Título da tela
-        Label lblCadastro = UIComponents.createLabel("Cadastro de Usuário",
+        Label lblCadastro = UIComponents.createLabel("Registro de Usuário",
                 "-fx-font-size: 22px; -fx-text-fill: #800080; -fx-font-weight: bold;");
 
         // Nome Completo
         Label lblNome = UIComponents.createLabel("Nome Completo:", null);
-        TextField txtNome = UIComponents.createTextField("Digite seu nome completo", "-fx-max-width: 280;");
+        TextField txtNome = UIComponents.createTextField("Digite seu nome completo",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblNomeError = new Label();
         lblNomeError.setStyle("-fx-text-fill: red;");
         lblNomeError.setVisible(false);
         lblNomeError.setManaged(false);
 
+        // Validação do nome
+        txtNome.textProperty().addListener((observable, oldValue, newValue) -> {
+            FieldValidator.validateName(txtNome, lblNomeError); // Chama a validação do nome
+        });
+
         // Data Nascimento
         Label lblDataNasc = UIComponents.createLabel("Data de Nascimento:", null);
-        DatePicker datePickerNasc = ValidateDate.createDatePicker("Selecione sua data de nascimento",
-                "-fx-min-width: 280", lblDataError);
+        DatePicker datePickerNasc = ValidateDate.createDatePicker("dd/MM/yyyy",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;", lblDataError);
         lblDataError.setStyle("-fx-text-fill: red;");
         lblDataError.setManaged(false);
 
+        // Validação da data
+        datePickerNasc.valueProperty().addListener((observable, oldValue, newValue) -> {
+            FieldValidator.validateDate(datePickerNasc, lblDataError); // Chama a validação da data
+        });
+
         // Email
         Label lblEmail = UIComponents.createLabel("Email", null);
-        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 280;");
+        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblEmailError = new Label();
         lblEmailError.setStyle("-fx-text-fill: red;");
         lblEmailError.setVisible(false);
         lblEmailError.setManaged(false);
 
+        // Validação do email
+        txtEmail.textProperty().addListener((observable, oldValue, newValue) -> {
+            FieldValidator.validateEmail(txtEmail, lblEmailError); // Chama a validação do email
+        });
+
         // CPF
         Label lblCPF = UIComponents.createLabel("CPF", null);
-        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 280;");
+        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblCPFError = new Label();
         lblCPFError.setStyle("-fx-text-fill: red;");
         lblCPFError.setVisible(false);
@@ -67,24 +83,37 @@ public class RegisterScreen {
             if (newValue.length() > 11) {
                 txtCPF.setText(newValue.substring(0, 11));
             }
+            FieldValidator.validateCPF(txtCPF, lblCPFError); // Chama a validação do CPF
         });
 
         // Senha
         Label lblSenha = UIComponents.createLabel("Senha", null);
-        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 280;");
+        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
 
-        Label lblSenhaErrorFirst = new Label("Deve conter no mínimo 6 caracteres");
+        Label lblSenhaErrorFirst = new Label("Deve conter no mínimo 6 caracteres. ⛔");
         lblSenhaErrorFirst.setStyle("-fx-text-fill: red;");
 
-        Label lblSenhaErrorSecond = new Label("Deve conter no mínimo 1 número.");
+        Label lblSenhaErrorSecond = new Label("Deve conter no mínimo 1 número. ⛔");
         lblSenhaErrorSecond.setStyle("-fx-text-fill: red;");
 
         // Confirmar Senha
         Label lblConfSenha = UIComponents.createLabel("Confirmar senha", null);
-        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 280;");
+        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblConfSenhaError = new Label();
         lblConfSenhaError.setStyle("-fx-text-fill: red;");
         lblConfSenhaError.setManaged(false);
+
+        // Validação da senha
+        txtSenha.textProperty().addListener((observable, oldValue, newValue) -> {
+            FieldValidator.validatePassword(txtSenha, txtConfSenha, lblSenhaErrorFirst, lblSenhaErrorSecond,
+                    lblConfSenhaError); // Chama a validação da senha
+        });
+
+        // Ouvinte para a confirmação da senha
+        txtConfSenha.textProperty().addListener((observable, oldValue, newValue) -> {
+            FieldValidator.validatePassword(txtSenha, txtConfSenha, lblSenhaErrorFirst, lblSenhaErrorSecond,
+                    lblConfSenhaError);
+        });
 
         // Checkbox para termos de serviço
         CheckBox checkTermos = new CheckBox("Concordo com os Termos de Serviço");
@@ -92,17 +121,23 @@ public class RegisterScreen {
 
         // Estilo do botão de termos de serviço
         Button btnTermos = UIComponents.createButton("Termos de Serviço",
-                "-fx-background-color: #ffff; -fx-text-fill: black; -fx-border-radius: 5; -fx-padding: 10 20; -fx-cursor: hand;",
+                "-fx-background-color: #e6e6fa; -fx-text-fill: black; -fx-font-size: 12px; -fx-font-weight: bold; " +
+                        "-fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 8;" +
+                        "-fx-cursor: hand; fx-width: 200;",
                 e -> showTermsDialog());
 
         // Estilo do botão de retorno para login
         Button btnRetornoLogin = UIComponents.createButton("Retornar",
-                "-fx-background-color: #FF0000; -fx-text-fill: white; -fx-border-radius: 5; -fx-padding: 10 20; -fx-cursor: hand;",
+                "-fx-background-color: #FF0000; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; " +
+                        "-fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 8;" +
+                        "-fx-cursor: hand; fx-width: 200;",
                 e -> ScreenNavigator.navigateToLoginScreen(stage));
 
         // Botão de Registrar
         Button btnRegistrar = UIComponents.createButton("Registrar",
-                "-fx-background-color: #800080; -fx-text-fill: white; -fx-border-radius: 5; -fx-padding: 10 20; -fx-cursor: hand;",
+                "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; " +
+                        "-fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 8;" +
+                        "-fx-cursor: hand; fx-width: 200;",
                 e -> {
                     boolean valid = validateFields(txtNome, datePickerNasc, txtEmail, txtCPF, txtSenha, txtConfSenha,
                             checkTermos,
