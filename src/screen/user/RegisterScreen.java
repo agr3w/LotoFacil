@@ -57,7 +57,8 @@ public class RegisterScreen {
 
         // Email
         Label lblEmail = UIComponents.createLabel("Email", null);
-        TextField txtEmail = UIComponents.createTextField("Digite seu Email", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
+        TextField txtEmail = UIComponents.createTextField("Digite seu Email",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblEmailError = new Label();
         lblEmailError.setStyle("-fx-text-fill: red;");
         lblEmailError.setVisible(false);
@@ -70,7 +71,8 @@ public class RegisterScreen {
 
         // CPF
         Label lblCPF = UIComponents.createLabel("CPF", null);
-        TextField txtCPF = UIComponents.createTextField("Digite seu CPF", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
+        TextField txtCPF = UIComponents.createTextField("Digite seu CPF",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblCPFError = new Label();
         lblCPFError.setStyle("-fx-text-fill: red;");
         lblCPFError.setVisible(false);
@@ -88,7 +90,8 @@ public class RegisterScreen {
 
         // Senha
         Label lblSenha = UIComponents.createLabel("Senha", null);
-        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
+        PasswordField txtSenha = UIComponents.createPasswordField("Digite sua senha",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
 
         Label lblSenhaErrorFirst = new Label("Deve conter no mínimo 6 caracteres. ⛔");
         lblSenhaErrorFirst.setStyle("-fx-text-fill: red;");
@@ -98,7 +101,8 @@ public class RegisterScreen {
 
         // Confirmar Senha
         Label lblConfSenha = UIComponents.createLabel("Confirmar senha", null);
-        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha", "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
+        PasswordField txtConfSenha = UIComponents.createPasswordField("Confirme sua senha",
+                "-fx-max-width: 280; -fx-background-radius: 5; -fx-border-radius: 5;");
         Label lblConfSenhaError = new Label();
         lblConfSenhaError.setStyle("-fx-text-fill: red;");
         lblConfSenhaError.setManaged(false);
@@ -216,7 +220,29 @@ public class RegisterScreen {
         Label lblHeader = UIComponents.createLabel("Termos de Serviço",
                 "-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #800080;");
 
-        TextArea txtTermos = new TextArea("Aqui estão os termos de serviço detalhados...");
+        // Texto dos Termos de Serviço
+        String termos = "1. Aceitação dos Termos\n" +
+                "Ao utilizar este aplicativo, você concorda em cumprir e estar vinculado a estes termos de serviço.\n\n"
+                +
+                "2. Modificações dos Termos\n" +
+                "Reservamo-nos o direito de modificar estes termos a qualquer momento. As alterações serão publicadas nesta página.\n\n"
+                +
+                "3. Uso do Aplicativo\n" +
+                "Você concorda em usar o aplicativo apenas para fins legais e de acordo com todas as leis aplicáveis.\n\n"
+                +
+                "4. Responsabilidade\n" +
+                "Não nos responsabilizamos por quaisquer danos diretos, indiretos, incidentais ou consequenciais resultantes do uso ou da incapacidade de usar o aplicativo.\n\n"
+                +
+                "5. Propriedade Intelectual\n" +
+                "Todos os direitos de propriedade intelectual relacionados ao aplicativo são de nossa propriedade ou de nossos licenciadores.\n\n"
+                +
+                "6. Contato\n" +
+                "Se você tiver alguma dúvida sobre estes termos, entre em contato conosco através do nosso suporte.\n\n"
+                +
+                "7. Lei Aplicável\n" +
+                "Estes termos serão regidos e interpretados de acordo com as leis do seu país.\n";
+
+        TextArea txtTermos = new TextArea(termos);
         txtTermos.setWrapText(true);
         txtTermos.setEditable(false);
         txtTermos.setMaxHeight(300);
