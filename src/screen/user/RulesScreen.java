@@ -29,7 +29,7 @@ public class RulesScreen {
 
         // Título
         Label lblTitle = UIComponents.createLabel("Regras da Lotofácil",
-                "-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #4B0082; -fx-underline: true;");
+                "-fx-font-size: 26px; -fx-font-weight: bold; -fx-text-fill: #4B0082;");
 
         // Regras
         Label lblRules = UIComponents.createLabel(
@@ -49,7 +49,7 @@ public class RulesScreen {
         buttonBox.setPadding(new Insets(20, 0, 0, 0)); // Espaçamento superior
         @SuppressWarnings("unused")
         Button btnBack = UIComponents.createButton("Voltar ao Menu",
-                "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5;",
+                "-fx-background-color: #800080; -fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10 20; -fx-border-radius: 5; -fx-background-radius: 5; -fx-cursor: hand;",
                 e -> ScreenNavigator.navigateToMainScreen(stage));
         buttonBox.getChildren().add(btnBack);
 

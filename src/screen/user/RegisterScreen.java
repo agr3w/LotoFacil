@@ -132,7 +132,7 @@ public class RegisterScreen {
 
         // Estilo do botão de retorno para login
         Button btnRetornoLogin = UIComponents.createButton("Retornar",
-                "-fx-background-color: #FF0000; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; " +
+                "-fx-background-color: #D9534F; -fx-text-fill: white; -fx-font-size: 12px; -fx-font-weight: bold; " +
                         "-fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 8;" +
                         "-fx-cursor: hand; fx-width: 200;",
                 e -> ScreenNavigator.navigateToLoginScreen(stage));

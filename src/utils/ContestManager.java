@@ -92,7 +92,7 @@ public class ContestManager {
         Random random = new Random();
 
         // Gerando 20 números únicos entre 1 e 25
-        while (numbers.size() < 20) {
+        while (numbers.size() < 15) {
             int number = random.nextInt(25) + 1; // Gera números de 1 a 25
             if (!numbers.contains(number)) {
                 numbers.add(number);
@@ -158,8 +158,8 @@ public class ContestManager {
 
                     // Passo 1: Calcular receita total e separar porcentagens
                     double totalRevenue = calculateTotalBets(contestCode);
-                    double prizePool = totalRevenue * 0.6; // 60% para prêmios
-                    double corporationShare = totalRevenue * 0.4; // 40% para a corporação
+                    double prizePool = totalRevenue * 0.5665; // 56,65% para prêmios
+                    double corporationShare = totalRevenue * 0.4335; // 43,35% para a corporação
 
                     // Atualiza os valores no mapa
                     contest.put("totalRevenue", String.valueOf(totalRevenue));
@@ -205,16 +205,14 @@ public class ContestManager {
     }
 
     public static int countCorrectNumbers(List<Integer> selectedNumbers, List<Integer> winningNumbers) {
+        Set<Integer> winningSet = new HashSet<>(winningNumbers); // Converte a lista de números vencedores em um
+                                                                 // conjunto
         int count = 0;
 
-        // As duas listas devem ter o mesmo tamanho para verificar as posições
-        // correspondentes
-        int size = Math.min(selectedNumbers.size(), winningNumbers.size());
-
-        // Itera sobre os números até o tamanho mínimo das duas listas
-        for (int i = 0; i < size; i++) {
-            // Compara os números na mesma posição
-            if (selectedNumbers.get(i).equals(winningNumbers.get(i))) {
+        // Itera sobre os números selecionados
+        for (Integer number : selectedNumbers) {
+            // Verifica se o número selecionado está no conjunto de números vencedores
+            if (winningSet.contains(number)) {
                 count++; // Conta o número correto
             }
         }
@@ -304,19 +302,30 @@ public class ContestManager {
     }
 
     public static double calculatePrize(int correctCount, double totalPrizePool) {
+        List<Map<String, String>> contests = readContestsFromFile();
         double prize = 0;
-        double totalPrizeDistribuation = totalPrizePool * 0.4335; //Apenas o valor de premios que sera distribuido
+        double totalPrizeDistribuation = 0;
+
+        // Soma o total de prêmios de todos os contests
+        for (Map<String, String> contest : contests) {
+            try {
+                double totalPrizes = Double.parseDouble(contest.get("totalPrizes"));
+                totalPrizeDistribuation = totalPrizes;
+            } catch (NumberFormatException e) {
+                System.err.println("Erro ao converter 'totalPrizes': " + e.getMessage());
+            }
+        }
 
         if (correctCount == 11) {
-            prize = totalPrizeDistribuation * 0.10; // Exemplo: 10% do total para 11 acertos
+            prize = totalPrizeDistribuation * 0.1; // 10%
         } else if (correctCount == 12) {
-            prize = totalPrizeDistribuation * 0.20; // Exemplo: 20% do total para 12 acertos
+            prize = totalPrizeDistribuation * 0.2; // 20%
         } else if (correctCount == 13) {
-            prize = totalPrizeDistribuation * 0.30; // Exemplo: 30% do total para 13 acertos
+            prize = totalPrizeDistribuation * 0.3; // 30%
         } else if (correctCount == 14) {
-            prize = totalPrizeDistribuation * 0.32; // 32% do total para 14 acertos
+            prize = totalPrizeDistribuation * 0.32; // 32%
         } else if (correctCount == 15) {
-            prize = totalPrizeDistribuation * 0.68; // 68% do total para 15 acertos
+            prize = totalPrizeDistribuation * 0.68; // 68%
         }
 
         return prize;
