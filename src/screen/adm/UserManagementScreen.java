@@ -88,9 +88,8 @@ public class UserManagementScreen {
     }
 
     private void loadUserData() {
-        List<Map<String, String>> users = UserManager.getAllUsers(); // Você precisaria de um método para pegar os
-                                                                     // usuários
-        table.getItems().clear(); // Limpar itens antes de carregar novos dados
+        List<Map<String, String>> users = UserManager.getAllUsers();
+        table.getItems().clear();
 
         for (Map<String, String> user : users) {
             table.getItems().add(user);
@@ -223,7 +222,7 @@ public class UserManagementScreen {
     private void excluirUsuario() {
         Map<String, String> selectedUser = table.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
-            String cpf = selectedUser.get("cpf");
+            String cpf = selectedUser.get("CPF");
             UserManager.deleteUserProfile(cpf); // Exclui o usuário pelo CPF
             UIComponents.showAlert("Usuário Excluído", "O usuário com CPF " + cpf + " foi excluído.",
                     AlertType.INFORMATION);

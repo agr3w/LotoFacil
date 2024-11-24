@@ -22,19 +22,20 @@ public class RegisterContestScreen {
         layout = new VBox(20); // Espaçamento entre os elementos
         stage.setTitle("LotoFacil - Registro de Novo Concurso");
         layout.setStyle(
-                "-fx-padding: 20; -fx-alignment: center; -fx-align-itens: center; -fx-background-color: #DCE8E8;");
+                "-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;");
 
         // Título da tela
         Label titleLabel = UIComponents.createLabel("Registrar Novo Concurso",
-                "-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #333333;");
+                "-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333333;");
 
         // Campos para registro
-        Label lblNomeConcurso = UIComponents.createLabel("Nome do Concurso", null);
+        Label lblNomeConcurso = UIComponents.createLabel("Nome do Concurso", "-fx-font-size: 16px; -fx-text-fill: #555555;");
         TextField txtNomeConcurso = UIComponents.createTextField("Digite o nome do concurso", null);
+        txtNomeConcurso.setStyle("-fx-font-size: 14px; -fx-padding: 10; -fx-border-radius: 5; -fx-border-color: #007BFF;");
 
         // Botão de salvar
         Button btnSalvar = UIComponents.createButton("Salvar Concurso",
-                "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5;",
+                "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5; cursor: hand;",
                 e -> {
                     String nomeConcurso = txtNomeConcurso.getText();
                     LocalDate startDate = LocalDate.now();
@@ -45,7 +46,6 @@ public class RegisterContestScreen {
                         return; // Interrompe o processo caso o nome esteja vazio
                     }
 
-                    // Verificação de formato e conversão da data
                     // Verificação se já existe um concurso com a mesma data
                     if (ContestFileManager.isStartDateTaken(startDate)) {
                         UIComponents.showAlert("Erro",
@@ -70,17 +70,18 @@ public class RegisterContestScreen {
 
         // Botão de voltar
         Button btnVoltar = UIComponents.createButton("Voltar",
-                "-fx-background-color: #FF5733; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5;",
+                "-fx-background-color: #FF5733; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5; cursor: hand;",
                 e -> {
-                    // Aqui você pode adicionar a lógica para retornar à tela anterior
                     ScreenNavigator.navigateToMainScreen(stage); // Exemplo simples: fecha a tela atual
                 });
 
         // Organizar elementos em um GridPane para alinhamento
         GridPane grid = new GridPane();
-        grid.setVgap(10);
+        grid.setVgap(15);
         grid.setHgap(10);
-        grid.add(txtNomeConcurso, 0, 0);
+        grid.setStyle("-fx-padding: 20; -fx-background-color: #FFFFFF; -fx-border-radius: 10; -fx-effect: dropshadow(gaussian, rgba( 0,0,0,0.2), 10, 0, 0, 1);");
+        grid.add(lblNomeConcurso, 0, 0);
+        grid.add(txtNomeConcurso, 0, 1);
         grid.add(btnSalvar, 0, 2);
         grid.add(btnVoltar, 0, 3);
 
