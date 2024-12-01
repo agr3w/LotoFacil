@@ -60,6 +60,7 @@ public class ContestFileManager {
             writer.write("totalRevenue: " + "0" + ";");
             writer.write("totalPrizes: " + "0" + ";");
             writer.write("corporationShare: " + "0" + ";");
+            writer.write("remainingPrizes: " + "0" + ";");
             writer.newLine(); // Adiciona nova linha para o próximo concurso
             writer.close();
 
@@ -107,6 +108,7 @@ public class ContestFileManager {
                     contest.put("totalRevenue", parts[7].split(":")[1].trim());
                     contest.put("totalPrizes", parts[8].split(":")[1].trim());
                     contest.put("corporationShare", parts[9].split(":")[1].trim());
+                    contest.put("remainingPrizes", parts[10].split(":")[1].trim()); 
                     openContests.add(contest);
                 }
             }
@@ -136,6 +138,7 @@ public class ContestFileManager {
                 contest.put("totalRevenue", parts[7].split(":")[1].trim());
                 contest.put("totalPrizes", parts[8].split(":")[1].trim());
                 contest.put("corporationShare", parts[9].split(":")[1].trim());
+                contest.put("remainingPrizes", parts[10].split(":")[1].trim()); 
                 AllContests.add(contest);
 
             }
