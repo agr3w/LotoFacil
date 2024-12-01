@@ -7,6 +7,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
@@ -168,6 +169,8 @@ public class RegisterScreen {
                         } else {
                             UIComponents.showAlert("Informação de Registro", "Senhas não coincidem", null);
                         }
+                    } else {
+                        Alert alertFields = UIComponents.showAlert("Campos Inválidos", "Existem campos inválidos", null);
                     }
                 });
 

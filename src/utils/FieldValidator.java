@@ -166,7 +166,7 @@ public class FieldValidator {
         }
 
         // Validação se as senhas coincidem
-        if (!txtSenha.getText().equals(txtConfSenha.getText())) {
+        if (!txtSenha.getText().equals(txtConfSenha.getText()) || txtConfSenha.getText().isEmpty()) {
             txtConfSenha.setStyle("-fx-border-color: red; -fx-max-width: 280;");
             lblConfSenhaError.setText("Senhas não coincidem.");
             lblConfSenhaError.setVisible(true);
