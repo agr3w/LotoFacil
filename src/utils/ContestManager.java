@@ -54,7 +54,6 @@ public class ContestManager {
                     contest.put("totalRevenue", parts[7].split(":")[1].trim()); // Inicializa o total de apostas
                     contest.put("totalPrizes", parts[8].split(":")[1].trim()); // Inicializa o total de apostas
                     contest.put("corporationShare", parts[9].split(":")[1].trim()); // Inicializa o total de apostas
-                    contest.put("remainingPrizes", parts[10].split(":")[1].trim()); // Inicializa o total de apostas
                     contests.add(contest);
                 }
             }
@@ -77,11 +76,10 @@ public class ContestManager {
                 bw.write("Codigo: " + contest.get("contestCode") + ";");
                 bw.write("Status: " + contest.get("status") + ";");
                 bw.write("WinningNumbers: " + contest.get("winningNumbers") + ";");
-                bw.write("TotalBets: " + contest.get("TotalBets") + ";");
-                bw.write("totalRevenue: " + contest.get("totalRevenue") + ";");
-                bw.write("totalPrizes: " + contest.get("totalPrizes") + ";");
-                bw.write("corporationShare: " + contest.get("corporationShare") + ";");
-                bw.write("remainingPrizes: " + contest.get("remainingPrizes") + ";");
+                bw.write("TotalBets: " + contest.get("TotalBets") + ";"); // Inclui TotalBets
+                bw.write("totalRevenue: " + contest.get("totalRevenue") + ";"); // Inclui TotalBets
+                bw.write("totalPrizes: " + contest.get("totalPrizes") + ";"); // Inclui TotalBets
+                bw.write("corporationShare: " + contest.get("corporationShare") + ";"); // Inclui TotalBets
                 bw.newLine();
             }
         } catch (IOException e) {
@@ -144,26 +142,21 @@ public class ContestManager {
 
     public static void finalizeContest(String contestCode) {
         try {
-            // Passo 1: Ler os concursos do arquivo
             List<Map<String, String>> contests = readContestsFromFile();
             boolean found = false;
 
             for (Map<String, String> contest : contests) {
-                // Verifica se o concurso atual é o que está sendo finalizado
                 if (contest.get("contestCode").equals(contestCode)) {
                     found = true;
 
-                    // Verifica se o concurso já foi finalizado
-                    String status = contest.get("status");
-                    if (status != null && status.equals("Finalizado")) {
+                    if (contest.get("status").equals("Finalizado")) {
                         System.out.println("Este concurso já está finalizado.");
                         return;
                     }
 
-                    // Atualiza o status do concurso para "Finalizado"
                     contest.put("status", "Finalizado");
 
-                    // Passo 2: Calcular receita total e separar porcentagens
+                    // Passo 1: Calcular receita total e separar porcentagens
                     double totalRevenue = calculateTotalBets(contestCode);
                     double prizePool = totalRevenue * 0.4335; // 43,35% para prêmios
                     double corporationShare = totalRevenue * 0.5665; // 56,65% para a corporação
@@ -172,45 +165,18 @@ public class ContestManager {
                     contest.put("totalRevenue", String.valueOf(totalRevenue));
                     contest.put("totalPrizes", String.valueOf(prizePool));
                     contest.put("corporationShare", String.valueOf(corporationShare));
-                    double totalDistributedPrizes = 0.0;
 
-                    // Carregar os tickets do usuário
-                    List<PurchaseFileManager> tickets = PurchaseFileManager.loadAllTickets();
-
-                    for (PurchaseFileManager ticket : tickets) {
-                        Map<String, String> ticketContest = getContestByCode(ticket.getContestCode());
-                        if (ticketContest != null) {
-                            List<Integer> winningNumbers = parseWinningNumbers(ticketContest.get("winningNumbers"));
-                            List<Integer> selectedNumbers = parseSelectedNumbers(ticket.getSelectedNumbersFromFile());
-                            int correctCount = countCorrectNumbers(selectedNumbers, winningNumbers);
-
-                            double prize = calculatePrize(correctCount, prizePool);
-                            totalDistributedPrizes += prize; // Acumula o total distribuído
-                        }
-                    }
-
-                    // Passo 4: Calcular o restante dos prêmios (sobra)
-                    double remainingPrizes = prizePool - totalDistributedPrizes;
-
-                    // Atualiza o restante dos prêmios no mapa
-                    contest.put("remainingPrizes", String.valueOf(remainingPrizes));
-
-                    // Passo 5: Salvar as alterações no arquivo
+                    // Salva as alterações no arquivo
                     writeContestsToFile(contests);
 
-                    // Exibir informações sobre o concurso finalizado
                     System.out.println("Concurso finalizado: " + contestCode);
                     System.out.println("Receita total: " + totalRevenue);
                     System.out.println("Total de prêmios distribuídos: " + prizePool);
                     System.out.println("Parte da corporação: " + corporationShare);
-                    System.out.println("Sobras: " + remainingPrizes);
-                    System.out.println(totalDistributedPrizes);
-
-                    return; // Retorna após processar o concurso
+                    return;
                 }
             }
 
-            // Se o concurso não for encontrado
             if (!found) {
                 System.out.println("Concurso não encontrado: " + contestCode);
             }

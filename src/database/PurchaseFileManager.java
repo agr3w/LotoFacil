@@ -96,42 +96,6 @@ public class PurchaseFileManager {
         return false;
     }
 
-    public static List<PurchaseFileManager> loadAllTickets() {
-        List<PurchaseFileManager> tickets = new ArrayList<>();
-        Path path = Paths.get(filePath);
-    
-        if (!Files.exists(path)) {
-            System.out.println("Arquivo de tickets não encontrado.");
-            return tickets;
-        }
-    
-        try (BufferedReader reader = Files.newBufferedReader(path)) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("CPF: ")) {
-                    String cpf = line.split(": ")[1];
-                    String codeContest = reader.readLine().split(": ")[1];
-                    String dataCompra = reader.readLine().split(": ")[1];
-                    String selectedNumbers = reader.readLine().split(": ")[1];
-                    String value = reader.readLine().split(": ")[1];
-                    String codigoCompra = reader.readLine().split(": ")[1];
-                    String formaPagamento = reader.readLine().split(": ")[1];
-                    String nomeAposta = reader.readLine().split(": ")[1];
-                    reader.readLine(); // Ignora a linha em branco
-    
-                    tickets.add(new PurchaseFileManager(
-                            cpf, dataCompra, selectedNumbers, value, 
-                            codigoCompra, formaPagamento, nomeAposta, codeContest));
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Erro ao carregar todos os tickets: " + e.getMessage());
-        }
-    
-        return tickets;
-    }
-    
-
     // Método para carregar as informações do arquivo
     public static List<PurchaseFileManager> loadUserTickets() {
         List<PurchaseFileManager> tickets = new ArrayList<>();
