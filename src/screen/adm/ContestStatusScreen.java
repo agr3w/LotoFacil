@@ -95,7 +95,7 @@ public class ContestStatusScreen {
                 totalRevenueColumn, totalPrizesColumn, totalCoporationShareColumn);
     }
 
-    private void loadContestData() {
+    private void loadContestData() { 
         List<Map<String, String>> contests = ContestFileManager.getAllContests();
         table.getItems().clear(); // Limpar itens antes de carregar novos dados
 
