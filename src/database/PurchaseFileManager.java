@@ -72,6 +72,11 @@ public class PurchaseFileManager {
     // Salva os valores do ticket no arquivo
     public static boolean saveBetToFile(String loggedInUser, List<Integer> numbers, String formaPagamento,
             String nomeAposta, String selectedContestCode) {
+        // Verifica se a combinação de números já foi comprada
+        if (isDuplicateTicket(loggedInUser, numbers)) {
+            System.out.println("Erro: A combinação de números já foi comprada.");
+            return false; // Impede a compra de um ticket duplicado
+        }
         String codigoCompra = generateUniquePurchaseCode(); // Gerar um código de compra único
         Path path = Paths.get(filePath);
 
@@ -131,5 +136,33 @@ public class PurchaseFileManager {
     // Método auxiliar para gerar um código de compra único (simples)
     private static String generateUniquePurchaseCode() {
         return "COMPRA-" + System.currentTimeMillis();
+    }
+
+    // Método para verificar se a combinação de números já foi comprada pelo usuário
+    public static boolean isDuplicateTicket(String loggedInUser, List<Integer> selectedNumbers) {
+        List<PurchaseFileManager> userTickets = loadUserTickets();
+
+        // Verifica se já existe um ticket com a mesma combinação de números
+        for (PurchaseFileManager ticket : userTickets) {
+            if (ticket.getCpfFromFile().equals(loggedInUser)) {
+                // Compara as combinações de números (convertidos para listas de inteiros)
+                List<Integer> ticketNumbers = convertStringToListOfNumbers(ticket.getSelectedNumbersFromFile());
+                if (ticketNumbers.equals(selectedNumbers)) {
+                    return true; // Encontrou um ticket com a mesma combinação
+                }
+            }
+        }
+        return false; // Não encontrou duplicação
+    }
+
+    // Método para converter uma string de números selecionados para uma lista de
+    // inteiros
+    private static List<Integer> convertStringToListOfNumbers(String selectedNumbers) {
+        String numbersString = selectedNumbers.replaceAll("[\\[\\] ]", ""); // Remove colchetes e espaços
+        List<Integer> numbers = new ArrayList<>();
+        for (String num : numbersString.split(",")) {
+            numbers.add(Integer.parseInt(num));
+        }
+        return numbers;
     }
 }

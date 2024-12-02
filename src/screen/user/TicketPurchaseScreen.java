@@ -12,10 +12,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.UIComponents;
+import utils.UserSession;
 import utils.NumberSelection;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import database.PurchaseFileManager;
 import database.TicketPricing;
 
 @SuppressWarnings("unused")
@@ -164,10 +167,21 @@ public class TicketPurchaseScreen {
 
     private void confirmTicketPurchase() {
         if (numberSelection.getSelectedCount() >= MIN_NUM && numberSelection.getSelectedCount() <= MAX_NUM) {
+            // Verifica se a combinação de números já foi comprada
+            String loggedInUserCpf = UserSession.getLoggedInUserCpf();
+            List<Integer> selectedNumbers = numberSelection.getSelectedNumbers();
+
+            if (PurchaseFileManager.isDuplicateTicket(loggedInUserCpf, selectedNumbers)) {
+                UIComponents.showAlert("Erro", "Você já comprou essa combinação de números.", AlertType.WARNING);
+                return; // Impede o prosseguimento se houver duplicação
+            }
+
+            // Caso não haja duplicação, prossegue com a navegação para a tela de resumo
             Stage stage = (Stage) layout.getScene().getWindow();
-            ScreenNavigator.navigateToTicketSummaryScreen(stage, numberSelection.getSelectedNumbers());
+            ScreenNavigator.navigateToTicketSummaryScreen(stage, selectedNumbers);
         } else {
             UIComponents.showAlert("Erro", "Número de seleções inválido.", AlertType.WARNING);
         }
     }
+
 }
