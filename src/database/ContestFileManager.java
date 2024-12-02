@@ -195,6 +195,37 @@ public class ContestFileManager {
         return String.valueOf(maxCode + 1);
     }
 
+    public static boolean isNomeConcursoRepetido(String nomeConcurso) {
+        // Verifica no arquivo de concursos se já existe um concurso com o nome fornecido
+        Path path = Paths.get("c:\\tmp\\contests.txt");
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Nome do Concurso: " + nomeConcurso)) {
+                    return true; // Nome já existe
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de concursos: " + e.getMessage());
+        }
+        return false; // Nome não encontrado
+    }
+    
+    public static boolean isContestCodeTaken(String contestCode) {
+        // Verifica no arquivo de concursos se o código fornecido já foi utilizado
+        Path path = Paths.get("c:\\tmp\\contests.txt");
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("Código do Concurso: " + contestCode)) {
+                    return true; // Código já existe
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de concursos: " + e.getMessage());
+        }
+        return false; // Código não encontrado
+    }
     
 
 }

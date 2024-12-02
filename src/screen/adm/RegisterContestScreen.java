@@ -30,65 +30,75 @@ public class RegisterContestScreen {
         layout = new VBox(20); // Espaçamento entre os elementos
         stage.setTitle("LotoFacil - Registro de Novo Concurso");
         layout.setStyle("-fx-padding: 20; -fx-alignment: center; -fx-background-color: #DCE8E8;");
-
+    
         numberButtons = new ArrayList<>();
         numberSelection = new NumberSelection(); // Inicializa a seleção de números
-
+    
         // Título da tela
         Label titleLabel = UIComponents.createLabel("Registrar Novo Concurso",
                 "-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #333333;");
-
+    
         // Campos para registro
         Label lblNomeConcurso = UIComponents.createLabel("Nome do Concurso",
                 "-fx-font-size: 16px; -fx-text-fill: #555555;");
         TextField txtNomeConcurso = UIComponents.createTextField("Digite o nome do concurso", null);
-        txtNomeConcurso
-                .setStyle("-fx-font-size: 14px; -fx-padding: 10; -fx-border-radius: 5; -fx-border-color: #007BFF;");
-
+        txtNomeConcurso.setStyle("-fx-font-size: 14px; -fx-padding: 10; -fx-border-radius: 5; -fx-border-color: #007BFF;");
+    
         // Botão de salvar
         Button btnSalvar = UIComponents.createButton("Salvar Concurso",
                 "-fx-background-color: #007BFF; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;",
                 e -> {
                     String nomeConcurso = txtNomeConcurso.getText();
                     LocalDate startDate = LocalDate.now();
-
+    
                     // Verificação do preenchimento do campo nome
                     if (nomeConcurso.isEmpty()) {
                         UIComponents.showAlert("Erro", "Por favor, preencha o campo de nome do concurso.",
                                 AlertType.WARNING);
                         return; // Interrompe o processo caso o nome esteja vazio
                     }
-
+    
+                    // Verificação se já existe um concurso com o mesmo nome
+                    if (ContestFileManager.isNomeConcursoRepetido(nomeConcurso)) {
+                        UIComponents.showAlert("Erro", "Já existe um concurso com este nome.", AlertType.WARNING);
+                        return; // Interrompe o processo caso o nome já exista
+                    }
+    
                     // Verificação se já existe um concurso com a mesma data
                     if (ContestFileManager.isStartDateTaken(startDate)) {
                         UIComponents.showAlert("Erro",
                                 "Já existe um concurso com esta data de início.", AlertType.WARNING);
                         return; // Interrompe o processo caso a data já exista
                     }
-
-                    // Gera o próximo código de concurso e cria um novo concurso
+    
+                    // Gera o próximo código de concurso e verifica se já existe um código igual
                     String nextCode = ContestFileManager.getNextContestCode();
+                    if (ContestFileManager.isContestCodeTaken(nextCode)) {
+                        UIComponents.showAlert("Erro", "O código do concurso já foi utilizado.", AlertType.WARNING);
+                        return; // Interrompe o processo caso o código já exista
+                    }
+    
                     Contest newContest = new Contest(nomeConcurso, startDate, startDate.plusDays(30), nextCode, true);
-
+    
                     // Define números vencedores (aqui podemos colocar os números selecionados ou
                     // gerados aleatoriamente)
                     newContest.setWinningNumbers(ContestManager.generateRandomNumbers());
-
+    
                     // Salva o concurso
                     ContestFileManager.saveContest(newContest);
                     UIComponents.showAlert("Sucesso", "Concurso registrado com sucesso!", null);
-
+    
                     // Redireciona para a tela principal
                     ScreenNavigator.navigateToMainScreen(stage);
                 });
-
+    
         // Botão de voltar
         Button btnVoltar = UIComponents.createButton("Voltar",
                 "-fx-background-color: #FF5733; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 10 20; -fx-border-radius: 5; -fx-cursor: hand;",
                 e -> {
                     ScreenNavigator.navigateToMainScreen(stage); // Exemplo simples: fecha a tela atual
                 });
-
+    
         // Adicionar botão para selecionar números manualmente
         Button btnSelectNumbers = new Button("Selecionar Números Manualmente");
         btnSelectNumbers.setStyle(
@@ -96,7 +106,7 @@ public class RegisterContestScreen {
         btnSelectNumbers.setOnAction(e -> {
             openManualNumberSelectionPopup();
         });
-
+    
         // Organizar elementos em um GridPane para alinhamento
         GridPane grid = new GridPane();
         grid.setVgap(15);
@@ -108,10 +118,11 @@ public class RegisterContestScreen {
         grid.add(btnSelectNumbers, 0, 2);
         grid.add(btnSalvar, 0, 3);
         grid.add(btnVoltar, 0, 4);
-
+    
         // Adicionar elementos ao layout
         layout.getChildren().addAll(titleLabel, grid);
     }
+    
 
     // Método para abrir o pop-up de seleção manual de números
     @SuppressWarnings("unused")
