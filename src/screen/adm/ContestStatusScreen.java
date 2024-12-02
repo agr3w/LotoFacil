@@ -9,6 +9,13 @@ import javafx.stage.Stage;
 import screen.sizes.ScreenNavigator;
 import utils.ContestManager;
 import utils.UIComponents;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -53,8 +60,21 @@ public class ContestStatusScreen {
         layout.getChildren().addAll(titleLabel, table, buttonBox, btnVoltar);
     }
 
-    @SuppressWarnings({ "unchecked" })
+    @SuppressWarnings({ "unchecked", "unused" })
     private void setupTableColumns() {
+        // Dentro do método que configura a tabela, adicione o EventHandler
+        table.setRowFactory(tv -> {
+            TableRow<Map<String, String>> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Map<String, String> selectedContest = row.getItem();
+                    String contestCode = selectedContest.get("contestCode");
+                    showUsersWhoBet(contestCode);
+                }
+            });
+            return row;
+        });
+
         TableColumn<Map<String, String>, String> nameColumn = new TableColumn<>("Nome do Concurso");
         nameColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(param.getValue().get("name")));
         nameColumn.setPrefWidth(200);
@@ -95,7 +115,7 @@ public class ContestStatusScreen {
                 totalRevenueColumn, totalPrizesColumn, totalCoporationShareColumn);
     }
 
-    private void loadContestData() { 
+    private void loadContestData() {
         List<Map<String, String>> contests = ContestFileManager.getAllContests();
         table.getItems().clear(); // Limpar itens antes de carregar novos dados
 
@@ -156,13 +176,87 @@ public class ContestStatusScreen {
         Map<String, String> selectedContest = table.getSelectionModel().getSelectedItem();
         if (selectedContest != null) {
             String contestCode = selectedContest.get("contestCode");
-            ContestManager.deleteContest(contestCode); // Chama o método do ContestManager
-            UIComponents.showAlert("Concurso Excluído", "O concurso " + contestCode + " foi excluído.",
+
+            // Verificar se o concurso já foi finalizado
+            String contestStatus = selectedContest.get("status");
+            if ("Finalizado".equals(contestStatus)) {
+                UIComponents.showAlert("Erro",
+                        "O concurso " + contestCode + " já foi finalizado e não pode ser excluído.",
+                        AlertType.ERROR);
+                return;
+            }
+
+            // Verificar se existem apostas para o concurso
+            List<String> users = getUsersByContestCode(contestCode);
+            if (!users.isEmpty()) {
+                UIComponents.showAlert("Erro",
+                        "Não é possível excluir o concurso " + contestCode + " porque há apostas associadas.",
+                        AlertType.ERROR);
+                return;
+            }
+
+            // Chama o método do ContestManager para excluir o concurso
+            ContestManager.deleteContest(contestCode);
+
+            UIComponents.showAlert("Concurso Excluído", "O concurso " + contestCode + " foi excluído com sucesso.",
                     AlertType.INFORMATION);
             loadContestData(); // Recarregar dados para atualizar a tabela
         } else {
             UIComponents.showAlert("Erro", "Selecione um concurso para excluir.", AlertType.INFORMATION);
         }
+    }
+
+    private void showUsersWhoBet(String contestCode) {
+        List<String> users = getUsersByContestCode(contestCode);
+        if (users.isEmpty()) {
+            UIComponents.showAlert("Nenhuma Aposta",
+                    "Não foram encontradas apostas para o concurso " + contestCode + ".",
+                    Alert.AlertType.INFORMATION);
+        } else {
+            StringBuilder message = new StringBuilder("Usuários que apostaram no concurso " + contestCode + ":\n\n");
+            for (String user : users) {
+                message.append("- ").append(user).append("\n");
+            }
+            UIComponents.showAlert("Apostas Encontradas", message.toString(), Alert.AlertType.INFORMATION);
+        }
+    }
+
+    private List<String> getUsersByContestCode(String contestCode) {
+        List<String> users = new ArrayList<>();
+        Path path = Paths.get("c:\\tmp\\purchases.txt");
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            String currentCpf = null; // Variável para armazenar o CPF
+
+            while ((line = reader.readLine()) != null) {
+                // Quando encontramos o código do concurso, verificamos se o código corresponde
+                if (line.startsWith("Código do Concurso: " + contestCode)) {
+                    // Se já tivermos o CPF, significa que temos uma aposta para o concurso
+                    if (currentCpf != null) {
+                        users.add(currentCpf); // Adiciona o CPF do usuário na lista
+                    }
+
+                    // Reset CPF após cada nova aposta
+                    currentCpf = null;
+                }
+
+                // Quando encontramos uma linha com CPF, guardamos o valor
+                if (line.startsWith("CPF: ")) {
+                    currentCpf = line.split(":")[1].trim(); // Extrai o CPF
+                }
+            }
+
+            // Adiciona o último CPF encontrado se estiver dentro do concurso
+            if (currentCpf != null) {
+                users.add(currentCpf);
+            }
+
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo de apostas: " + e.getMessage());
+        }
+
+        return users;
     }
 
     public VBox getLayout() {
