@@ -14,6 +14,94 @@ import java.util.Map;
 public class UserManager {
     private static final String USER_FILE_NAME = "users.txt";
     private static final String DIRECTORY_PATH = "c:\\tmp\\";
+    private static final String FILE_PATH = "c:\\tmp\\purchases.txt";
+
+
+
+     /**
+     * Verifica se o usuário realizou alguma aposta.
+     *
+     * @param cpf CPF do usuário.
+     * @return true se o usuário fez apostas; caso contrário, false.
+     */
+    public static boolean hasUserMadeBets(String cpf) {
+        Path path = Paths.get(FILE_PATH);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("CPF: ") && line.split(": ")[1].equals(cpf)) {
+                    return true; // CPF encontrado
+                }
+                // Pula as próximas linhas do registro até o próximo CPF
+                while ((line = reader.readLine()) != null && !line.isEmpty());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false; // Nenhuma aposta encontrada
+    }
+
+    /**
+     * Retorna a lista de concursos nos quais o usuário apostou.
+     *
+     * @param cpf CPF do usuário.
+     * @return Lista de códigos de concursos.
+     */
+    public static List<String> getUserContests(String cpf) {
+        List<String> contests = new ArrayList<>();
+        Path path = Paths.get(FILE_PATH);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("CPF: ") && line.split(": ")[1].equals(cpf)) {
+                    String contestCode = reader.readLine().split(": ")[1]; // Lê a linha do código do concurso
+                    if (!contests.contains(contestCode)) {
+                        contests.add(contestCode);
+                    }
+                }
+                // Pula as próximas linhas do registro até o próximo CPF
+                while ((line = reader.readLine()) != null && !line.isEmpty());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return contests;
+    }
+
+    /**
+     * Calcula o valor total ganho pelo usuário.
+     *
+     * @param cpf CPF do usuário.
+     * @return Valor total ganho.
+     */
+    public static double getUserTotalWinnings(String cpf) {
+        double totalWinnings = 0.0;
+        Path path = Paths.get(FILE_PATH);
+
+        try (BufferedReader reader = Files.newBufferedReader(path)) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("CPF: ") && line.split(": ")[1].equals(cpf)) {
+                    reader.readLine(); // Pula código do concurso
+                    reader.readLine(); // Pula data da compra
+                    reader.readLine(); // Pula números selecionados
+                    String valueLine = reader.readLine(); // Lê linha do valor
+                    totalWinnings += Double.parseDouble(valueLine.split(": ")[1]);
+                }
+                // Pula as próximas linhas do registro até o próximo CPF
+                while ((line = reader.readLine()) != null && !line.isEmpty());
+            }
+        } catch (IOException e) {
+            System.out.println("Erro ao ler o arquivo: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return totalWinnings;
+    }
+
 
     // Carregar dados de um usuário específico
     public static List<String> loadUserData(String cpf) {
@@ -185,7 +273,7 @@ public class UserManager {
         Path path = Paths.get(DIRECTORY_PATH + USER_FILE_NAME);
         List<String> allUsers = new ArrayList<>();
         boolean userFound = false;
-    
+
         try (BufferedReader reader = Files.newBufferedReader(path)) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -199,7 +287,7 @@ public class UserManager {
             e.printStackTrace();
             return false; // Em caso de erro, retornamos falso
         }
-    
+
         if (userFound) {
             // Sobrescreve o arquivo com a lista de usuários atualizada
             try (BufferedWriter writer = Files.newBufferedWriter(path)) {
@@ -213,9 +301,8 @@ public class UserManager {
             }
             return true; // Retorna true se a exclusão foi bem-sucedida
         }
-    
+
         return false; // Caso o CPF não tenha sido encontrado
     }
-    
 
 }

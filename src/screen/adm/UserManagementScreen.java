@@ -37,6 +37,8 @@ public class UserManagementScreen {
         // Carregar dados dos usuários
         loadUserData();
 
+        setupTableDoubleClick();
+
         // Organizando botões
         HBox buttonBox = new HBox(10);
         Button btnAdicionar = UIComponents.createButton("Adicionar Usuário",
@@ -111,7 +113,7 @@ public class UserManagementScreen {
 
         // Criar o DatePicker para selecionar Data de Nascimento
         DatePicker datePicker = ValidateDate.createDatePicker("Selecione sua data de nascimento",
-        "-fx-min-width: 300", null);
+                "-fx-min-width: 300", null);
 
         // Criar o layout do formulário
         VBox vbox = new VBox(10);
@@ -223,6 +225,17 @@ public class UserManagementScreen {
         Map<String, String> selectedUser = table.getSelectionModel().getSelectedItem();
         if (selectedUser != null) {
             String cpf = selectedUser.get("CPF");
+
+            // Verificar se o usuário fez apostas
+            boolean hasBets = UserManager.hasUserMadeBets(cpf);
+            if (hasBets) {
+                UIComponents.showAlert("Erro",
+                        "Não é possível excluir este usuário, pois ele já realizou apostas.",
+                        AlertType.ERROR);
+                return; // Interrompe o processo de exclusão
+            }
+
+            // Excluir o usuário
             UserManager.deleteUserProfile(cpf); // Exclui o usuário pelo CPF
             UIComponents.showAlert("Usuário Excluído", "O usuário com CPF " + cpf + " foi excluído.",
                     AlertType.INFORMATION);
@@ -230,6 +243,35 @@ public class UserManagementScreen {
         } else {
             UIComponents.showAlert("Erro", "Selecione um usuário para excluir.", AlertType.INFORMATION);
         }
+    }
+
+    @SuppressWarnings("unused")
+    private void setupTableDoubleClick() {
+        table.setRowFactory(tv -> {
+            TableRow<Map<String, String>> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 && !row.isEmpty()) {
+                    Map<String, String> selectedUser = row.getItem();
+                    String cpf = selectedUser.get("CPF");
+
+                    // Obter detalhes do usuário
+                    List<String> contests = UserManager.getUserContests(cpf); // Concursos apostados
+                    double totalWinnings = UserManager.getUserTotalWinnings(cpf); // Total ganho
+
+                    // Criar mensagem detalhada
+                    StringBuilder details = new StringBuilder();
+                    details.append("Usuário: ").append(selectedUser.get("nome")).append("\n");
+                    details.append("E-mail: ").append(selectedUser.get("email")).append("\n");
+                    details.append("Concursos apostados:\n");
+                    contests.forEach(contest -> details.append("Código: ").append(contest).append("\n"));
+                    details.append("Total apostado: R$ ").append(String.format("%.2f", totalWinnings));
+
+                    // Exibir alerta com os detalhes
+                    UIComponents.showAlert("Detalhes do Usuário", details.toString(), AlertType.INFORMATION);
+                }
+            });
+            return row;
+        });
     }
 
     public VBox getLayout() {
