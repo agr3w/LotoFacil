@@ -1,80 +1,33 @@
-# Projeto de Loto Facil
+# Projeto de Loto Fácil 💲
 
-Este repositório contém o código para um sistema de gerenciamento de tickets da Loto Facil. Abaixo, você encontrará a situação atual do código e as áreas onde podemos retomar o desenvolvimento.
+Este repositório contém o código-fonte de um sistema de gerenciamento de tickets para o jogo **Loto Fácil**, desenvolvido para facilitar a compra e o controle dos bilhetes de loteria. O projeto foi desenvolvido com foco na organização, facilidade de uso e expansão para futuras funcionalidades.
 
-## Situação do Código
+## Sobre o Projeto 💼
 
-### 1. Módulo Principal
-- **mainJFX**: ✅ Totalmente funcional.
+O sistema permite que os usuários registrem suas contas, façam login, escolham os números da Loto Fácil, visualizem o histórico de compras e realizem pagamentos, tudo em uma interface gráfica intuitiva. O código está modularizado em várias telas e módulos para facilitar a manutenção e futuras melhorias.
 
-### 2. Banco de Dados
-- **DataBase**: 🔄 Em progresso
-  - Parte mais crua está funcional, mas pode ser melhorada. Consideramos separar mais as classes para uma melhor organização.
-  
-- **FileManager**: ✅ Funcional
-  - Chama o método de criar o arquivo `purchases.txt` e seus gerenciamentos.
+### Funcionalidades Implementadas ⚙
 
-- **TicketPricing**: ✅ Funcional
-  - Chama apenas os valores dos tickets. Sugestão de mudança de localização.
+- **Registro e login de usuário**: Os usuários podem se cadastrar e fazer login na plataforma.
+- **Seleção de números**: Interface para escolher números para os bilhetes da Loto Fácil.
+- **Histórico de compras**: Visualização das compras anteriores.
+- **Pagamentos**: Processo para selecionar e registrar pagamentos.
 
-### 4. Telas
-- **LoginScreen**: ✅ Funcional
-  - Necessita apenas de uma revisão de estilos.
+## Tecnologias Utilizadas 🌐
 
-- **MainScreen**: 🔄 Em progresso
-  - Tela funcional, mas métodos ainda precisam ser criados e objetos definidos.
+O projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-- **PaymentSelectionScreen**: 🔄 Em progresso
-  - Tela não finalizada.
+- **JavaFX**: Para a criação da interface gráfica (GUI).
+- **arquivos .txt**: Local para armazenar informações de usuários e compras.
+- **Git**: Controle de versão e colaboração no código.
 
-- **PurchaseHistoryScreen**: 🔄 Em progresso
-  - Tela funcional, mas pode sofrer modificações no futuro.
+## Instalação
 
-- **RegisterScreen**: ✅ Funcional
-  - Tela está ok, mas haverá modificações em estilo e métodos.
+Para rodar o projeto localmente, siga os passos abaixo:
 
-- **TermosScreen**: 🔄 Em progresso
-  - Falta a inclusão dos termos.
+### 1. Clonar o Repositório
 
-- **TicketPurchaseScreen**: ✅ Quase totalmente funcional
-  - Necessita de revisão na estilização.
+No terminal, execute o comando:
 
-- **TicketSummaryScreen**: 🔄 Em progresso
-  - Necessita finalizar seus métodos principais e estilizacao.
-
-## Contribuições
-
-Sinta-se à vontade para contribuir com melhorias, correções de bugs ou novas funcionalidades. Para contribuir, siga estas etapas:
-
-1. **Fork este repositório**:
-   - Clique no botão "Fork" no canto superior direito do repositório para criar uma cópia em sua conta do GitHub.
-
-2. **Clone o repositório**:
-   - No terminal, execute:
-     ```bash
-     git clone https://github.com/seu-usuario/LotoFacil.git
-     ```
-   - Substitua `seu-usuario` pelo seu nome de usuário do GitHub.
-
-3. **Crie uma nova branch**:
-   - Execute:
-     ```bash
-     git checkout -b feature/nome-da-sua-feature
-     ```
-
-4. **Faça suas alterações e comite**:
-   - Após fazer as alterações, execute:
-     ```bash
-     git commit -m 'Adiciona uma nova feature'
-     ```
-
-5. **Envie para o repositório remoto**:
-   - Execute:
-     ```bash
-     git push origin feature/nome-da-sua-feature
-     ```
-
-6. **Abra um pull request**:
-   - Vá para a página do repositório original e clique em "Compare & pull request" para abrir um pull request.
-
-
+```bash
+git clone https://github.com/agr3w/LotoFacil.git
